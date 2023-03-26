@@ -1,0 +1,8 @@
+openai
+Flask
+flask_cors
+ga4mp
+python-dotenv
+markdown
+WeasyPrint
+jinja2

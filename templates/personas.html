@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  
+<form id="download-form" onsubmit="downloadPdf(event)">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required>
+    <button type="submit">Download PDF</button>
+</form>
+
+<script>
+async function downloadPdf(event) {
+    event.preventDefault();
+    const title = document.getElementById('title').value;
+    const responseMarkdown = await fetch("{{ url_for('generate_post.convert_to_md') }}", {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({title: title}),
+    });
+    const responseMarkdownJson = await responseMarkdown.json();
+    const markdown_string = responseMarkdownJson.markdown_string;
+
+    const responsePdf = await fetch("{{ url_for('generate_post.download_response_post') }}", {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({markdown_string: markdown_string}),
+    });
+    const responsePdfJson = await responsePdf.json();
+    const downloadUrl = responsePdfJson.download_url;
+    window.location.href = downloadUrl;
+}
+</script>
+
+{% endblock %}
