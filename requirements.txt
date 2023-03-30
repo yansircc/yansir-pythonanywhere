@@ -1,4 +1,4 @@
 openai
 Flask
 flask_cors
-mistune
+python-dotenv
