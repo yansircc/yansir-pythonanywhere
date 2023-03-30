@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>颜sir线下课：ChatGPT预训练</h1>
+  <p>先描述用户画像并填写自己生意的重要信息</p>
+  <form id="business-form">
+      <div>
+          <label>关于你的生意：</label>
+          <input type="text" name="my-business-brand-name" placeholder="你的品牌名叫什么？">
+      </div>
+      <div>
+          <input type="text" name="my-business-location" placeholder="你在哪个国家？">
+      </div>
+      <div>
+          <input type="text" name="my-business-product-type" placeholder="你做什么产品？">
+      </div>
+      <div>
+          <input type="text" name="my-business-type" placeholder="你做的是B2B还是B2C？">
+      </div>
+      <div>
+          <input type="text" name="my-company-type" placeholder="你是工厂还是贸易商？">
+      </div>
+      <div>
+          <input type="number" name="my-business-company-size" placeholder="你的公司多少人？">
+      </div>
+      <div>
+          <input type="text" name="my-business-export-country" placeholder="你出口过哪些国家？">
+      </div>
+      <div>
+          <input type="text" name="my-business-target-audience" placeholder="你的客户还能有什么身份？">
+      </div>
+      <div>
+          <input type="text" name="my-business-competitive-advantage" placeholder="你和其他对手比有什么优势？">
+      </div>
+      <div>
+          <input type="text" name="my-business-promotion-channel" placeholder="你目前在用哪些渠道推广？">
+      </div>
+      <div>
+          <label>关于你的用户画像：</label>
+          <input type="text" name="typical-Client-name" placeholder="他叫什么？">
+      </div>
+      <div>
+          <input type="text" name="typical-client-location" placeholder="他在哪个国家？">
+      </div>
+      <div>
+          <input type="number" name="typical-Client-age" placeholder="他年龄多大？">
+      </div>
+      <div>
+          <input type="text" name="typical-Client-personality" placeholder="他是什么性格？">
+      </div>
+      <div>
+          <input type="text" name="typical-Client-prefer-product" placeholder="他采购什么产品？">
+      </div>
+      <div>
+          <input type="text" name="typical-Client-prefer-price-or-quality" placeholder="他对价格和质量哪个更敏感？">
+      </div>
+      <div>
+          <input type="text" name="typical-Client-position" placeholder="他是什么职位？">
+      </div>
+      <div>
+          <input type="text" name="typical-Client-prefer-country" placeholder="他偏好在哪些国家采购？">
+      </div>
+      <div>
+          <input type="number" name="typical-Client-company-size" placeholder="他的公司有多少人？">
+      </div>
+      <div>
+          <input type="text" name="typical-Client-business-model" placeholder="他的生意怎么赚钱？">
+      </div>
+      <div>
+          <input type="text" name="typical-Client-prefer-supplier-channel" placeholder="他会通过哪些渠道找供应商？">
+      </div>
+      <div>
+          <input type="text" name="typical-Client-supplier-priority" placeholder="找供应商时看重什么？">
+      </div>
+      <div>
+          <input type="text" name="typical-Client-pain-points" placeholder="采购时遇到什么问题会烦心甚至恼怒？">
+      </div>
+      <div>
+          <input type="text" name="typical-Client-additional-info" placeholder="对于他的描述，有什么要补充的？">
+      </div>
+      <div>
+          <button type="submit">写好了</button>
+      </div>
+  </form>
+  <!-- Add div to display loading animation -->
+  <div id="loader" class="loader" style="display:none;"></div>
+  <div id="response-container"></div>
+  <script type="text/javascript" src="{{ url_for('static', filename='business.js') }}"></script>
+{% endblock %}

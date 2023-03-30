@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  
+  <h1>颜sir线下建站课Json生成器</h1>
+  <p>v1.01，内测期间免费</p>
+  <form id="query-form">
+    <input type="text" name="query" id="query-input" placeholder="我要一行两列，左边是标题，右边是按钮">
+    <input type="submit" value="回车">
+  </form>
+
+  <!-- Add div to display prompt message and API response -->
+  <div id="response-container"></div>
+
+  <!-- Add div to display loading animation -->
+  <div id="loader" class="loader" style="display:none;"></div>
+  <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+{% endblock %}

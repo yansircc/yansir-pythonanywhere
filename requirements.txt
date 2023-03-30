@@ -1,0 +1,5 @@
+re
+openai
+Flask
+flask_cors
+ga4mp
