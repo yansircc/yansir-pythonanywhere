@@ -20,11 +20,11 @@ async function downloadPdf(event) {
     const responseMarkdownJson = await responseMarkdown.json();
     const markdown_string = responseMarkdownJson.markdown_string;
 
-    const responsePdf = await fetch("{{ url_for('generate_post.download_response_post') }}", {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({markdown_string: markdown_string}),
-    });
+    // const responsePdf = await fetch("{{ url_for('generate_post.download_response_post') }}", {
+    //     method: 'POST',
+    //     headers: {'Content-Type': 'application/json'},
+    //     body: JSON.stringify({markdown_string: markdown_string}),
+    // });
     const responsePdfJson = await responsePdf.json();
     const downloadUrl = responsePdfJson.download_url;
     window.location.href = downloadUrl;

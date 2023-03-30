@@ -1,5 +1,6 @@
 from flask import Blueprint, request, render_template, jsonify
-import openai
+from golem import Golem
+import os
 
 builder_blueprint = Blueprint('builder', __name__)
 
@@ -9,7 +10,7 @@ def builder():
 
 @builder_blueprint.route('/builder-submit', methods=['POST'])
 def builder_submit():
-    # System Prompts
+    openai_api_key = os.environ.get('OPENAI_API_KEY')
     sys_prompt = """
     You are a programmer who helps me use a website builder that relies on JSON for front-end layout, and your task is to help me write code in JSON format.
     The following is important information.
@@ -21,22 +22,14 @@ def builder_submit():
     6. Inner Section is similar to outter section except that the value of "isInner" is true;
     From now on, only formatted json code wrapped in three backticks should be output, and no need to explain what the code does.
     """
+    user_input_suffix = "Your output must be written in English, code must be wrapped in three backticks."
+    builder_golem = Golem(openai_api_key,sys_prompt, user_input_suffix)
 
-    # Retrieve user input from form
-    prompt = request.form['query']
+    user_input = request.form['query']
+    response = builder_golem.response(user_input)
 
-    # Extra additional prompt
-    extra_prompt = "Your output must be written in English, code must be wrapped in three backticks."
+    return jsonify({'response': response})
 
-    # Call OpenAI ChatGPT API
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "system", "content":sys_prompt},{"role":"user","content":prompt + extra_prompt}]
-    )
-
-    # Extract the response text from the API response
-    query = response.choices[0].message['content']
-    return jsonify({'response': query})
 
 def register_routes(app):
     app.register_blueprint(builder_blueprint)

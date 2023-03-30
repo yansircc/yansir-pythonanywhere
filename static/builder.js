@@ -1,4 +1,4 @@
-document.getElementById('query-form').addEventListener('submit', function(event) {
+document.getElementById('query-form').addEventListener('submit', function (event) {
   event.preventDefault();
   const query = document.getElementById('query-input').value;
   const loader = document.getElementById('loader');
@@ -9,9 +9,9 @@ document.getElementById('query-form').addEventListener('submit', function(event)
   fetch('/builder-submit', {
     method: 'POST',
     body: new FormData(event.target)
-  }).then(function(response) {
+  }).then(function (response) {
     return response.json();
-  }).then(function(data) {
+  }).then(function (data) {
     loader.style.display = "none";
     if (/```([^`]+)```/g.test(data.response)) {
       container.innerHTML = data.response.replace(/```([^`]+)```/g, "<span class='highlight'>$1</span>");
@@ -24,7 +24,7 @@ document.getElementById('query-form').addEventListener('submit', function(event)
     const copyButton = document.createElement('button');
     copyButton.innerText = "复制";
     copyButton.classList.add('copy-button');
-    copyButton.addEventListener('click', function(event) {
+    copyButton.addEventListener('click', function (event) {
       const code = document.querySelector('#response-container .highlight').innerText;
       copyToClipboard(code);
       event.preventDefault();
@@ -43,16 +43,16 @@ function copyToClipboard(code) {
   tempElement.select();
   document.execCommand('copy');
   document.body.removeChild(tempElement);
-  
+
   // Change copy button text and color
   const copyButton = document.querySelector('.copy-button');
   copyButton.innerText = "已复制";
   copyButton.style.backgroundColor = "#3CB371";
   copyButton.style.color = "white";
   copyButton.disabled = true;
-  
+
   // Reset copy button after 2 seconds
-  setTimeout(function() {
+  setTimeout(function () {
     copyButton.innerText = "复制";
     copyButton.style.backgroundColor = "";
     copyButton.style.color = "";

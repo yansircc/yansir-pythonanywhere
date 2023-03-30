@@ -4,12 +4,12 @@ import os
 
 paid_chat_blueprint = Blueprint('paid_chat', __name__)
 
-@paid_chat_blueprint.route('/chat')
-def chat():
+@paid_chat_blueprint.route('/paid-chat')
+def paid_chat():
     session.clear()
-    return render_template('chat.html')
+    return render_template('paid_chat.html')
 
-@paid_chat_blueprint.route('/chatgpt', methods=['POST'])
+@paid_chat_blueprint.route('/paid-chat', methods=['POST'])
 def paid_golem():
     data = request.get_json()
     user_input = data['user_input']

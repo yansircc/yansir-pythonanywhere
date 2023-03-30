@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     container.style.display = 'block';
     loader.style.display = 'block';
     container.innerHTML += `<div><span>${userInput}</span></div>`;
-    fetch('/chatgpt', {
+    fetch('/paid-chat', {
       method: 'POST',
       body: JSON.stringify({ user_input: userInput }),
       headers: { 'Content-Type': 'application/json' }

@@ -1,0 +1,572 @@
+{
+    "exportFormatVersion": 2,
+    "exportTime": "2023-03-30 11:12:09",
+    "containerVersion": {
+        "path": "accounts/6000211192/containers/104790677/versions/0",
+        "accountId": "6000211192",
+        "containerId": "104790677",
+        "containerVersionId": "0",
+        "container": {
+            "path": "accounts/6000211192/containers/104790677",
+            "accountId": "6000211192",
+            "containerId": "104790677",
+            "name": "ForkMover.com",
+            "publicId": "GTM-PNMSTFG",
+            "usageContext": [
+                "WEB"
+            ],
+            "fingerprint": "1679018680642",
+            "tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/6000211192/containers/104790677/workspaces?apiLink=container",
+            "features": {
+                "supportUserPermissions": true,
+                "supportEnvironments": true,
+                "supportWorkspaces": true,
+                "supportGtagConfigs": false,
+                "supportBuiltInVariables": true,
+                "supportClients": false,
+                "supportFolders": true,
+                "supportTags": true,
+                "supportTemplates": true,
+                "supportTriggers": true,
+                "supportVariables": true,
+                "supportVersions": true,
+                "supportZones": true
+            },
+            "tagIds": [
+                "GTM-PNMSTFG"
+            ]
+        },
+        "tag": [
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "tagId": "21",
+                "name": "Gads - Leads",
+                "type": "awct",
+                "parameter": [
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableNewCustomerReporting",
+                        "value": "false"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableConversionLinker",
+                        "value": "true"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "orderId",
+                        "value": "{{Transaction_ID}}"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableProductReporting",
+                        "value": "false"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableEnhancedConversion",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "conversionValue",
+                        "value": "{{Leads_Value}}"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "conversionCookiePrefix",
+                        "value": "_gcl"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableShippingData",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "conversionId",
+                        "value": "{{Gads_ID}}"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "currencyCode",
+                        "value": "USD"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "conversionLabel",
+                        "value": "{{Gads_Label}}"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "rdp",
+                        "value": "false"
+                    }
+                ],
+                "fingerprint": "1679929938106",
+                "firingTriggerId": [
+                    "17"
+                ],
+                "parentFolderId": "13",
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "tagId": "22",
+                "name": "GA4 - PV",
+                "type": "gaawc",
+                "parameter": [
+                    {
+                        "type": "BOOLEAN",
+                        "key": "sendPageView",
+                        "value": "true"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableSendToServerContainer",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "measurementId",
+                        "value": "{{GA4_ID}}"
+                    }
+                ],
+                "fingerprint": "1679929938107",
+                "firingTriggerId": [
+                    "2147479553"
+                ],
+                "parentFolderId": "13",
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "tagId": "23",
+                "name": "GA4 - Leads",
+                "type": "gaawe",
+                "parameter": [
+                    {
+                        "type": "BOOLEAN",
+                        "key": "sendEcommerceData",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "eventName",
+                        "value": "generate_lead"
+                    },
+                    {
+                        "type": "LIST",
+                        "key": "eventParameters",
+                        "list": [
+                            {
+                                "type": "MAP",
+                                "map": [
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "name",
+                                        "value": "currency"
+                                    },
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "value",
+                                        "value": "USD"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "MAP",
+                                "map": [
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "name",
+                                        "value": "value"
+                                    },
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "value",
+                                        "value": "{{Leads_Value}}"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "TAG_REFERENCE",
+                        "key": "measurementId",
+                        "value": "GA4 - PV"
+                    }
+                ],
+                "fingerprint": "1679929938107",
+                "firingTriggerId": [
+                    "17"
+                ],
+                "setupTag": [
+                    {
+                        "tagName": "Gads - Leads",
+                        "stopOnSetupFailure": true
+                    }
+                ],
+                "parentFolderId": "13",
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "tagId": "25",
+                "name": "Data Layer Push",
+                "type": "html",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "html",
+                        "value": "<script>\n  var leads_content = {{Form Text}};\n  var system_prompt = \"You're a rating machine. You will rate the inquiries on a scale of 0-100. If the inquiry has no relationship with B2B procurement, you will give it a rating of 0. If it is relevant, then you will rate it based on the quality of the inquiry. You always output score first head and then explain the reasons.\";\n  var max_tokens = 100;\n  var temperature = 0.1;\n  var ads_conversion_id = \"AW-756055019/YmB9CNmLvpIYEOv3wegC\";\n\n  var xhr = new XMLHttpRequest();\n  xhr.open('POST', 'https://yansir.pythonanywhere.com/leads-value');\n  xhr.setRequestHeader('Content-Type', 'application/json');\n  xhr.onload = function() {\n    if (xhr.status === 200) {\n      console.log(xhr.responseText);\n    }\n  };\n  xhr.onerror = function() {\n    console.error(\"Error: \", xhr.statusText);\n  };\n  xhr.send(JSON.stringify({\n    // leads_value: leads_content,\n    // system_prompt: system_prompt,\n    // max_tokens: max_tokens,\n    // temperature: temperature\n    leads_content: leads_content,\n    sys_prompt: system_prompt,\n    max_tokens: max_tokens,\n    temperature: temperature,\n    measurement_id: {{GA4_ID}},\n    api_secret: {{GA4_API_Key}},\n    ads_conversion_id: {{Gads_ID}},\n    ads_conversion_id: ads_conversion_id,\n    client_id: '1560533014.1676793714'\n  }));\n</script>"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "supportDocumentWrite",
+                        "value": "false"
+                    }
+                ],
+                "fingerprint": "1679931069732",
+                "firingTriggerId": [
+                    "17"
+                ],
+                "teardownTag": [
+                    {
+                        "tagName": "Gads - Leads",
+                        "stopTeardownOnFailure": true
+                    }
+                ],
+                "parentFolderId": "13",
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "tagId": "26",
+                "name": "Conversion Linker",
+                "type": "gclidw",
+                "parameter": [
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableCrossDomain",
+                        "value": "false"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableUrlPassthrough",
+                        "value": "false"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableCookieOverrides",
+                        "value": "false"
+                    }
+                ],
+                "fingerprint": "1679929938108",
+                "firingTriggerId": [
+                    "2147479553"
+                ],
+                "parentFolderId": "13",
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            }
+        ],
+        "trigger": [
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "triggerId": "17",
+                "name": "Form Submission",
+                "type": "FORM_SUBMISSION",
+                "waitForTags": {
+                    "type": "BOOLEAN",
+                    "value": "false"
+                },
+                "checkValidation": {
+                    "type": "BOOLEAN",
+                    "value": "false"
+                },
+                "waitForTagsTimeout": {
+                    "type": "TEMPLATE",
+                    "value": "5000"
+                },
+                "uniqueTriggerId": {
+                    "type": "TEMPLATE"
+                },
+                "fingerprint": "1679929938105",
+                "parentFolderId": "16"
+            }
+        ],
+        "variable": [
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "variableId": "14",
+                "name": "GA4_ID",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "ga4_id_replace"
+                    }
+                ],
+                "fingerprint": "1680174591222",
+                "parentFolderId": "12",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "variableId": "15",
+                "name": "Gads_Label",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "gads_label_replace"
+                    }
+                ],
+                "fingerprint": "1680174613361",
+                "parentFolderId": "12",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "variableId": "18",
+                "name": "Gads_ID",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "gads_id_replace"
+                    }
+                ],
+                "fingerprint": "1680174601135",
+                "parentFolderId": "12",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "variableId": "19",
+                "name": "Leads_Value",
+                "type": "v",
+                "parameter": [
+                    {
+                        "type": "INTEGER",
+                        "key": "dataLayerVersion",
+                        "value": "2"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "setDefaultValue",
+                        "value": "true"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "defaultValue",
+                        "value": "0"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "name",
+                        "value": "leads_value"
+                    }
+                ],
+                "fingerprint": "1679929938106",
+                "parentFolderId": "12",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "variableId": "20",
+                "name": "Transaction_ID",
+                "type": "v",
+                "parameter": [
+                    {
+                        "type": "INTEGER",
+                        "key": "dataLayerVersion",
+                        "value": "2"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "setDefaultValue",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "name",
+                        "value": "transaction_id"
+                    }
+                ],
+                "fingerprint": "1679929938106",
+                "parentFolderId": "12",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "variableId": "24",
+                "name": "GA4_API_Key",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "ga4_api_key_replace"
+                    }
+                ],
+                "fingerprint": "1680174581140",
+                "parentFolderId": "12",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "variableId": "27",
+                "name": "System_Prompt",
+                "type": "v",
+                "parameter": [
+                    {
+                        "type": "INTEGER",
+                        "key": "dataLayerVersion",
+                        "value": "2"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "setDefaultValue",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "name",
+                        "value": "system_prompt"
+                    }
+                ],
+                "fingerprint": "1679929938108",
+                "parentFolderId": "12",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "variableId": "28",
+                "name": "OpenAI_API_Key",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "openai_api_key_replace"
+                    }
+                ],
+                "fingerprint": "1680174623617",
+                "parentFolderId": "12",
+                "formatValue": {}
+            }
+        ],
+        "folder": [
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "folderId": "12",
+                "name": "Variables",
+                "fingerprint": "1679929938103"
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "folderId": "13",
+                "name": "Tags",
+                "fingerprint": "1679929938104"
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "folderId": "16",
+                "name": "Triggers",
+                "fingerprint": "1679929938105"
+            }
+        ],
+        "builtInVariable": [
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "type": "PAGE_URL",
+                "name": "Page URL"
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "type": "PAGE_HOSTNAME",
+                "name": "Page Hostname"
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "type": "PAGE_PATH",
+                "name": "Page Path"
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "type": "REFERRER",
+                "name": "Referrer"
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "type": "EVENT",
+                "name": "Event"
+            },
+            {
+                "accountId": "6000211192",
+                "containerId": "104790677",
+                "type": "FORM_TEXT",
+                "name": "Form Text"
+            }
+        ],
+        "fingerprint": "1680174729250",
+        "tagManagerUrl": "https://tagmanager.google.com/#/versions/accounts/6000211192/containers/104790677/versions/0?apiLink=version"
+    }
+}
