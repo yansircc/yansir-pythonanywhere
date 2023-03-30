@@ -1,6 +1,5 @@
 from flask import Blueprint, request, render_template, jsonify
-from golem import Golem
-import os
+from golem import Golem, openai_api_key
 import re
 
 post_ideas_blueprint = Blueprint('post_ideas', __name__)
@@ -11,7 +10,6 @@ def ideas():
 
 @post_ideas_blueprint.route('/post-ideas', methods=['POST'])
 def post_ideas_endpoint():
-    openai_api_key = os.environ.get('OPENAI_API_KEY')
     data = request.get_json()
     keywords = data['keywords']
     processes = data['processes']

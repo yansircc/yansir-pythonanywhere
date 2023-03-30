@@ -1,5 +1,4 @@
 from flask import Blueprint, request, render_template
-import re
 import json
 
 gtm_json_blueprint = Blueprint('gtm_json', __name__)

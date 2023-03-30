@@ -1,8 +1,6 @@
 from flask import Blueprint, request, render_template, jsonify
-from golem import Golem
-import mistune
+from golem import Golem, openai_api_key
 import re
-import os
 
 
 generate_post_blueprint = Blueprint('generate_post', __name__)
@@ -13,7 +11,6 @@ def generate_post():
 
 @generate_post_blueprint.route('/generate_post', methods=['POST'])
 def generate_html():
-    openai_api_key = os.environ.get('OPENAI_API_KEY')
     data = request.get_json()
     title = ' '.join(re.findall(r'[a-zA-Z\s]+', data['user_input']))
     post_type = data['post_type']

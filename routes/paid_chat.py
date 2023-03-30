@@ -1,6 +1,5 @@
 from flask import Blueprint, request, render_template, jsonify, session
-from golem import Golem
-import os
+from golem import Golem, openai_api_key
 
 paid_chat_blueprint = Blueprint('paid_chat', __name__)
 
@@ -13,7 +12,6 @@ def paid_chat():
 def paid_golem():
     data = request.get_json()
     user_input = data['user_input']
-    openai_api_key = os.environ.get('OPENAI_API_KEY')
     sys_prompt = "You're a man of few words."
     paid_golem = Golem(openai_api_key, sys_prompt, memory=True)
     response = paid_golem.response(user_input)

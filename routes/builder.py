@@ -1,6 +1,5 @@
 from flask import Blueprint, request, render_template, jsonify
-from golem import Golem
-import os
+from golem import Golem, openai_api_key
 
 builder_blueprint = Blueprint('builder', __name__)
 
@@ -10,7 +9,6 @@ def builder():
 
 @builder_blueprint.route('/builder-submit', methods=['POST'])
 def builder_submit():
-    openai_api_key = os.environ.get('OPENAI_API_KEY')
     sys_prompt = """
     You are a programmer who helps me use a website builder that relies on JSON for front-end layout, and your task is to help me write code in JSON format.
     The following is important information.

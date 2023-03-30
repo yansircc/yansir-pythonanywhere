@@ -1,6 +1,5 @@
 from flask import Blueprint, request, render_template, jsonify
-from golem import Golem
-import os
+from golem import Golem, openai_api_key
 
 business_blueprint = Blueprint('business', __name__)
 
@@ -15,7 +14,6 @@ def submit_business_form():
 
 @business_blueprint.route('/chatgpt-training', methods=['POST'])
 def chatgpt_training():
-    openai_api_key = os.environ.get('OPENAI_API_KEY')
     sys_prompt = "You are a successful Chinese business owner. Now, you have to describe your business to ChatGPT."
     user_input_prefix = "This is your business information: "
     user_input_suffix = "A key with the keyword 'PERSONAS' indicates that the value is information about your target audience, and a key with the keyword 'MY-BUSINESS' indicates that the value is information about your business. Now start your description in English."

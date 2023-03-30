@@ -1,5 +1,8 @@
 from flask import session
 import openai
+import os
+
+openai_api_key = os.getenv("OPENAI_API_KEY")
 
 class Golem:
     

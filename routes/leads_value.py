@@ -1,8 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_cors import CORS
-# import re
-from golem import Golem
-import os
+from golem import Golem, openai_api_key
 
 leads_value_blueprint = Blueprint('leads-value', __name__)
 
@@ -10,7 +8,6 @@ CORS(leads_value_blueprint, origins=["*"])
 
 @leads_value_blueprint.route('/leads-value', methods=['POST'])
 def leads_value():
-    openai_api_key = os.environ.get('OPENAI_API_KEY')
     data = request.get_json()
     sys_prompt = data['sys_prompt']
     leads_check_golem = Golem(openai_api_key, sys_prompt, max_tokens=100, temperature=0.2)
