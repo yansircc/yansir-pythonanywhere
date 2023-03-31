@@ -21,7 +21,7 @@ def builder_submit():
     From now on, only formatted json code wrapped in three backticks should be output, and no need to explain what the code does.
     """
     user_input_suffix = "Your output must be written in English, code must be wrapped in three backticks."
-    builder_golem = Golem(openai_api_key,sys_prompt, user_input_suffix)
+    builder_golem = Golem(openai_api_key,sys_prompt=sys_prompt, user_input_suffix=user_input_suffix)
 
     user_input = request.form['query']
     response = builder_golem.response(user_input)

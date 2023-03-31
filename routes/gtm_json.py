@@ -16,6 +16,7 @@ def generate_json():
     gads_id = data.get('gads_id')
     gads_label = data.get('gads_label')
     openai_api_key = data.get('openai_api_key')
+    sys_prompt = data.get('sys_prompt')
 
     # Get the directory of the current Python script
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -33,6 +34,7 @@ def generate_json():
         gtm_json = gtm_json.replace('gads_id_replace', gads_id)
         gtm_json = gtm_json.replace('gads_label_replace', gads_label)
         gtm_json = gtm_json.replace('openai_api_key_replace', openai_api_key)
+        gtm_json = gtm_json.replace('sys_prompt_replace', sys_prompt)
 
     return json.dumps(gtm_json)
 

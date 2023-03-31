@@ -15,6 +15,8 @@
         <input type="text" id="gads_label" style="resize: none; width: 100%; height: 50px; margin-bottom: 15px; border: 1px solid black;">
         <label for="openai_api_key" style="margin-bottom: 5px;">OpenAI API Key:</label>
         <input type="text" id="openai_api_key" style="resize: none; width: 100%; height: 50px; margin-bottom: 15px; border: 1px solid black;">
+        <label for="sys_prompt" style="margin-bottom: 5px;">Training Order:</label>
+        <input type="textarea" id="sys_prompt" style="resize: none; width: 100%; height: 50px; margin-bottom: 15px; border: 1px solid black;">
         <input type="submit" value="生成我的Json" style="background-color: black; color: white; border: none; padding: 5px 10px; cursor: pointer;">
     </form>
 <script src="{{ url_for('static', filename='generate_json.js') }}"></script>

@@ -10,7 +10,9 @@ CORS(leads_value_blueprint, origins=["*"])
 def leads_value():
     data = request.get_json()
     sys_prompt = data['sys_prompt']
-    leads_check_golem = Golem(openai_api_key, sys_prompt, max_tokens=100, temperature=0.2)
+    sys_prompt_prefix = "You're a rating machine. You will rate the inquiries on a scale of 0-100. "
+    sys_prompt_suffix = " You always output score first head and then explain the reasons."
+    leads_check_golem = Golem(openai_api_key, sys_prompt=sys_prompt, sys_prompt_prefix=sys_prompt_prefix, sys_prompt_suffix=sys_prompt_suffix, max_tokens=150, temperature=0.2)
 
     user_input = data['leads_content']
     response = leads_check_golem(user_input)

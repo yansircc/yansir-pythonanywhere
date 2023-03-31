@@ -9,6 +9,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const gads_id = document.getElementById('gads_id').value;
         const gads_label = document.getElementById('gads_label').value;
         const openai_api_key = document.getElementById('openai_api_key').value;
+        const sys_prompt = document.getElementById('sys_prompt').value;
 
         loader.style.display = 'block';
         fetch('/generate_json', {
@@ -18,7 +19,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 'ga4_api_key': ga4_api_key,
                 'gads_id': gads_id,
                 'gads_label': gads_label,
-                'openai_api_key': openai_api_key
+                'openai_api_key': openai_api_key,
+                'sys_prompt': sys_prompt
             }),
             headers: { 'Content-Type': 'application/json' }
         })

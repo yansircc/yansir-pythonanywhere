@@ -20,7 +20,7 @@ def generate_html():
     
     if post_type == 'response_post':
         max_word_count = 1000
-        response_post_golem = Golem(openai_api_key, sys_prompt, max_tokens=int(max_word_count*1.2))
+        response_post_golem = Golem(openai_api_key, sys_prompt=sys_prompt, max_tokens=int(max_word_count*1.2))
         user_input = f'''
         From you angle of view, Write a blog post(around {max_word_count} words) about {title}. 
         Keep in mind that you need to:
