@@ -115,7 +115,6 @@ const createButtons = function(){
   trainButton.addEventListener('click', function(event) {
     event.preventDefault();
     const prompt = container.textContent.trim(); // Get the text from the response container
-    console.log(prompt)
     loader.style.display = "block";
     fetch('/chatgpt-training', {
       method: 'POST',

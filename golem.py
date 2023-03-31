@@ -30,7 +30,8 @@ class Golem:
         )
         response_string = response.choices[0].message['content']
         transcript_history += ([{'role':'assistant', 'content':response_string}])
-        session['transcript_history'] = transcript_history
+        if self.__memory:
+            session['transcript_history'] = transcript_history
         return response_string
     
     def clear(self):

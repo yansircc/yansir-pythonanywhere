@@ -1,5 +1,6 @@
 from flask import Blueprint, request, render_template
 import json
+import os
 
 gtm_json_blueprint = Blueprint('gtm_json', __name__)
 
@@ -16,7 +17,16 @@ def generate_json():
     gads_label = data.get('gads_label')
     openai_api_key = data.get('openai_api_key')
 
-    with open('resources/gtm.json', 'r') as f:
+    # Get the directory of the current Python script
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Go one level up from the 'routes' directory
+    parent_dir = os.path.dirname(current_dir)
+
+    # Build the absolute path for the 'gtm.json' file
+    gtm_json_path = os.path.join(parent_dir, 'resources', 'gtm.json')
+
+    with open(gtm_json_path, 'r') as f:
         gtm_json = f.read()
         gtm_json = gtm_json.replace('ga4_id_replace', ga4_id)
         gtm_json = gtm_json.replace('ga4_api_key_replace', ga4_api_key)
