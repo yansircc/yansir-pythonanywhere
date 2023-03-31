@@ -128,6 +128,7 @@ const createButtons = function(){
       loader.style.display = "none";
       container.innerHTML = "<span class='highlight'>" + data.response + "</span>";
       localStorage.setItem("dataTrained", data.response);
+      localStorage.setItem("smmarized_trained_data", data.smmarized_trained_data);
       createButtons();
       document.getElementById('train-button').style.display = "none";
     });

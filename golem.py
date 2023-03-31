@@ -6,7 +6,7 @@ openai_api_key = os.getenv("OPENAI_API_KEY")
 
 class Golem:
     
-    def __init__(self, api_key, sys_prompt="", sys_prompt_prefix="", sys_prompt_suffix="", user_input_prefix="", user_input_suffix="", max_tokens=3000, temperature=0.7, memory=False):
+    def __init__(self, api_key, sys_prompt="", sys_prompt_prefix="", sys_prompt_suffix="", user_input_prefix="", user_input_suffix="", max_tokens=4097, temperature=0.7, memory=False):
         self.__model = "gpt-3.5-turbo"
         self.__openai_api_key = api_key
         self.__user_input_prefix = user_input_prefix

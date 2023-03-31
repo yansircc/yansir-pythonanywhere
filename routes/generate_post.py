@@ -14,8 +14,9 @@ def generate_html():
     data = request.get_json()
     title = ' '.join(re.findall(r'[a-zA-Z\s]+', data['user_input']))
     post_type = data['post_type']
-    trained_data = data['trained_data']
-    sys_prompt = "The following information is about you identity and your business. You will read it in the first person: " + re.sub(r"Based on the above information.*", "", trained_data)
+    smmarized_trained_data = data['smmarized_trained_data']
+
+    sys_prompt = "The following information is about you identity and your business. You will read it in the first person: " + smmarized_trained_data
     
     if post_type == 'response_post':
         max_word_count = 1000
