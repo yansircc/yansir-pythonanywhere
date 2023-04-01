@@ -1,15 +1,24 @@
-<!-- base.html -->
 <!DOCTYPE html>
-<html>
+<html lang="zh_cn">
+
 <head>
-  <meta charset="UTF-8">
-  <title>{% block title %}颜sirAI工具合集{% endblock %}</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}颜sirAI工具合集{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
-  {% include 'navigation.html' %}
-  <div class="content">
-    {% block content %}{% endblock %}
-  </div>
+    <header>
+        {% include 'navigation.html' %}
+    </header>
+    <main class="content">
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <script type="module"
+            src="{{ url_for('static', filename=js_file) }}"></script>
+    </footer>
 </body>
+
 </html>
