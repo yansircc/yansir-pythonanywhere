@@ -1,4 +1,6 @@
-from flask import Flask, redirect
+from flask import Flask, redirect, session, make_response
+from flask_cors import CORS
+from uuid import uuid4
 
 from routes.builder import register_routes as register_builder_routes
 from routes.paid_chat import register_routes as register_paid_chat_routes
@@ -10,6 +12,7 @@ from routes.gtm_json import register_routes as register_gtm_json_routes
 from routes.anki_cards import register_routes as register_anki_cards_routes
 
 app = Flask(__name__)
+CORS(app)
 register_builder_routes(app)
 register_paid_chat_routes(app)
 register_business_routes(app)
@@ -24,7 +27,10 @@ app.secret_key = 'your-secret-key-here'
 
 @app.route('/')
 def index():
-    return redirect('/builder')
+    session['user_id'] = str(uuid4())
+    resp = make_response(redirect('/builder'))
+    resp.set_cookie('user_id', session['user_id'].encode('utf-8'))
+    return resp
 
 if __name__ == '__main__':
     app.run()

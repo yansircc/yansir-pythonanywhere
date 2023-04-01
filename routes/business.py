@@ -22,7 +22,7 @@ def chatgpt_training():
 
     user_input = request.form.get('prompt')
     response = business_golem.response(user_input)
-    raw_trained_data = response.copy()
+    raw_trained_data = response
     response += append_prompt
 
     summary_golem = Golem(openai_api_key, sys_prompt=" You're a man of few word.", user_input_prefix="Summarize the following information into a paragraph of no more than 200 words: ", max_tokens=1000)

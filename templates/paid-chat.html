@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>钞能力版ChatGPT</h1>
+<p>v1.01，内测期间免费</p>
+
+<div id="response-container">
+    <button id="clear-transcript-history" style="position:absolute; top:10px; right:10px;">清除对话记录</button>
+</div>
+<div id="loader" class="loader" style="display:none;"></div>
+<form id="form">
+    <input type="text" name="user_input" id="user_input">
+    <input type="submit" value="回车">
+</form>
+<script type="text/javascript" src="{{ url_for('static', filename='chat_ui.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='paid_chat.js') }}"></script>
+{% endblock %}
