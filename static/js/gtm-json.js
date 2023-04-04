@@ -1,5 +1,10 @@
 window.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('query-form');
+    const form = document.getElementById('form');
+    const sysPromptLabel = document.querySelector('label[for="sys_prompt"]');
+    const hint = document.createElement('div');
+    hint.innerHTML = '不知道怎么写就复制我的命令: If the inquiry has no relationship with B2B procurement, you will give it a rating of 0. If it is relevant, then you will rate it based on the quality of the inquiry.';
+    hint.classList.add('hint');
+    sysPromptLabel.appendChild(hint);
 
     form.addEventListener('submit', (event) => {
         event.preventDefault();

@@ -5,7 +5,7 @@ anki_cards_blueprint = Blueprint('anki_cards', __name__)
 
 @anki_cards_blueprint.route('/anki-cards')
 def anki_cards():
-    return render_template('anki-cards.html')
+    return render_template('anki-cards.jinja2')
 
 @anki_cards_blueprint.route('/generate_anki_cards', methods=['POST'])
 def generate_anki_cards():

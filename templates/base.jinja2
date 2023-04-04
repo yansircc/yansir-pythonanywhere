@@ -5,12 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}颜sirAI工具合集{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% assets 'scss_all' %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
 </head>
 
 <body>
     <header>
-        {% include 'navigation.html' %}
+        {% include 'navigation.jinja2' %}
     </header>
     <main class="content">
         {% block content %}{% endblock %}

@@ -1,0 +1,20 @@
+<script>
+    var leads_content = {{From Text}};
+    var sys_prompt = {{System Prompt}};
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://yansir.pythonanywhere.com/leads-value');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            console.log(xhr.responseText);
+        }
+    };
+    xhr.onerror = function() {
+        console.error("Error: ", xhr.statusText);
+    };
+    xhr.send(JSON.stringify({
+        leads_content: leads_content,
+        sys_prompt: sys_prompt,
+    }));
+</script>

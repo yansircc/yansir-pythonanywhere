@@ -1,0 +1,9 @@
+{% from 'macro.jinja2' import qa_macro, title_macro, insertBtns %}
+
+{% extends 'base.jinja2' %}
+{% block content %}
+
+{{ title_macro('钞能力版ChatGPT','v1.05,内测期间免费') }}
+{{ qa_macro(form_data, 3, 2, 1, insertBtns([{'id':'clear-transcript-history','className':'btn','value':'清空对话'}])) }}
+
+{% endblock %}

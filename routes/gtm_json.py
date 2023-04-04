@@ -6,7 +6,17 @@ gtm_json_blueprint = Blueprint('gtm_json', __name__)
 
 @gtm_json_blueprint.route('/gtm-json', methods=['GET'])
 def gtm_json():
-    return render_template('gtm-json.html')
+    form_data = [
+        {'label': 'GA4 ID:', 'tag': 'input', 'type': 'text', 'id': 'ga4_id', 'placeholder': 'G-xxxxxx'},
+        {'label': 'GA4 API Key:', 'tag': 'input', 'type': 'text', 'id': 'ga4_api_key', 'placeholder': 'AIzaSyxxxxxx'},
+        {'label': 'GAds ID:', 'tag': 'input', 'type': 'text', 'id': 'gads_id', 'placeholder': 'AW-xxxxxx'},
+        {'label': 'GAds Label:', 'tag': 'input', 'type': 'text', 'id': 'gads_label', 'placeholder': 'xxxxxx'},
+        {'label': 'OpenAI API Key:', 'tag': 'input', 'type': 'text', 'id': 'openai_api_key' , 'placeholder': 'sk-xxxxxx'},
+        {'label': '训练AI的命令:', 'tag': 'textarea', 'id': 'sys_prompt', 'rows': '5', 'placeholder': '你想让AI按什么标准给询盘打分?'},
+        {'tag': 'input', 'type': 'submit', 'value': '生成我的Json'}
+    ]
+    endpoint = request.path.lstrip('/')
+    return render_template(endpoint+'.jinja2', js_file='js/'+endpoint+'.js', form_data=form_data)
 
 @gtm_json_blueprint.route('/generate_json', methods=['POST'])
 def generate_json():

@@ -1,0 +1,49 @@
+{% macro title_macro(title, description) %}
+<div class="title-container">
+    {% if title %}<h1 class="page-title">{{ title }}</h1>{% endif %}
+    {% if description %}<div class="page-description"><span>{{ description }}<span></div>{% endif %}
+</div>
+{% endmacro %}
+
+{% macro qa_macro(form_data, formPo=1, loaderPo=2, containerPo=3, btnCall=None, db_strings='') %}
+<div id="container">
+    <div class="form-container" style="order:{{ formPo }}">
+        <form id="form"{% if db_strings %} style="display:none;"{% endif %}>
+            {% for field in form_data %}
+                {% set tag = field.pop('tag') %}
+                {% set label = field.pop('label', None) %}
+                
+                {% if label %}
+                    <label for="{{ field['name'] or field['id'] }}">{{ label }}</label>
+                {% endif %}
+                
+                <{{ tag }}
+                    {% for key, value in field.items() %}
+                        {{ key }}="{{ value }}"
+                    {% endfor %}
+                    {% if tag in ['input', 'img', 'br'] %}
+                        />
+                    {% else %}
+                        {% if tag == 'textarea' %}
+                        {% endif %}
+                        ></{{ tag }}>
+                    {% endif %}
+            {% endfor %}
+        </form>
+    </div>
+    <div id="loader" style="order:{{ loaderPo }}"></div>
+    <div id="response-container" style="order:{{ containerPo }}{% if db_strings %}; display:block;{% endif %}">
+        {%if btnCall%}{{ btnCall }}{%endif%}
+        <pre><span class="highlight">{{ db_strings }}</span></pre>
+    </div>
+</div>
+{% endmacro %}
+
+{# qa_macro的callback函数(btnCall) #}
+{% macro insertBtns(btn_data_list) %}
+    <div class="btns">
+        {% for btn_data in btn_data_list %}
+            <div id="{{ btn_data['id'] }}" class="{{ btn_data['className'] }}">{{ btn_data['value'] }}</div>
+        {% endfor %}
+    </div>
+{% endmacro %}

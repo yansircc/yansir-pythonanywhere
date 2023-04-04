@@ -1,0 +1,7 @@
+.env
+.webassets-cache/
+__pycache__/
+.vscode/
+wsgi.py
+```
+templates/personas.html

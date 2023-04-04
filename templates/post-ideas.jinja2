@@ -1,0 +1,9 @@
+{% from 'macro.jinja2' import qa_macro, title_macro %}
+
+{% extends 'base.jinja2' %}
+{% block content %}
+
+{{ title_macro('文章灵感生成器','v1.05,内测期间免费') }}
+{{ qa_macro(form_data, formPo=1, loaderPo=2, containerPo=3) }}
+
+{% endblock %}

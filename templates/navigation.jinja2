@@ -2,8 +2,14 @@
     <li><a href="{{ url_for('builder.builder') }}">建站</a></li>
     <li><a href="{{ url_for('paid_chat.paid_chat') }}">对话</a></li>
     <li><a href="{{ url_for('business.business') }}">生意</a></li>
-    <li><a href="{{ url_for('post_ideas.ideas') }}">标题</a></li>
+    <li><a href="{{ url_for('post_ideas.post_ideas') }}">标题</a></li>
     <li><a href="{{ url_for('generate_post.generate_post') }}">文章</a></li>
     <li><a href="{{ url_for('gtm_json.gtm_json') }}">GTM</a></li>
     <li><a href="{{ url_for('anki_cards.anki_cards') }}">Anki</a></li>
 </ul>
+<button class="hamburger">&#9776;</button>
+<script>
+    document.querySelector('.hamburger').addEventListener('click', function () {
+        document.querySelector('.navigation').classList.toggle('active');
+    });
+</script>

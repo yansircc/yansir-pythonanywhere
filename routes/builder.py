@@ -1,14 +1,22 @@
-from flask import Blueprint, request, render_template, jsonify
+from flask import Blueprint, request, render_template
 from golem import Golem, openai_api_key
 
 builder_blueprint = Blueprint('builder', __name__)
 
+
 @builder_blueprint.route('/builder')
 def builder():
-    return render_template('builder.html')
+    form_data = [
+        {'tag': 'input', 'type': 'text', 'name': 'user_input', 'id': 'user_input', 'placeholder': '比如：我要一行两列，左边图右边标题+视频'},
+        {'tag': 'input', 'type': 'submit', 'id': 'submit', 'value': '回车'}
+    ]
+    endpoint = request.path.lstrip('/')
+    return render_template(endpoint+'.jinja2', js_file='js/'+endpoint+'.js', form_data=form_data)
 
-@builder_blueprint.route('/builder-submit', methods=['POST'])
-def builder_submit():
+
+@builder_blueprint.route('/builder_golem', methods=['GET'])
+def builder_golem():
+    session_id = request.args.get('session_id', '')
     sys_prompt = """
     You are a programmer who helps me use a website builder that relies on JSON for front-end layout, and your task is to help me write code in JSON format.
     The following is important information.
@@ -21,12 +29,11 @@ def builder_submit():
     From now on, only formatted json code wrapped in three backticks should be output, and no need to explain what the code does.
     """
     user_input_suffix = "Your output must be written in English, code must be wrapped in three backticks."
-    builder_golem = Golem(openai_api_key,sys_prompt=sys_prompt, user_input_suffix=user_input_suffix)
+    builder_golem = Golem(openai_api_key, session_id,
+                          sys_prompt=sys_prompt, user_input_suffix=user_input_suffix)
 
-    user_input = request.form['query']
-    response = builder_golem.response(user_input)
-
-    return jsonify({'response': response})
+    user_input = request.args.get('user_input', '')
+    return builder_golem.response(user_input)
 
 
 def register_routes(app):

@@ -1,5 +1,6 @@
-from flask import Blueprint, request, render_template, jsonify
+from flask import Blueprint, request, render_template
 from golem import Golem, openai_api_key
+from transcripts_db import TranscriptsDB
 import re
 
 
@@ -7,54 +8,64 @@ generate_post_blueprint = Blueprint('generate_post', __name__)
 
 @generate_post_blueprint.route('/generate-post', methods=['GET'])
 def generate_post():
-    return render_template('generate-post.html')
+    form_data = [
+        {'tag': 'input', 'type': 'text', 'name': 'user_input', 'id': 'user_input', 'placeholder': '输入英文标题'},
+        {'tag': 'input', 'type': 'submit', 'id': 'submit', 'value': '回车'}
+    ]
+    endpoint = request.path.lstrip('/')
+    return render_template(endpoint+'.jinja2', js_file='js/'+endpoint+'.js', form_data=form_data)
 
-@generate_post_blueprint.route('/generate_post', methods=['POST'])
-def generate_html():
-    data = request.get_json()
-    title = ' '.join(re.findall(r'[a-zA-Z\s]+', data['user_input']))
-    post_type = data['post_type']
-    smmarized_trained_data = data['smmarized_trained_data']
-
-    sys_prompt = "The following information is about you identity and your business. You will read it in the first person: " + smmarized_trained_data
+@generate_post_blueprint.route('/generate_post', methods=['GET'])
+def generate_post_golem():
+    session_id = request.args.get('session_id')
+    user_input = request.args.get('user_input')
+    post_type = request.args.get('post_type')
+    title = ' '.join(re.findall(r'[a-zA-Z\s]+', user_input))
     
-    if post_type == 'response_post':
-        max_word_count = 1000
-        response_post_golem = Golem(openai_api_key, sys_prompt=sys_prompt, max_tokens=int(max_word_count*1.2))
-        user_input = f'''
-        From you angle of view, Write a blog post(around {max_word_count} words) about {title}. 
-        Keep in mind that you need to:
-        1. Insert images for every 300 words using this API:http://source.unsplash.com/800x450/?keywords-here;
-        2. Inset a resources link for those keywords which need data support;
-        3. Split the paragraph whenever you encounter a period;
-        4. The post need to be output in English and html format;
-        Here is a example of what you should do:
-        ----------------
-        <h1>What is a response post?</h1>
-        <img src="https://source.unsplash.com/800x450/?keywords-here" alt="featured image">
-        <p>Grab attention in the frist paragraph. Multiple rhetorical questions or a fabricated story.(80 words)</p>
-        <p>In second paragraph, provide a brief and helpful answer just like Google featured snippet and bold it.(80 words)</p>
-        <p>Leave the reader wanting more, maintaining their interest in continuing to read.(30 words)</p>
-        <h2>Use related question as heading2, for example: Should I use response posts to rank my website?</h2>
-        <p>Related answer here, don't forget to bold keywords and find related images from unsplash.</p>
-        <h2>More related questions</h2>
-        <p>Relate answers</p>
-        <h2>Conclusion</h2>
-        <p>Summary this post within 80 words.</p>
-        ----------------
-        '''
+    generate_post_db = TranscriptsDB()
+    with generate_post_db as db:
+        business_prompts = db.retrieve_data('conversation', session_id, 'business_prompts')
 
-        response = response_post_golem.response(user_input)
-        
-    elif post_type == 'listicle':
-        pass
-    elif post_type == 'pillar_post':
-        pass
+    if business_prompts:
+        sys_prompt = "The following information is about you identity and your business. You will read it in the first person: " + business_prompts
+
+        if post_type == 'response_post':
+            max_word_count = 1200
+            response_post_golem = Golem(openai_api_key, session_id, sys_prompt=sys_prompt, max_tokens=500)
+            user_input = f'''
+            From you angle of view, Write a blog post(between {max_word_count-100} to {max_word_count+100} words) about {title}. 
+            Keep in mind that you need to:
+            1. Inset a resources link for those keywords which need data support;
+            2. Short sentence, split the paragraph more often;
+            3. Output in English and html format;
+            Here is a example of what you should do:
+            <h1>A title end with question mark?</h1>
+            <p>Frist paragraph, multiple rhetorical questions or a fabricated story.(80 words)</p>
+            <p><strong>Second paragraph, provide a brief and helpful answer to the title.(80 words)</strong></p>
+            <p>Maintaining readers' interest in continuing to read.(30 words)</p>
+            <h2>Topic related question end with question mark?</h2>
+            <p>Bold all keywords which need data support.</p>
+            <h2>More related questions</h2>
+            <p>answers</p>
+            ...
+            <h2>Conclusion</h2>
+            <p>Within 50 words.</p>
+            '''
+            response = response_post_golem.response(user_input)
+            
+        elif post_type == 'listicle':
+            pass
+        elif post_type == 'pillar_post':
+            pass
+        else:
+            post_ideas_golem = Golem(openai_api_key, session_id, sys_prompt="Don't output anything but '文章类型错误。'.")
+            response = post_ideas_golem.response("Output the error message.")
     else:
-        return jsonify(error="Invalid post type")
+        post_ideas_golem = Golem(
+            openai_api_key, session_id, sys_prompt="Don't output anything but '数据缺失，请先完成预训练。'.")
+        response = post_ideas_golem.response("Output the error message.")
 
-    #html = mistune.markdown(response)
-    return jsonify({'response': response})
+    return response
 
 def register_routes(app):
     app.register_blueprint(generate_post_blueprint)
