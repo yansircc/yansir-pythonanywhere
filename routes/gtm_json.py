@@ -1,10 +1,12 @@
 from flask import Blueprint, request, render_template
+from navigator import navigator
 import json
 import os
 
 gtm_json_blueprint = Blueprint('gtm_json', __name__)
 
 @gtm_json_blueprint.route('/gtm-json', methods=['GET'])
+@navigator
 def gtm_json():
     form_data = [
         {'label': 'GA4 ID:', 'tag': 'input', 'type': 'text', 'id': 'ga4_id', 'placeholder': 'G-xxxxxx'},

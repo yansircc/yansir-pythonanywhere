@@ -1,10 +1,12 @@
 from flask import Blueprint, request, render_template
 from golem import Golem, openai_api_key
+from navigator import navigator
 
 builder_blueprint = Blueprint('builder', __name__)
 
 
 @builder_blueprint.route('/builder')
+@navigator
 def builder():
     form_data = [
         {'tag': 'input', 'type': 'text', 'name': 'user_input', 'id': 'user_input', 'placeholder': '比如：我要一行两列，左边图右边标题+视频'},

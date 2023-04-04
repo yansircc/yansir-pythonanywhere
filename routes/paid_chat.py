@@ -1,11 +1,13 @@
 from flask import Blueprint, request, render_template
 from golem import Golem, openai_api_key
+from navigator import navigator
 
 
 paid_chat_blueprint = Blueprint('paid_chat', __name__)
 
 
 @paid_chat_blueprint.route('/paid-chat')
+@navigator
 def paid_chat():
     form_data = [
         {'tag': 'input', 'type': 'text', 'name': 'user_input', 'id': 'user_input', 'placeholder': '输入你的问题'},

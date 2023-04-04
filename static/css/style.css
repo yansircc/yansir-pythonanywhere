@@ -12,25 +12,29 @@ body {
     font-size: clamp(32px, 4vw, 48px); }
 
     p {
-      text-align: center;
+      text-align: left;
       font-size: clamp(16px, 2.5vw, 20px); }
 
-      .navigation {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        background-color: #333;
-        overflow: hidden; }
-        .navigation li {
-          float: left; }
-          .navigation li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none; }
-            .navigation li a:hover {
-              background-color: #555; }
+      .page-description {
+        text-align: center;
+        font-size: clamp(16px, 2.5vw, 20px); }
+
+        .navigator {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          background-color: #333;
+          overflow: hidden; }
+          .navigator li {
+            float: left; }
+            .navigator li a {
+              display: block;
+              color: white;
+              text-align: center;
+              padding: 14px 16px;
+              text-decoration: none; }
+              .navigator li a:hover {
+                background-color: #555; }
 
 .hamburger {
   display: none;
@@ -45,9 +49,9 @@ body {
     background-color: #555; }
 
 @media (max-width: 767px) {
-  .navigation li {
+  .navigator li {
     display: none;   }
-    .navigation.active li {
+    .navigator.active li {
       display: block;   }
   .hamburger {
     display: block;   }
@@ -56,6 +60,42 @@ body {
 @media (min-width: 768px) {
   .hamburger {
     display: none;   }
+}
+
+.index-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  max-width: 700px;
+  gap: 20px;
+  width: calc(100% - 2 * $card-spacing);
+  margin: 0 auto;
+  height: 100vh; }
+  .index-container .index-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: calc(25% - 20px);
+    height: 150px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    text-decoration: none; }
+    .index-container .index-item span {
+      font-size: 20px;
+      color: #333; }
+      .index-container .index-item:hover {
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+        transform: translateY(-3px);
+        transition: all 0.3s ease;
+        font-weight: bold; }
+
+@media (max-width: 767px) {
+  .index-item {
+    width: calc(50% - 20px);   }
 }
 
 #loader {

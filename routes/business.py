@@ -1,6 +1,7 @@
 from flask import Blueprint, request, render_template
 from golem import Golem, openai_api_key
 from transcripts_db import TranscriptsDB
+from navigator import navigator
 
 business_blueprint = Blueprint('business', __name__)
 
@@ -8,6 +9,7 @@ business_db = TranscriptsDB()
 
 
 @business_blueprint.route('/business')
+@navigator
 def business():
     form_data = [
         {'label':'关于你的生意：','tag': 'input', 'type': 'text', 'class': 'user_input', 'name': 'my-business-brand-name', 'placeholder': '你的品牌名叫什么？'},

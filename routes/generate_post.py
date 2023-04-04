@@ -1,12 +1,14 @@
 from flask import Blueprint, request, render_template
 from golem import Golem, openai_api_key
 from transcripts_db import TranscriptsDB
+from navigator import navigator
 import re
 
 
 generate_post_blueprint = Blueprint('generate_post', __name__)
 
 @generate_post_blueprint.route('/generate-post', methods=['GET'])
+@navigator
 def generate_post():
     form_data = [
         {'tag': 'input', 'type': 'text', 'name': 'user_input', 'id': 'user_input', 'placeholder': '输入英文标题'},

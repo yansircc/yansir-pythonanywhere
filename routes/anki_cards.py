@@ -1,9 +1,11 @@
 from flask import Blueprint, request, render_template, jsonify
 from golem import Golem, openai_api_key
+from navigator import navigator
 
 anki_cards_blueprint = Blueprint('anki_cards', __name__)
 
 @anki_cards_blueprint.route('/anki-cards')
+@navigator
 def anki_cards():
     return render_template('anki-cards.jinja2')
 

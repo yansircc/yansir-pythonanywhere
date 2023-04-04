@@ -1,12 +1,13 @@
 from flask import Blueprint, request, render_template, jsonify, Response
 from golem import Golem, openai_api_key
 from transcripts_db import TranscriptsDB
-import re
+from navigator import navigator
 
 post_ideas_blueprint = Blueprint('post_ideas', __name__)
 
 
 @post_ideas_blueprint.route('/post-ideas')
+@navigator
 def post_ideas():
     form_data = [
         {'label':'关键词：', 'tag': 'textarea', 'id': 'keyword', 'placeholder': '输入你的核心关键词，每个关键词占一行', 'rows':'5'},

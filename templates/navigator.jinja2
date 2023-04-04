@@ -1,0 +1,7 @@
+<ul class="navigator">
+    {% for item in g.navigator_items %}
+        <li><a href="{{ url_for(item.route) }}">{{ item.text }}</a></li>
+    {% endfor %}
+</ul>
+<button class="hamburger">&#9776;</button>
+<script type="text/javascript" src="{{ url_for('static', filename='js/navigator.js') }}"></script>
