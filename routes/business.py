@@ -2,6 +2,7 @@ from flask import Blueprint, request, render_template, Response, stream_with_con
 from golem import Golem, openai_api_key
 from transcripts_db import TranscriptsDB
 from navigator import navigator
+from cookies import create_cookie
 from queue import Queue
 import json
 
@@ -12,6 +13,7 @@ business_db = TranscriptsDB()
 
 @business_blueprint.route('/business')
 @navigator
+@create_cookie
 def business():
     form_data = [
         {'label':'关于你的生意：','tag': 'input', 'type': 'text', 'class': 'user_input', 'name': 'my-business-brand-name', 'placeholder': '你的品牌名叫什么？'},

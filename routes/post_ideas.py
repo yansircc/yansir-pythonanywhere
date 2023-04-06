@@ -2,6 +2,7 @@ from flask import Blueprint, request, render_template, Response, stream_with_con
 from golem import Golem, openai_api_key
 from transcripts_db import TranscriptsDB
 from navigator import navigator
+from cookies import create_cookie
 from queue import Queue
 
 post_ideas_blueprint = Blueprint('post_ideas', __name__)
@@ -10,6 +11,7 @@ response_queue = Queue()
 
 @post_ideas_blueprint.route('/post-ideas')
 @navigator
+@create_cookie
 def post_ideas():
     form_data = [
         {'label': '关键词：', 'tag': 'textarea', 'id': 'keyword', 'name': 'keyword',

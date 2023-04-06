@@ -2,6 +2,7 @@ from flask import Blueprint, request, render_template, Response, stream_with_con
 from golem import Golem, openai_api_key
 from transcripts_db import TranscriptsDB
 from navigator import navigator
+from cookies import create_cookie
 from queue import Queue
 import re
 
@@ -11,6 +12,7 @@ response_queue = Queue()
 
 @generate_post_blueprint.route('/generate-post', methods=['GET'])
 @navigator
+@create_cookie
 def generate_post():
     form_data = [
         {'tag': 'input', 'type': 'text', 'name': 'user_input', 'id': 'user_input', 'placeholder': '输入英文标题'},

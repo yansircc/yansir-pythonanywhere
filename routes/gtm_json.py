@@ -1,5 +1,6 @@
 from flask import Blueprint, request, render_template, jsonify
 from navigator import navigator
+from cookies import create_cookie
 import os
 import json
 
@@ -8,6 +9,7 @@ gtm_json_blueprint = Blueprint('gtm_json', __name__)
 
 @gtm_json_blueprint.route('/gtm-json', methods=['GET'])
 @navigator
+@create_cookie
 def gtm_json():
     form_data = [
         {'label': 'GA4 ID:', 'tag': 'input', 'type': 'text',

@@ -1,6 +1,7 @@
 from flask import Blueprint, request, render_template, Response, stream_with_context
 from golem import Golem, openai_api_key
 from navigator import navigator
+from cookies import create_cookie
 from queue import Queue
 
 paid_chat_blueprint = Blueprint('paid_chat', __name__)
@@ -8,6 +9,7 @@ response_queue = Queue()
 
 @paid_chat_blueprint.route('/paid-chat')
 @navigator
+@create_cookie
 def paid_chat():
     form_data = [
         {'tag': 'input', 'type': 'text', 'name': 'user_input',
