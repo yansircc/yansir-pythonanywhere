@@ -2,6 +2,7 @@ from flask import Blueprint, request, render_template, Response, stream_with_con
 from golem import Golem, openai_api_key
 from navigator import navigator
 from queue import Queue
+from cookies import create_cookie
 
 builder_blueprint = Blueprint('builder', __name__)
 response_queue = Queue()
@@ -9,6 +10,7 @@ response_queue = Queue()
 
 @builder_blueprint.route('/builder')
 @navigator
+@create_cookie
 def builder():
     form_data = [
         {'tag': 'input', 'type': 'text', 'name': 'user_input', 'id': 'user_input', 'placeholder': '比如：我要一行两列，左边图右边标题+视频'},

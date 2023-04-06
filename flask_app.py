@@ -1,23 +1,11 @@
-from flask import Flask, redirect, session, make_response, g
+from flask import Flask, session, make_response
 from flask_cors import CORS
 from flask_assets import Environment, Bundle
-from uuid import uuid4
 import os
 import importlib
-import redis
 
 
 app = Flask(__name__)
-redis_client = redis.Redis(host='localhost', port=6379, db=0)
-
-@app.before_request
-def create_cookie():
-    if 'user_id' not in session:
-        session['user_id'] = str(uuid4())
-        resp = make_response()
-        resp.set_cookie('user_id', session['user_id'].encode('utf-8'))
-
-
 CORS(app)
 
 assets = Environment(app)
