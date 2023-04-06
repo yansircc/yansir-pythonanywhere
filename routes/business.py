@@ -1,10 +1,12 @@
-from flask import Blueprint, request, render_template
+from flask import Blueprint, request, render_template, Response, stream_with_context
 from golem import Golem, openai_api_key
 from transcripts_db import TranscriptsDB
 from navigator import navigator
+from queue import Queue
+import json
 
 business_blueprint = Blueprint('business', __name__)
-
+response_queue = Queue()
 business_db = TranscriptsDB()
 
 
@@ -39,37 +41,33 @@ def business():
         {'tag': 'input', 'type': 'submit', 'value': '预训练'}
     ]
     endpoint = request.path.lstrip('/')
-    session_id = request.cookies.get('user_id')
-    with business_db as db:
-        db.create_table('conversation', 'business_prompts')
-        transcript_history = db.retrieve_data(
-            'conversation', session_id, 'business_prompts')
-    if transcript_history:
-        content_suffix = "\n\nBased on the above information execute my command: [PROMPT]. Note that you always have to write copy for my typical client, from his point of interest, and add value."
-        return render_template(endpoint+'.jinja2', js_file='js/'+endpoint+'.js', form_data=form_data, transcript_history=transcript_history+content_suffix)
-    else:
-        return render_template(endpoint+'.jinja2', js_file='js/'+endpoint+'.js', form_data=form_data)
+    return render_template(endpoint+'.jinja2', js_file='js/'+endpoint+'.js', form_data=form_data)
 
 
-@business_blueprint.route('/business_golem', methods=['GET'])
+@business_blueprint.route('/business_golem', methods=['GET', 'POST'])
 def business_golem():
-    session_id = request.args.get('session_id')
-    sys_prompt = "You are a successful Chinese business owner. Now, you have to describe your business to ChatGPT."
-    user_input_prefix = "This is your business information: "
-    user_input_suffix = "A key with the keyword 'PERSONAS' indicates that the value is information about your target audience, and a key with the keyword 'MY-BUSINESS' indicates that the value is information about your business. Now start your description in English within 200 words."
-    business_golem = Golem(openai_api_key, session_id, sys_prompt=sys_prompt,
-                           user_input_prefix=user_input_prefix, user_input_suffix=user_input_suffix)
+    if request.method == 'POST':
+        form_data = request.form.to_dict()
+        form_data_str = json.dumps(form_data)
+        session_id = request.cookies.get('user_id')
+        sys_prompt = "You are a successful Chinese business owner. Now, you have to describe your business to ChatGPT."
+        user_input_prefix = "This is your business information: "
+        user_input_suffix = "A key with the keyword 'PERSONAS' indicates that the value is information about your target audience, and a key with the keyword 'MY-BUSINESS' indicates that the value is information about your business. Now start your description in English within 200 words."
+        business_golem = Golem(openai_api_key, session_id, sys_prompt=sys_prompt,
+                            user_input_prefix=user_input_prefix, user_input_suffix=user_input_suffix)
 
-    user_input = request.args.get('user_input')
+        def store_data_in_db(full_reply_content):
+            with business_db as db:
+                db.create_table('conversation', 'business_prompts')
+                db.store_data('conversation', session_id,
+                            'business_prompts', full_reply_content)
 
-    def store_data_in_db(full_reply_content):
-        with business_db as db:
-            db.create_table('conversation', 'business_prompts')
-            db.store_data('conversation', session_id,
-                          'business_prompts', full_reply_content)
-
-    return business_golem.response(user_input, store_data_in_db)
-
+        response = business_golem.response(form_data_str, store_data_in_db)
+        response_queue.put(response)
+        return '', 204
+    else:
+        response = response_queue.get()
+        return Response(stream_with_context(response), mimetype='text/event-stream')
 
 def register_routes(app):
     app.register_blueprint(business_blueprint)

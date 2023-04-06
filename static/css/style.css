@@ -6,35 +6,31 @@ body {
   color: #333;
   font-size: clamp(14px, 2vw, 18px); }
 
-  h1 {
+  .page-title {
     text-align: center;
     margin-top: 50px;
     font-size: clamp(32px, 4vw, 48px); }
 
-    p {
-      text-align: left;
+    .page-description {
+      text-align: center;
       font-size: clamp(16px, 2.5vw, 20px); }
 
-      .page-description {
-        text-align: center;
-        font-size: clamp(16px, 2.5vw, 20px); }
-
-        .navigator {
-          list-style: none;
-          margin: 0;
-          padding: 0;
-          background-color: #333;
-          overflow: hidden; }
-          .navigator li {
-            float: left; }
-            .navigator li a {
-              display: block;
-              color: white;
-              text-align: center;
-              padding: 14px 16px;
-              text-decoration: none; }
-              .navigator li a:hover {
-                background-color: #555; }
+      .navigator {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        background-color: #333;
+        overflow: hidden; }
+        .navigator li {
+          float: left; }
+          .navigator li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none; }
+            .navigator li a:hover {
+              background-color: #555; }
 
 .hamburger {
   display: none;
@@ -125,7 +121,8 @@ img {
 
   #container {
     display: flex;
-    flex-direction: column; }
+    flex-direction: column;
+    padding: 50px 0; }
 
     @media (max-width: 767px) {
       #container {
@@ -184,6 +181,7 @@ form {
 }
 
 #response-container {
+  order: 1;
   position: relative;
   margin: 0 auto;
   max-width: 700px;
@@ -196,21 +194,12 @@ form {
   line-height: 1.5;
   display: none;
   box-sizing: border-box; }
-  #response-container pre {
-    white-space: pre-wrap;
-    word-wrap: break-word; }
-    #response-container h1 {
-      text-align: center;
-      margin-top: 0;
-      font-size: 32px;
-      margin-bottom: 40px; }
-      #response-container p {
-        margin-bottom: 20px;
-        font-size: clamp(14px, 2.5vw, 18px);
-        text-align: left;
-        margin: 0 0 20px 0; }
-        #response-container .highlight {
-          background-color: #FFD700; }
+  #response-container .golem-response {
+    white-space: break-spaces; }
+    #response-container p {
+      font-size: clamp(14px, 2.5vw, 18px); }
+      #response-container .highlight {
+        background-color: #FFD700; }
 
 @media (max-width: 767px) {
   #response-container {

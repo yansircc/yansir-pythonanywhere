@@ -4,6 +4,6 @@
 {% block content %}
 
 {{ title_macro('ChatGPT预训练', '先描述用户画像并填写自己生意的重要信息') }}
-{{ qa_macro(form_data, 1, 2, 3, insertBtns([{'id':'refill', 'className':'btn refill', 'value':'重新填写'}]), transcript_history ) }}
+{{ qa_macro(form_data) }}
 
 {% endblock %}

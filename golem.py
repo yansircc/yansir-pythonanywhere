@@ -33,7 +33,7 @@ class Golem:
         else:
             self.__transcript_history = self.__init_sys_prompt
 
-    def __generate_response(self, user_input, callback=None):
+    def response(self, user_input, callback=None):
 
         self.__transcript_history += [{'role': 'user',
                                        'content': self.__user_input_prefix + user_input + self.__user_input_suffix}]
@@ -55,19 +55,16 @@ class Golem:
 
             if not chunk_message:
                 yield f"data: {json.dumps({'done': True})}\n\n"
-                self.__full_reply_content = ''.join([m.get('content', '') for m in self.__collected_messages])
-                self.__transcript_history += [{'role': 'assistant', 'content': self.__full_reply_content}]
+                self.__full_reply_content = ''.join(
+                    [m.get('content', '') for m in self.__collected_messages])
+                self.__transcript_history += [{'role': 'assistant',
+                                               'content': self.__full_reply_content}]
                 if self.__memory:
                     with self.__transcripts_db as db:
                         db.store_data(self.__table_name, self.__session_id,
-                                    self.__column_name, self.__transcript_history)
+                                      self.__column_name, self.__transcript_history)
                 if callback:
                     callback(self.__full_reply_content)
                 break
             elif chunk_message.get('content'):
                 yield f"data: {json.dumps({'response': chunk_message['content']})}\n\n"
-        
-
-    def response(self, user_input, callback=None):
-        response = self.__generate_response(user_input, callback)
-        return Response(response, content_type='text/event-stream')

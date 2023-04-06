@@ -1,6 +1,6 @@
 {
     "exportFormatVersion": 2,
-    "exportTime": "2023-03-30 11:12:09",
+    "exportTime": "2023-04-05 14:46:24",
     "containerVersion": {
         "path": "accounts/6000211192/containers/104790677/versions/0",
         "accountId": "6000211192",
@@ -242,7 +242,7 @@
                     {
                         "type": "TEMPLATE",
                         "key": "html",
-                        "value": "<script>\n  var leads_content = {{Form Text}};\n  var system_prompt = \"You're a rating machine. You will rate the inquiries on a scale of 0-100. If the inquiry has no relationship with B2B procurement, you will give it a rating of 0. If it is relevant, then you will rate it based on the quality of the inquiry. You always output score first head and then explain the reasons.\";\n  var max_tokens = 100;\n  var temperature = 0.1;\n  var ads_conversion_id = \"AW-756055019/YmB9CNmLvpIYEOv3wegC\";\n\n  var xhr = new XMLHttpRequest();\n  xhr.open('POST', 'https://yansir.pythonanywhere.com/leads-value');\n  xhr.setRequestHeader('Content-Type', 'application/json');\n  xhr.onload = function() {\n    if (xhr.status === 200) {\n      console.log(xhr.responseText);\n    }\n  };\n  xhr.onerror = function() {\n    console.error(\"Error: \", xhr.statusText);\n  };\n  xhr.send(JSON.stringify({\n    // leads_value: leads_content,\n    // system_prompt: system_prompt,\n    // max_tokens: max_tokens,\n    // temperature: temperature\n    leads_content: leads_content,\n    sys_prompt: system_prompt,\n    max_tokens: max_tokens,\n    temperature: temperature,\n    measurement_id: {{GA4_ID}},\n    api_secret: {{GA4_API_Key}},\n    ads_conversion_id: {{Gads_ID}},\n    ads_conversion_id: ads_conversion_id,\n    client_id: '1560533014.1676793714'\n  }));\n</script>"
+                        "value": "<script>\n  var leads_content = {{Form Text}};\n  var system_prompt = \"You're a rating machine. You will rate the inquiries on a scale of 0-100. If the inquiry has no relationship with B2B procurement, you will give it a rating of 0. If it is relevant, then you will rate it based on the quality of the inquiry. You always output score first head and then explain the reasons.\";\n\n  var ads_conversion_id = \"AW-756055019/YmB9CNmLvpIYEOv3wegC\";\n\n  var xhr = new XMLHttpRequest();\n  xhr.open('POST', 'https://yansir.pythonanywhere.com/leads-value');\n  xhr.setRequestHeader('Content-Type', 'application/json');\n  xhr.onload = function() {\n    if (xhr.status === 200) {\n      console.log(xhr.responseText);\n    }\n  };\n  xhr.onerror = function() {\n    console.error(\"Error: \", xhr.statusText);\n  };\n  xhr.send(JSON.stringify({\n    leads_content: leads_content,\n    sys_prompt: system_prompt,\n    measurement_id: {{GA4_ID}},\n    api_secret: {{GA4_API_Key}},\n    ads_conversion_id: {{Gads_ID}},\n    ads_conversion_id: ads_conversion_id,\n  }));\n</script>"
                     },
                     {
                         "type": "BOOLEAN",
@@ -250,7 +250,7 @@
                         "value": "false"
                     }
                 ],
-                "fingerprint": "1679931069732",
+                "fingerprint": "1680193163592",
                 "firingTriggerId": [
                     "17"
                 ],
@@ -465,25 +465,15 @@
                 "containerId": "104790677",
                 "variableId": "27",
                 "name": "System_Prompt",
-                "type": "v",
+                "type": "c",
                 "parameter": [
                     {
-                        "type": "INTEGER",
-                        "key": "dataLayerVersion",
-                        "value": "2"
-                    },
-                    {
-                        "type": "BOOLEAN",
-                        "key": "setDefaultValue",
-                        "value": "false"
-                    },
-                    {
                         "type": "TEMPLATE",
-                        "key": "name",
-                        "value": "system_prompt"
+                        "key": "value",
+                        "value": "sys_prompt_replace"
                     }
                 ],
-                "fingerprint": "1679929938108",
+                "fingerprint": "1680705949063",
                 "parentFolderId": "12",
                 "formatValue": {}
             },
@@ -566,7 +556,7 @@
                 "name": "Form Text"
             }
         ],
-        "fingerprint": "1680174729250",
+        "fingerprint": "1680705984482",
         "tagManagerUrl": "https://tagmanager.google.com/#/versions/accounts/6000211192/containers/104790677/versions/0?apiLink=version"
     }
 }

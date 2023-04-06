@@ -5,9 +5,9 @@
 </div>
 {% endmacro %}
 
-{% macro qa_macro(form_data, formPo=1, loaderPo=2, containerPo=3, btnCall=None, db_strings='') %}
+{% macro qa_macro(form_data, formPo=0) %}
 <div id="container">
-    <div class="form-container" style="order:{{ formPo }}">
+    <div class="form-container"{% if formPo %} style="order:{{ formPo }}"{% endif %}>
         <form id="form"{% if db_strings %} style="display:none;"{% endif %}>
             {% for field in form_data %}
                 {% set tag = field.pop('tag') %}
@@ -31,19 +31,7 @@
             {% endfor %}
         </form>
     </div>
-    <div id="loader" style="order:{{ loaderPo }}"></div>
-    <div id="response-container" style="order:{{ containerPo }}{% if db_strings %}; display:block;{% endif %}">
-        {%if btnCall%}{{ btnCall }}{%endif%}
-        <pre><span class="highlight">{{ db_strings }}</span></pre>
-    </div>
+    <div id="response-container"></div>
 </div>
-{% endmacro %}
-
-{# qa_macro的callback函数(btnCall) #}
-{% macro insertBtns(btn_data_list) %}
-    <div class="btns">
-        {% for btn_data in btn_data_list %}
-            <div id="{{ btn_data['id'] }}" class="{{ btn_data['className'] }}">{{ btn_data['value'] }}</div>
-        {% endfor %}
-    </div>
+<div id="loader"></div>
 {% endmacro %}

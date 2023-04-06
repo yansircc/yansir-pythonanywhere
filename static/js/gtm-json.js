@@ -31,8 +31,7 @@ window.addEventListener('DOMContentLoaded', () => {
         })
             .then(response => response.json())
             .then(data => {
-                const jsonData = JSON.stringify(data);
-                const blob = new Blob([jsonData], { type: 'application/json' });
+                const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
 
                 // Create an anchor element to trigger the download

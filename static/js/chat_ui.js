@@ -1,4 +1,4 @@
-import { getCookie } from './get_cookie.js'
+import { getCookie } from './extra_func.js'
 
 export class ChatUI {
     constructor(endpoint, userInputSelectors, containerId, loaderId, formId, isClearTranscript, isPrintUserInput, isHighlightOutput, onStreamEnd=()=>{}, appendUrl='') {

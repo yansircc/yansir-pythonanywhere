@@ -20,15 +20,10 @@ body {
     font-size: clamp(14px, 2vw, 18px);
 }
 
-h1 {
+.page-title {
     text-align: center;
     margin-top: 50px;
     font-size: clamp(32px, 4vw, 48px);
-}
-
-p {
-    text-align: left;
-    font-size: clamp(16px, 2.5vw, 20px);
 }
 
 .page-description {
@@ -101,6 +96,7 @@ p {
     }
 }
 
+//Homepage
 .index-container {
     display: flex;
     flex-wrap: wrap;
@@ -177,10 +173,11 @@ img {
     margin-bottom: 20px;
 }
 
-// Main ontainer
+// Main container
 #container {
     display: flex;
     flex-direction: column;
+    padding: 50px 0;
 }
 
 @media (max-width: $mobile-breakpoint) {
@@ -261,6 +258,7 @@ form {
 
 // Response container
 #response-container {
+    order: 1;
     position: relative;
     margin: 0 auto;
     max-width: 700px;
@@ -274,23 +272,12 @@ form {
     display: none;
     box-sizing: border-box;
 
-    pre {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-    }
-
-    h1 {
-        text-align: center;
-        margin-top: 0;
-        font-size: 32px;
-        margin-bottom: 40px;
+    .golem-response {
+        white-space: break-spaces;
     }
 
     p {
-        margin-bottom: 20px;
         font-size: clamp(14px, 2.5vw, 18px);
-        text-align: left;
-        margin: 0 0 20px 0;
     }
 
     .highlight {

@@ -4,10 +4,11 @@ from flask_assets import Environment, Bundle
 from uuid import uuid4
 import os
 import importlib
+import redis
 
 
 app = Flask(__name__)
-
+redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
 @app.before_request
 def create_cookie():
