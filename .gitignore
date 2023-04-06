@@ -3,6 +3,5 @@
 __pycache__/
 .vscode/
 **/.DS_Store
-wsgi.py
 templates/personas.html
 static/gtm_demo.html
