@@ -26,7 +26,7 @@ function onDone() {
 
 document.addEventListener('DOMContentLoaded', () => {
     const chatClient = new ChatClient(
-        'builder_golem',
+        'sse/builder_golem',
         {
             onSubmitCallback: onSubmit,
             onMessageCallback: onMessage,

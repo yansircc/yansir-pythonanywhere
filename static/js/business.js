@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     addBtns('refill', ['btn', 'btn-primary'], '重新填表', 'response-container');
 
     const chatClient = new ChatClient(
-        'business_golem',
+        'sse/business_golem',
         {
             onSubmitCallback: onSubmit,
             handleFormDataCallback: storeFormData,

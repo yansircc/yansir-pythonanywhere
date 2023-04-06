@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.head.appendChild(script);
 
     const chatClient = new ChatClient(
-        'generate_post',
+        'sse/generate_post',
         {
             onSubmitCallback: onSubmit,
             handleFormDataCallback: addCustomFormData,

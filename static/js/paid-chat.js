@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     addBtns('clear-transcript-history', ['btn', 'btn-primary'], '清空历史记录', 'response-container');
 
     const chatClient = new ChatClient(
-        'paid_chat',
+        'sse/paid_chat',
         {
             handleFormDataCallback: onFormData,
             onSubmitCallback: onSubmit,

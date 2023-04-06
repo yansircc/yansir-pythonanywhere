@@ -24,7 +24,7 @@ function onDone() {
 
 document.addEventListener('DOMContentLoaded', () => {
     const chatClient = new ChatClient(
-        'post_ideas',
+        'sse/post_ideas',
         {
             onSubmitCallback: onSubmit,
             onMessageCallback: onMessage,

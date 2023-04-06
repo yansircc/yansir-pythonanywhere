@@ -1,10 +1,12 @@
-from flask import Flask, session, make_response
+from flask import Flask
 from flask_cors import CORS
 from flask_assets import Environment, Bundle
 import os
 import importlib
+from dotenv import load_dotenv
 
 
+load_dotenv(".env")
 app = Flask(__name__)
 CORS(app)
 

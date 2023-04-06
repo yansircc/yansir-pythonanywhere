@@ -21,7 +21,7 @@ def generate_post():
     endpoint = request.path.lstrip('/')
     return render_template(endpoint+'.jinja2', js_file='js/'+endpoint+'.js', form_data=form_data)
 
-@generate_post_blueprint.route('/generate_post', methods=['GET','POST'])
+@generate_post_blueprint.route('/sse/generate_post', methods=['GET','POST'])
 def generate_post_golem():
     if request.method == 'POST':
         session_id = request.cookies.get('user_id')

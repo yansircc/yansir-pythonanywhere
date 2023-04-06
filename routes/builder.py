@@ -13,14 +13,15 @@ response_queue = Queue()
 @create_cookie
 def builder():
     form_data = [
-        {'tag': 'input', 'type': 'text', 'name': 'user_input', 'id': 'user_input', 'placeholder': '比如：我要一行两列，左边图右边标题+视频'},
+        {'tag': 'input', 'type': 'text', 'name': 'user_input',
+            'id': 'user_input', 'placeholder': '比如：我要一行两列，左边图右边标题+视频'},
         {'tag': 'input', 'type': 'submit', 'id': 'submit', 'value': '回车'}
     ]
     endpoint = request.path.lstrip('/')
     return render_template(endpoint+'.jinja2', js_file='js/'+endpoint+'.js', form_data=form_data)
 
 
-@builder_blueprint.route('/builder_golem', methods=['GET', 'POST'])
+@builder_blueprint.route('/sse/builder_golem', methods=['GET', 'POST'])
 def builder_golem():
     if request.method == 'POST':
         user_input = request.form['user_input']
@@ -38,14 +39,13 @@ def builder_golem():
         """
         user_input_suffix = "Your output must be written in English, code must be wrapped in three backticks."
         builder_golem = Golem(openai_api_key, session_id,
-                            sys_prompt=sys_prompt, user_input_suffix=user_input_suffix)
+                              sys_prompt=sys_prompt, user_input_suffix=user_input_suffix)
         response = builder_golem.response(user_input)
         response_queue.put(response)
         return '', 204
     else:
         response = response_queue.get()
         return Response(stream_with_context(response), mimetype='text/event-stream')
-
 
 
 def register_routes(app):

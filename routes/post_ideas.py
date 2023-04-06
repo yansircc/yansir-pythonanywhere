@@ -24,7 +24,7 @@ def post_ideas():
     return render_template(endpoint+'.jinja2', js_file='js/'+endpoint+'.js', form_data=form_data)
 
 
-@post_ideas_blueprint.route('/post_ideas', methods=['GET', 'POST'])
+@post_ideas_blueprint.route('/sse/post_ideas', methods=['GET', 'POST'])
 def post_ideas_golem():
     if request.method == 'POST':
         keyword = request.form['keyword']

@@ -20,7 +20,7 @@ def paid_chat():
     return render_template(endpoint+'.jinja2', js_file='js/'+endpoint+'.js', form_data=form_data)
 
 
-@paid_chat_blueprint.route('/paid_chat', methods=['GET','POST'])
+@paid_chat_blueprint.route('/sse/paid_chat', methods=['GET','POST'])
 def handle_user_input():
     if request.method == 'POST':
         user_input = request.form['user_input']

@@ -46,7 +46,7 @@ def business():
     return render_template(endpoint+'.jinja2', js_file='js/'+endpoint+'.js', form_data=form_data)
 
 
-@business_blueprint.route('/business_golem', methods=['GET', 'POST'])
+@business_blueprint.route('/sse/business_golem', methods=['GET', 'POST'])
 def business_golem():
     if request.method == 'POST':
         form_data = request.form.to_dict()
