@@ -6,3 +6,4 @@ mysql-connector-python
 Flask-Assets
 libsass
 pip-autoremove
+queue
