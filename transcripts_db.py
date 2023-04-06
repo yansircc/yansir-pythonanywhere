@@ -11,14 +11,18 @@ class TranscriptsDB:
         self.password = os.getenv('DB_PASSWORD')
         self.database = os.getenv('DB_NAME')
         self.connection = None
+        print("Environment variables loaded")
 
     def __enter__(self):
+        print("Connecting to the database...")
         self.connection = mysql.connector.connect(
             host=self.host,
             user=self.user,
             password=self.password,
-            database=self.database
+            database=self.database,
+            connection_timeout=10
         )
+        print("Connected to the database")
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
