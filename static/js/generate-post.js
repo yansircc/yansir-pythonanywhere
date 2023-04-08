@@ -31,8 +31,10 @@ function onMessage(response) {
 
 function onDone() {
     loader.style.display = 'none';
-    const golemResponseSpan = document.querySelector('.golem-response span');
+    const golemResponse = document.querySelector('.golem-response');
+    const golemResponseSpan = golemResponse.querySelector('span');
     golemResponseSpan.innerHTML = marked.parse(golemResponseSpan.textContent);
+    golemResponse.style.whiteSpace = 'normal';
 }
 
 document.addEventListener('DOMContentLoaded', () => {

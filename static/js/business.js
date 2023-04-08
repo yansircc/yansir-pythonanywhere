@@ -11,6 +11,8 @@ function onSubmit() {
     form.style.display = 'none';
     //为sse消息创建容器
     addSseContainer(['golem-response'])
+    const highlightSpan = document.querySelector('span.highlight');
+    highlightSpan.textContent = '';
 }
 
 //把表单数据存储到本地
