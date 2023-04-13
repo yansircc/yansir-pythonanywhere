@@ -10,9 +10,10 @@ window.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
 
         const ga4_id = document.getElementById('ga4_id').value;
-        const ga4_api_key = document.getElementById('ga4_api_key').value;
+        const google_optimize_id = document.getElementById('google_optimize_id').value;
         const gads_id = document.getElementById('gads_id').value;
         const gads_label = document.getElementById('gads_label').value;
+        const hotjar_site_id = document.getElementById('hotjar_site_id').value;
         const openai_api_key = document.getElementById('openai_api_key').value;
         const sys_prompt = document.getElementById('sys_prompt').value;
 
@@ -21,9 +22,10 @@ window.addEventListener('DOMContentLoaded', () => {
             method: 'POST',
             body: JSON.stringify({
                 'ga4_id': ga4_id,
-                'ga4_api_key': ga4_api_key,
+                'google_optimize_id': google_optimize_id,
                 'gads_id': gads_id,
                 'gads_label': gads_label,
+                'hotjar_site_id': hotjar_site_id,
                 'openai_api_key': openai_api_key,
                 'sys_prompt': sys_prompt
             }),

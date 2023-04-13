@@ -14,12 +14,14 @@ def gtm_json():
     form_data = [
         {'label': 'GA4 ID:', 'tag': 'input', 'type': 'text',
             'id': 'ga4_id', 'placeholder': 'G-xxxxxx'},
-        {'label': 'GA4 API Key:', 'tag': 'input', 'type': 'text',
-            'id': 'ga4_api_key', 'placeholder': 'AIzaSyxxxxxx'},
+        {'label': 'Google Optimize ID:', 'tag': 'input', 'type': 'text',
+            'id': 'google_optimize_id', 'placeholder': 'OPT-XXXXXXX'},
         {'label': 'GAds ID:', 'tag': 'input', 'type': 'text',
-            'id': 'gads_id', 'placeholder': 'AW-xxxxxx'},
+            'id': 'gads_id', 'placeholder': '纯数字xxxxxx'},
         {'label': 'GAds Label:', 'tag': 'input', 'type': 'text',
             'id': 'gads_label', 'placeholder': 'xxxxxx'},
+        {'label': 'Hotjar Site ID:', 'tag': 'input', 'type': 'text',
+         'id': 'hotjar_site_id', 'placeholder': '308960x'},
         {'label': 'OpenAI API Key:', 'tag': 'input', 'type': 'text',
             'id': 'openai_api_key', 'placeholder': 'sk-xxxxxx'},
         {'label': '训练AI的命令:', 'tag': 'textarea', 'id': 'sys_prompt',
@@ -34,9 +36,10 @@ def gtm_json():
 def generate_json():
     data = request.get_json()
     ga4_id = data.get('ga4_id')
-    ga4_api_key = data.get('ga4_api_key')
+    google_optimize_id = data.get('google_optimize_id')
     gads_id = data.get('gads_id')
     gads_label = data.get('gads_label')
+    hotjar_site_id = data.get('hotjar_site_id')
     openai_api_key = data.get('openai_api_key')
     sys_prompt = data.get('sys_prompt')
 
@@ -52,25 +55,26 @@ def generate_json():
     with open(gtm_json_path, 'r') as f:
         gtm_json = json.load(f)  # Load JSON as a Python object
         gtm_json = replace_placeholders(
-            gtm_json, ga4_id, ga4_api_key, gads_id, gads_label, openai_api_key, sys_prompt)
+            gtm_json, ga4_id, google_optimize_id, gads_id, gads_label, hotjar_site_id, openai_api_key, sys_prompt)
 
     return jsonify(gtm_json)
 
 
-def replace_placeholders(json_obj, ga4_id, ga4_api_key, gads_id, gads_label, openai_api_key, sys_prompt):
+def replace_placeholders(json_obj, ga4_id, google_optimize_id, gads_id, gads_label, hotjar_site_id, openai_api_key, sys_prompt):
     if isinstance(json_obj, dict):
         for key, value in json_obj.items():
             json_obj[key] = replace_placeholders(
-                value, ga4_id, ga4_api_key, gads_id, gads_label, openai_api_key, sys_prompt)
+                value, ga4_id, google_optimize_id, gads_id, gads_label, hotjar_site_id, openai_api_key, sys_prompt)
     elif isinstance(json_obj, list):
         for i, value in enumerate(json_obj):
             json_obj[i] = replace_placeholders(
-                value, ga4_id, ga4_api_key, gads_id, gads_label, openai_api_key, sys_prompt)
+                value, ga4_id, google_optimize_id, gads_id, gads_label, hotjar_site_id, openai_api_key, sys_prompt)
     elif isinstance(json_obj, str):
         return json_obj.replace('ga4_id_replace', ga4_id) \
-            .replace('ga4_api_key_replace', ga4_api_key) \
+            .replace('google_optimize_id_replace', google_optimize_id) \
             .replace('gads_id_replace', gads_id) \
             .replace('gads_label_replace', gads_label) \
+            .replace('hotjar_site_id_replace', hotjar_site_id) \
             .replace('openai_api_key_replace', openai_api_key) \
             .replace('sys_prompt_replace', sys_prompt)
     return json_obj

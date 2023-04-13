@@ -1,22 +1,22 @@
 {
     "exportFormatVersion": 2,
-    "exportTime": "2023-04-05 14:46:24",
+    "exportTime": "2023-04-13 08:03:41",
     "containerVersion": {
-        "path": "accounts/6000211192/containers/104790677/versions/0",
-        "accountId": "6000211192",
-        "containerId": "104790677",
+        "path": "accounts/4701557434/containers/11458468/versions/0",
+        "accountId": "4701557434",
+        "containerId": "11458468",
         "containerVersionId": "0",
         "container": {
-            "path": "accounts/6000211192/containers/104790677",
-            "accountId": "6000211192",
-            "containerId": "104790677",
-            "name": "ForkMover.com",
-            "publicId": "GTM-PNMSTFG",
+            "path": "accounts/4701557434/containers/11458468",
+            "accountId": "4701557434",
+            "containerId": "11458468",
+            "name": "www.sleep-glasses.com",
+            "publicId": "GTM-KTHJPTX",
             "usageContext": [
                 "WEB"
             ],
-            "fingerprint": "1679018680642",
-            "tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/6000211192/containers/104790677/workspaces?apiLink=container",
+            "fingerprint": "1553826418125",
+            "tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/4701557434/containers/11458468/workspaces?apiLink=container",
             "features": {
                 "supportUserPermissions": true,
                 "supportEnvironments": true,
@@ -33,14 +33,50 @@
                 "supportZones": true
             },
             "tagIds": [
-                "GTM-PNMSTFG"
+                "GTM-KTHJPTX"
             ]
         },
         "tag": [
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
-                "tagId": "21",
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "tagId": "32",
+                "name": "Conversion Linker",
+                "type": "gclidw",
+                "parameter": [
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableCrossDomain",
+                        "value": "false"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableUrlPassthrough",
+                        "value": "false"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableCookieOverrides",
+                        "value": "false"
+                    }
+                ],
+                "fingerprint": "1680707510439",
+                "firingTriggerId": [
+                    "2147479553"
+                ],
+                "parentFolderId": "26",
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "tagId": "35",
                 "name": "Gads - Leads",
                 "type": "awct",
                 "parameter": [
@@ -105,11 +141,17 @@
                         "value": "false"
                     }
                 ],
-                "fingerprint": "1679929938106",
+                "fingerprint": "1681357126673",
                 "firingTriggerId": [
-                    "17"
+                    "34"
                 ],
-                "parentFolderId": "13",
+                "teardownTag": [
+                    {
+                        "tagName": "GA4 - Leads",
+                        "stopTeardownOnFailure": true
+                    }
+                ],
+                "parentFolderId": "26",
                 "tagFiringOption": "ONCE_PER_EVENT",
                 "monitoringMetadata": {
                     "type": "MAP"
@@ -119,9 +161,9 @@
                 }
             },
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
-                "tagId": "22",
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "tagId": "37",
                 "name": "GA4 - PV",
                 "type": "gaawc",
                 "parameter": [
@@ -141,11 +183,11 @@
                         "value": "{{GA4_ID}}"
                     }
                 ],
-                "fingerprint": "1679929938107",
+                "fingerprint": "1680707510440",
                 "firingTriggerId": [
                     "2147479553"
                 ],
-                "parentFolderId": "13",
+                "parentFolderId": "26",
                 "tagFiringOption": "ONCE_PER_EVENT",
                 "monitoringMetadata": {
                     "type": "MAP"
@@ -155,9 +197,9 @@
                 }
             },
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
-                "tagId": "23",
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "tagId": "38",
                 "name": "GA4 - Leads",
                 "type": "gaawe",
                 "parameter": [
@@ -213,17 +255,11 @@
                         "value": "GA4 - PV"
                     }
                 ],
-                "fingerprint": "1679929938107",
+                "fingerprint": "1681357022848",
                 "firingTriggerId": [
-                    "17"
+                    "34"
                 ],
-                "setupTag": [
-                    {
-                        "tagName": "Gads - Leads",
-                        "stopOnSetupFailure": true
-                    }
-                ],
-                "parentFolderId": "13",
+                "parentFolderId": "26",
                 "tagFiringOption": "ONCE_PER_EVENT",
                 "monitoringMetadata": {
                     "type": "MAP"
@@ -233,16 +269,16 @@
                 }
             },
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
-                "tagId": "25",
-                "name": "Data Layer Push",
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "tagId": "39",
+                "name": "Data Layer Push - Leads",
                 "type": "html",
                 "parameter": [
                     {
                         "type": "TEMPLATE",
                         "key": "html",
-                        "value": "<script>\n  var leads_content = {{Form Text}};\n  var system_prompt = \"You're a rating machine. You will rate the inquiries on a scale of 0-100. If the inquiry has no relationship with B2B procurement, you will give it a rating of 0. If it is relevant, then you will rate it based on the quality of the inquiry. You always output score first head and then explain the reasons.\";\n\n  var ads_conversion_id = \"AW-756055019/YmB9CNmLvpIYEOv3wegC\";\n\n  var xhr = new XMLHttpRequest();\n  xhr.open('POST', 'https://yansir.pythonanywhere.com/leads-value');\n  xhr.setRequestHeader('Content-Type', 'application/json');\n  xhr.onload = function() {\n    if (xhr.status === 200) {\n      console.log(xhr.responseText);\n    }\n  };\n  xhr.onerror = function() {\n    console.error(\"Error: \", xhr.statusText);\n  };\n  xhr.send(JSON.stringify({\n    leads_content: leads_content,\n    sys_prompt: system_prompt,\n    measurement_id: {{GA4_ID}},\n    api_secret: {{GA4_API_Key}},\n    ads_conversion_id: {{Gads_ID}},\n    ads_conversion_id: ads_conversion_id,\n  }));\n</script>"
+                        "value": "<script>\n    var leads_content = {{Form Text}};\n    var sys_prompt = {{System_Prompt}};\n    var first_party_cookie = {{1st_Party_Cookie}};\n\n    var xhr = new XMLHttpRequest();\n    xhr.open('POST', 'https://gpt.yansir.vip/leads-value');\n    xhr.setRequestHeader('Content-Type', 'application/json');\n    xhr.onload = function () {\n        if (xhr.status === 200) {\n            var response = JSON.parse(xhr.responseText);\n            var leads_value = parseInt(response.leads_value);\n            var transaction_id = response.transaction_id;\n            dataLayer.push({ 'leads_value': leads_value, 'transaction_id': transaction_id, 'server_response': true });\n            console.log(xhr.responseText);\n        }\n    };\n    xhr.onerror = function () {\n        console.error(\"Error: \", xhr.statusText);\n    };\n    xhr.send(JSON.stringify({\n        leads_content: leads_content,\n        sys_prompt: sys_prompt,\n        first_party_cookie: first_party_cookie\n    }));\n</script>"
                     },
                     {
                         "type": "BOOLEAN",
@@ -250,9 +286,9 @@
                         "value": "false"
                     }
                 ],
-                "fingerprint": "1680193163592",
+                "fingerprint": "1681372982211",
                 "firingTriggerId": [
-                    "17"
+                    "34"
                 ],
                 "teardownTag": [
                     {
@@ -260,7 +296,7 @@
                         "stopTeardownOnFailure": true
                     }
                 ],
-                "parentFolderId": "13",
+                "parentFolderId": "26",
                 "tagFiringOption": "ONCE_PER_EVENT",
                 "monitoringMetadata": {
                     "type": "MAP"
@@ -270,33 +306,118 @@
                 }
             },
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
-                "tagId": "26",
-                "name": "Conversion Linker",
-                "type": "gclidw",
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "tagId": "42",
+                "name": "Google Optimize - PI",
+                "type": "opt",
                 "parameter": [
                     {
                         "type": "BOOLEAN",
-                        "key": "enableCrossDomain",
-                        "value": "false"
+                        "key": "useOptimizeDomain",
+                        "value": "true"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "optimizeContainerId",
+                        "value": "{{Google_Optimize_ID}}"
                     },
                     {
                         "type": "BOOLEAN",
-                        "key": "enableUrlPassthrough",
-                        "value": "false"
-                    },
-                    {
-                        "type": "BOOLEAN",
-                        "key": "enableCookieOverrides",
+                        "key": "globalFunctionNameSettings",
                         "value": "false"
                     }
                 ],
-                "fingerprint": "1679929938108",
+                "fingerprint": "1681357675918",
+                "firingTriggerId": [
+                    "2147479573"
+                ],
+                "parentFolderId": "26",
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "tagId": "44",
+                "name": "Hotjar - PV",
+                "type": "hjtc",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "hotjar_site_id",
+                        "value": "{{Hotjar_Site_ID}}"
+                    }
+                ],
+                "fingerprint": "1681359968048",
                 "firingTriggerId": [
                     "2147479553"
                 ],
-                "parentFolderId": "13",
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "tagId": "46",
+                "name": "Google Remarketing - PV",
+                "type": "sp",
+                "parameter": [
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableConversionLinker",
+                        "value": "true"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableDynamicRemarketing",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "conversionCookiePrefix",
+                        "value": "_gcl"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "userId",
+                        "value": "{{1st_Party_Cookie}}"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "conversionId",
+                        "value": "{{Gads_ID}}"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "customParamsFormat",
+                        "value": "NONE"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "conversionLabel",
+                        "value": "{{Gads_Label}}"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "rdp",
+                        "value": "false"
+                    }
+                ],
+                "fingerprint": "1681359948631",
+                "firingTriggerId": [
+                    "2147479553"
+                ],
                 "tagFiringOption": "ONCE_PER_EVENT",
                 "monitoringMetadata": {
                     "type": "MAP"
@@ -308,18 +429,35 @@
         ],
         "trigger": [
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
-                "triggerId": "17",
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "triggerId": "34",
                 "name": "Form Submission",
                 "type": "FORM_SUBMISSION",
+                "autoEventFilter": [
+                    {
+                        "type": "EQUALS",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{Server_Response}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": "true"
+                            }
+                        ]
+                    }
+                ],
                 "waitForTags": {
                     "type": "BOOLEAN",
                     "value": "false"
                 },
                 "checkValidation": {
                     "type": "BOOLEAN",
-                    "value": "false"
+                    "value": "true"
                 },
                 "waitForTagsTimeout": {
                     "type": "TEMPLATE",
@@ -328,49 +466,15 @@
                 "uniqueTriggerId": {
                     "type": "TEMPLATE"
                 },
-                "fingerprint": "1679929938105",
-                "parentFolderId": "16"
+                "fingerprint": "1681356566542",
+                "parentFolderId": "31"
             }
         ],
         "variable": [
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
-                "variableId": "14",
-                "name": "GA4_ID",
-                "type": "c",
-                "parameter": [
-                    {
-                        "type": "TEMPLATE",
-                        "key": "value",
-                        "value": "ga4_id_replace"
-                    }
-                ],
-                "fingerprint": "1680174591222",
-                "parentFolderId": "12",
-                "formatValue": {}
-            },
-            {
-                "accountId": "6000211192",
-                "containerId": "104790677",
-                "variableId": "15",
-                "name": "Gads_Label",
-                "type": "c",
-                "parameter": [
-                    {
-                        "type": "TEMPLATE",
-                        "key": "value",
-                        "value": "gads_label_replace"
-                    }
-                ],
-                "fingerprint": "1680174613361",
-                "parentFolderId": "12",
-                "formatValue": {}
-            },
-            {
-                "accountId": "6000211192",
-                "containerId": "104790677",
-                "variableId": "18",
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "24",
                 "name": "Gads_ID",
                 "type": "c",
                 "parameter": [
@@ -380,14 +484,75 @@
                         "value": "gads_id_replace"
                     }
                 ],
-                "fingerprint": "1680174601135",
-                "parentFolderId": "12",
+                "fingerprint": "1681353229234",
+                "parentFolderId": "23",
                 "formatValue": {}
             },
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
-                "variableId": "19",
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "25",
+                "name": "GA4_API_Key",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "ga4_api_key_replace"
+                    }
+                ],
+                "fingerprint": "1681353210649",
+                "parentFolderId": "23",
+                "formatValue": {}
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "27",
+                "name": "System_Prompt",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "sys_prompt_replace"
+                    }
+                ],
+                "fingerprint": "1681353289260",
+                "parentFolderId": "23",
+                "formatValue": {}
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "28",
+                "name": "Transaction_ID",
+                "type": "v",
+                "parameter": [
+                    {
+                        "type": "INTEGER",
+                        "key": "dataLayerVersion",
+                        "value": "2"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "setDefaultValue",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "name",
+                        "value": "transaction_id"
+                    }
+                ],
+                "fingerprint": "1680707510438",
+                "parentFolderId": "23",
+                "formatValue": {}
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "29",
                 "name": "Leads_Value",
                 "type": "v",
                 "parameter": [
@@ -412,15 +577,66 @@
                         "value": "leads_value"
                     }
                 ],
-                "fingerprint": "1679929938106",
-                "parentFolderId": "12",
+                "fingerprint": "1680707510438",
+                "parentFolderId": "23",
                 "formatValue": {}
             },
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
-                "variableId": "20",
-                "name": "Transaction_ID",
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "30",
+                "name": "OpenAI_API_Key",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "openai_api_key_replace"
+                    }
+                ],
+                "fingerprint": "1681353274917",
+                "parentFolderId": "23",
+                "formatValue": {}
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "33",
+                "name": "Gads_Label",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "gads_label_replace"
+                    }
+                ],
+                "fingerprint": "1681353262729",
+                "parentFolderId": "23",
+                "formatValue": {}
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "36",
+                "name": "GA4_ID",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "ga4_id_replace"
+                    }
+                ],
+                "fingerprint": "1681353198771",
+                "parentFolderId": "23",
+                "formatValue": {}
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "40",
+                "name": "Server_Response",
                 "type": "v",
                 "parameter": [
                     {
@@ -431,132 +647,151 @@
                     {
                         "type": "BOOLEAN",
                         "key": "setDefaultValue",
+                        "value": "true"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "defaultValue",
                         "value": "false"
                     },
                     {
                         "type": "TEMPLATE",
                         "key": "name",
-                        "value": "transaction_id"
+                        "value": "server_response"
                     }
                 ],
-                "fingerprint": "1679929938106",
-                "parentFolderId": "12",
+                "fingerprint": "1681356281533",
+                "parentFolderId": "23",
                 "formatValue": {}
             },
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
-                "variableId": "24",
-                "name": "GA4_API_Key",
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "41",
+                "name": "Google_Optimize_ID",
                 "type": "c",
                 "parameter": [
                     {
                         "type": "TEMPLATE",
                         "key": "value",
-                        "value": "ga4_api_key_replace"
+                        "value": "google_optimize_id_replace"
                     }
                 ],
-                "fingerprint": "1680174581140",
-                "parentFolderId": "12",
+                "fingerprint": "1681360262465",
+                "parentFolderId": "23",
                 "formatValue": {}
             },
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
-                "variableId": "27",
-                "name": "System_Prompt",
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "43",
+                "name": "Hotjar_Site_ID",
                 "type": "c",
                 "parameter": [
                     {
                         "type": "TEMPLATE",
                         "key": "value",
-                        "value": "sys_prompt_replace"
+                        "value": "hotjar_site_id_replace"
                     }
                 ],
-                "fingerprint": "1680705949063",
-                "parentFolderId": "12",
+                "fingerprint": "1681360262464",
+                "parentFolderId": "23",
                 "formatValue": {}
             },
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
-                "variableId": "28",
-                "name": "OpenAI_API_Key",
-                "type": "c",
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "45",
+                "name": "1st_Party_Cookie",
+                "type": "k",
                 "parameter": [
                     {
+                        "type": "BOOLEAN",
+                        "key": "decodeCookie",
+                        "value": "false"
+                    },
+                    {
                         "type": "TEMPLATE",
-                        "key": "value",
-                        "value": "openai_api_key_replace"
+                        "key": "name",
+                        "value": "_ga"
                     }
                 ],
-                "fingerprint": "1680174623617",
-                "parentFolderId": "12",
-                "formatValue": {}
+                "fingerprint": "1681372869792",
+                "parentFolderId": "23",
+                "formatValue": {
+                    "convertNullToValue": {
+                        "type": "TEMPLATE",
+                        "value": "1"
+                    },
+                    "convertUndefinedToValue": {
+                        "type": "TEMPLATE",
+                        "value": "1"
+                    }
+                }
             }
         ],
         "folder": [
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
-                "folderId": "12",
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "folderId": "23",
                 "name": "Variables",
-                "fingerprint": "1679929938103"
+                "fingerprint": "1680707510436"
             },
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
-                "folderId": "13",
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "folderId": "26",
                 "name": "Tags",
-                "fingerprint": "1679929938104"
+                "fingerprint": "1680707510437"
             },
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
-                "folderId": "16",
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "folderId": "31",
                 "name": "Triggers",
-                "fingerprint": "1679929938105"
+                "fingerprint": "1680707510439"
             }
         ],
         "builtInVariable": [
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
+                "accountId": "4701557434",
+                "containerId": "11458468",
                 "type": "PAGE_URL",
                 "name": "Page URL"
             },
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
+                "accountId": "4701557434",
+                "containerId": "11458468",
                 "type": "PAGE_HOSTNAME",
                 "name": "Page Hostname"
             },
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
+                "accountId": "4701557434",
+                "containerId": "11458468",
                 "type": "PAGE_PATH",
                 "name": "Page Path"
             },
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
+                "accountId": "4701557434",
+                "containerId": "11458468",
                 "type": "REFERRER",
                 "name": "Referrer"
             },
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
+                "accountId": "4701557434",
+                "containerId": "11458468",
                 "type": "EVENT",
                 "name": "Event"
             },
             {
-                "accountId": "6000211192",
-                "containerId": "104790677",
+                "accountId": "4701557434",
+                "containerId": "11458468",
                 "type": "FORM_TEXT",
                 "name": "Form Text"
             }
         ],
-        "fingerprint": "1680705984482",
-        "tagManagerUrl": "https://tagmanager.google.com/#/versions/accounts/6000211192/containers/104790677/versions/0?apiLink=version"
+        "fingerprint": "1681373021660",
+        "tagManagerUrl": "https://tagmanager.google.com/#/versions/accounts/4701557434/containers/11458468/versions/0?apiLink=version"
     }
 }

@@ -4,4 +4,5 @@ __pycache__/
 .vscode/
 **/.DS_Store
 templates/personas.html
-static/gtm_demo.html
+templates/gtm-demo.jinja2
+static/js/gtm-demo.js
