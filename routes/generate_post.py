@@ -37,7 +37,7 @@ def generate_post_golem():
 
             if post_type == 'response_post':
                 max_word_count = 1200
-                response_post_golem = Golem(openai_api_key, session_id, sys_prompt=sys_prompt, max_tokens=500)
+                response_post_golem = Golem(openai_api_key, session_id, sys_prompt=sys_prompt)
                 user_input = f'''
                 From you angle of view, Write a blog post(between {max_word_count-100} to {max_word_count+100} words) about {title}. 
                 Keep in mind that you need to:

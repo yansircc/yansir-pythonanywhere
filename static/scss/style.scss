@@ -221,10 +221,6 @@ form {
             outline: none;
             border-color: $primary-color;
         }
-
-        &:invalid {
-            border-color: red;
-        }
     }
 
     input[type="submit"],

@@ -1,6 +1,6 @@
 {
     "exportFormatVersion": 2,
-    "exportTime": "2023-04-13 08:03:41",
+    "exportTime": "2023-04-13 14:37:40",
     "containerVersion": {
         "path": "accounts/4701557434/containers/11458468/versions/0",
         "accountId": "4701557434",
@@ -41,7 +41,7 @@
                 "accountId": "4701557434",
                 "containerId": "11458468",
                 "tagId": "32",
-                "name": "Conversion Linker",
+                "name": "Conversion Linker - Leads",
                 "type": "gclidw",
                 "parameter": [
                     {
@@ -60,7 +60,7 @@
                         "value": "false"
                     }
                 ],
-                "fingerprint": "1680707510439",
+                "fingerprint": "1681393726584",
                 "firingTriggerId": [
                     "2147479553"
                 ],
@@ -76,7 +76,74 @@
             {
                 "accountId": "4701557434",
                 "containerId": "11458468",
-                "tagId": "35",
+                "tagId": "37",
+                "name": "GA4 - PV",
+                "type": "gaawc",
+                "parameter": [
+                    {
+                        "type": "BOOLEAN",
+                        "key": "sendPageView",
+                        "value": "true"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableSendToServerContainer",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "measurementId",
+                        "value": "{{GA4_ID}}"
+                    }
+                ],
+                "fingerprint": "1681393626679",
+                "firingTriggerId": [
+                    "2147479553"
+                ],
+                "parentFolderId": "63",
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "tagId": "52",
+                "name": "Data Layer Push - Leads",
+                "type": "html",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "html",
+                        "value": "<style>\n#loader {\n    position: absolute;\n    visibility: visible;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    z-index: 9999;\n}\n\n.loader {\n    border: 4px solid #f3f3f3;\n    border-top: 4px solid #3498db;\n    border-radius: 50%;\n    width: 30px;\n    height: 30px;\n    animation: spin 1s linear infinite;\n}\n\n@keyframes spin {\n    0% { transform: rotate(0deg); }\n    100% { transform: rotate(360deg); }\n}\n</style>\n\n<script>\n    var form = {{Form_DOM}};\n    form.style.position = 'relative';\n    form.style.visibility = 'hidden';\n\n    var loader = document.createElement('div');\n    loader.id = 'loader';\n    loader.innerHTML = '<div class=\"loader\"></div>';\n    form.appendChild(loader);\n\n    var sys_prompt = {{System_Prompt}};\n    var first_party_cookie = {{1st_Party_Cookie}};\n    \n    var leads_content = '';\n    var textareas = form.querySelectorAll('textarea');\n    for (var i = 0; i < textareas.length; i++) {\n        leads_content += textareas[i].value;\n    }\n\n    var xhr = new XMLHttpRequest();\n    xhr.open('POST', 'https://gpt.yansir.vip/leads-value');\n    xhr.setRequestHeader('Content-Type', 'application/json');\n    xhr.onload = function () {\n        if (xhr.status === 200) {\n            var response = JSON.parse(xhr.responseText);\n            var leads_value = parseInt(response.leads_value);\n            var transaction_id = response.transaction_id;\n            dataLayer.push({ 'leads_value': leads_value, 'transaction_id': transaction_id, 'event': 'server_response_success' });\n            console.log(xhr.responseText);\n            loader.style.display = 'none';\n            form.style.visibility = 'visible';\n        }\n    };\n    xhr.onerror = function () {\n        console.error(\"Error: \", xhr.statusText);\n        loader.style.display = 'none';\n        form.style.opacity = 1;\n    };\n    xhr.send(JSON.stringify({\n        leads_content: leads_content,\n        sys_prompt: sys_prompt,\n        first_party_cookie: first_party_cookie\n    }));\n</script>"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "supportDocumentWrite",
+                        "value": "false"
+                    }
+                ],
+                "fingerprint": "1681396644778",
+                "firingTriggerId": [
+                    "49"
+                ],
+                "parentFolderId": "26",
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "tagId": "55",
                 "name": "Gads - Leads",
                 "type": "awct",
                 "parameter": [
@@ -141,15 +208,9 @@
                         "value": "false"
                     }
                 ],
-                "fingerprint": "1681357126673",
+                "fingerprint": "1681393726586",
                 "firingTriggerId": [
-                    "34"
-                ],
-                "teardownTag": [
-                    {
-                        "tagName": "GA4 - Leads",
-                        "stopTeardownOnFailure": true
-                    }
+                    "54"
                 ],
                 "parentFolderId": "26",
                 "tagFiringOption": "ONCE_PER_EVENT",
@@ -163,31 +224,56 @@
             {
                 "accountId": "4701557434",
                 "containerId": "11458468",
-                "tagId": "37",
-                "name": "GA4 - PV",
-                "type": "gaawc",
+                "tagId": "56",
+                "name": "Google Remarketing - PV",
+                "type": "sp",
                 "parameter": [
                     {
                         "type": "BOOLEAN",
-                        "key": "sendPageView",
+                        "key": "enableConversionLinker",
                         "value": "true"
                     },
                     {
                         "type": "BOOLEAN",
-                        "key": "enableSendToServerContainer",
+                        "key": "enableDynamicRemarketing",
                         "value": "false"
                     },
                     {
                         "type": "TEMPLATE",
-                        "key": "measurementId",
-                        "value": "{{GA4_ID}}"
+                        "key": "conversionCookiePrefix",
+                        "value": "_gcl"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "userId",
+                        "value": "{{1st_Party_Cookie}}"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "conversionId",
+                        "value": "{{Gads_ID}}"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "customParamsFormat",
+                        "value": "NONE"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "conversionLabel",
+                        "value": "{{Gads_Label}}"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "rdp",
+                        "value": "false"
                     }
                 ],
-                "fingerprint": "1680707510440",
+                "fingerprint": "1681393626678",
                 "firingTriggerId": [
                     "2147479553"
                 ],
-                "parentFolderId": "26",
+                "parentFolderId": "63",
                 "tagFiringOption": "ONCE_PER_EVENT",
                 "monitoringMetadata": {
                     "type": "MAP"
@@ -199,7 +285,7 @@
             {
                 "accountId": "4701557434",
                 "containerId": "11458468",
-                "tagId": "38",
+                "tagId": "58",
                 "name": "GA4 - Leads",
                 "type": "gaawe",
                 "parameter": [
@@ -255,9 +341,9 @@
                         "value": "GA4 - PV"
                     }
                 ],
-                "fingerprint": "1681357022848",
+                "fingerprint": "1681393726585",
                 "firingTriggerId": [
-                    "34"
+                    "54"
                 ],
                 "parentFolderId": "26",
                 "tagFiringOption": "ONCE_PER_EVENT",
@@ -271,32 +357,21 @@
             {
                 "accountId": "4701557434",
                 "containerId": "11458468",
-                "tagId": "39",
-                "name": "Data Layer Push - Leads",
-                "type": "html",
+                "tagId": "59",
+                "name": "Hotjar - PV",
+                "type": "hjtc",
                 "parameter": [
                     {
                         "type": "TEMPLATE",
-                        "key": "html",
-                        "value": "<script>\n    var leads_content = {{Form Text}};\n    var sys_prompt = {{System_Prompt}};\n    var first_party_cookie = {{1st_Party_Cookie}};\n\n    var xhr = new XMLHttpRequest();\n    xhr.open('POST', 'https://gpt.yansir.vip/leads-value');\n    xhr.setRequestHeader('Content-Type', 'application/json');\n    xhr.onload = function () {\n        if (xhr.status === 200) {\n            var response = JSON.parse(xhr.responseText);\n            var leads_value = parseInt(response.leads_value);\n            var transaction_id = response.transaction_id;\n            dataLayer.push({ 'leads_value': leads_value, 'transaction_id': transaction_id, 'server_response': true });\n            console.log(xhr.responseText);\n        }\n    };\n    xhr.onerror = function () {\n        console.error(\"Error: \", xhr.statusText);\n    };\n    xhr.send(JSON.stringify({\n        leads_content: leads_content,\n        sys_prompt: sys_prompt,\n        first_party_cookie: first_party_cookie\n    }));\n</script>"
-                    },
-                    {
-                        "type": "BOOLEAN",
-                        "key": "supportDocumentWrite",
-                        "value": "false"
+                        "key": "hotjar_site_id",
+                        "value": "{{Hotjar_Site_ID}}"
                     }
                 ],
-                "fingerprint": "1681372982211",
+                "fingerprint": "1681393626679",
                 "firingTriggerId": [
-                    "34"
+                    "2147479553"
                 ],
-                "teardownTag": [
-                    {
-                        "tagName": "Gads - Leads",
-                        "stopTeardownOnFailure": true
-                    }
-                ],
-                "parentFolderId": "26",
+                "parentFolderId": "63",
                 "tagFiringOption": "ONCE_PER_EVENT",
                 "monitoringMetadata": {
                     "type": "MAP"
@@ -308,7 +383,7 @@
             {
                 "accountId": "4701557434",
                 "containerId": "11458468",
-                "tagId": "42",
+                "tagId": "61",
                 "name": "Google Optimize - PI",
                 "type": "opt",
                 "parameter": [
@@ -328,96 +403,11 @@
                         "value": "false"
                     }
                 ],
-                "fingerprint": "1681357675918",
+                "fingerprint": "1681393626679",
                 "firingTriggerId": [
                     "2147479573"
                 ],
-                "parentFolderId": "26",
-                "tagFiringOption": "ONCE_PER_EVENT",
-                "monitoringMetadata": {
-                    "type": "MAP"
-                },
-                "consentSettings": {
-                    "consentStatus": "NOT_SET"
-                }
-            },
-            {
-                "accountId": "4701557434",
-                "containerId": "11458468",
-                "tagId": "44",
-                "name": "Hotjar - PV",
-                "type": "hjtc",
-                "parameter": [
-                    {
-                        "type": "TEMPLATE",
-                        "key": "hotjar_site_id",
-                        "value": "{{Hotjar_Site_ID}}"
-                    }
-                ],
-                "fingerprint": "1681359968048",
-                "firingTriggerId": [
-                    "2147479553"
-                ],
-                "tagFiringOption": "ONCE_PER_EVENT",
-                "monitoringMetadata": {
-                    "type": "MAP"
-                },
-                "consentSettings": {
-                    "consentStatus": "NOT_SET"
-                }
-            },
-            {
-                "accountId": "4701557434",
-                "containerId": "11458468",
-                "tagId": "46",
-                "name": "Google Remarketing - PV",
-                "type": "sp",
-                "parameter": [
-                    {
-                        "type": "BOOLEAN",
-                        "key": "enableConversionLinker",
-                        "value": "true"
-                    },
-                    {
-                        "type": "BOOLEAN",
-                        "key": "enableDynamicRemarketing",
-                        "value": "false"
-                    },
-                    {
-                        "type": "TEMPLATE",
-                        "key": "conversionCookiePrefix",
-                        "value": "_gcl"
-                    },
-                    {
-                        "type": "TEMPLATE",
-                        "key": "userId",
-                        "value": "{{1st_Party_Cookie}}"
-                    },
-                    {
-                        "type": "TEMPLATE",
-                        "key": "conversionId",
-                        "value": "{{Gads_ID}}"
-                    },
-                    {
-                        "type": "TEMPLATE",
-                        "key": "customParamsFormat",
-                        "value": "NONE"
-                    },
-                    {
-                        "type": "TEMPLATE",
-                        "key": "conversionLabel",
-                        "value": "{{Gads_Label}}"
-                    },
-                    {
-                        "type": "BOOLEAN",
-                        "key": "rdp",
-                        "value": "false"
-                    }
-                ],
-                "fingerprint": "1681359948631",
-                "firingTriggerId": [
-                    "2147479553"
-                ],
+                "parentFolderId": "63",
                 "tagFiringOption": "ONCE_PER_EVENT",
                 "monitoringMetadata": {
                     "type": "MAP"
@@ -431,33 +421,16 @@
             {
                 "accountId": "4701557434",
                 "containerId": "11458468",
-                "triggerId": "34",
+                "triggerId": "49",
                 "name": "Form Submission",
                 "type": "FORM_SUBMISSION",
-                "autoEventFilter": [
-                    {
-                        "type": "EQUALS",
-                        "parameter": [
-                            {
-                                "type": "TEMPLATE",
-                                "key": "arg0",
-                                "value": "{{Server_Response}}"
-                            },
-                            {
-                                "type": "TEMPLATE",
-                                "key": "arg1",
-                                "value": "true"
-                            }
-                        ]
-                    }
-                ],
                 "waitForTags": {
                     "type": "BOOLEAN",
                     "value": "false"
                 },
                 "checkValidation": {
                     "type": "BOOLEAN",
-                    "value": "true"
+                    "value": "false"
                 },
                 "waitForTagsTimeout": {
                     "type": "TEMPLATE",
@@ -466,62 +439,37 @@
                 "uniqueTriggerId": {
                     "type": "TEMPLATE"
                 },
-                "fingerprint": "1681356566542",
+                "fingerprint": "1681393076702",
+                "parentFolderId": "31"
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "triggerId": "54",
+                "name": "Server Response Recieved",
+                "type": "CUSTOM_EVENT",
+                "customEventFilter": [
+                    {
+                        "type": "EQUALS",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{_event}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": "server_response_success"
+                            }
+                        ]
+                    }
+                ],
+                "fingerprint": "1681393076704",
                 "parentFolderId": "31"
             }
         ],
         "variable": [
-            {
-                "accountId": "4701557434",
-                "containerId": "11458468",
-                "variableId": "24",
-                "name": "Gads_ID",
-                "type": "c",
-                "parameter": [
-                    {
-                        "type": "TEMPLATE",
-                        "key": "value",
-                        "value": "gads_id_replace"
-                    }
-                ],
-                "fingerprint": "1681353229234",
-                "parentFolderId": "23",
-                "formatValue": {}
-            },
-            {
-                "accountId": "4701557434",
-                "containerId": "11458468",
-                "variableId": "25",
-                "name": "GA4_API_Key",
-                "type": "c",
-                "parameter": [
-                    {
-                        "type": "TEMPLATE",
-                        "key": "value",
-                        "value": "ga4_api_key_replace"
-                    }
-                ],
-                "fingerprint": "1681353210649",
-                "parentFolderId": "23",
-                "formatValue": {}
-            },
-            {
-                "accountId": "4701557434",
-                "containerId": "11458468",
-                "variableId": "27",
-                "name": "System_Prompt",
-                "type": "c",
-                "parameter": [
-                    {
-                        "type": "TEMPLATE",
-                        "key": "value",
-                        "value": "sys_prompt_replace"
-                    }
-                ],
-                "fingerprint": "1681353289260",
-                "parentFolderId": "23",
-                "formatValue": {}
-            },
             {
                 "accountId": "4701557434",
                 "containerId": "11458468",
@@ -584,123 +532,6 @@
             {
                 "accountId": "4701557434",
                 "containerId": "11458468",
-                "variableId": "30",
-                "name": "OpenAI_API_Key",
-                "type": "c",
-                "parameter": [
-                    {
-                        "type": "TEMPLATE",
-                        "key": "value",
-                        "value": "openai_api_key_replace"
-                    }
-                ],
-                "fingerprint": "1681353274917",
-                "parentFolderId": "23",
-                "formatValue": {}
-            },
-            {
-                "accountId": "4701557434",
-                "containerId": "11458468",
-                "variableId": "33",
-                "name": "Gads_Label",
-                "type": "c",
-                "parameter": [
-                    {
-                        "type": "TEMPLATE",
-                        "key": "value",
-                        "value": "gads_label_replace"
-                    }
-                ],
-                "fingerprint": "1681353262729",
-                "parentFolderId": "23",
-                "formatValue": {}
-            },
-            {
-                "accountId": "4701557434",
-                "containerId": "11458468",
-                "variableId": "36",
-                "name": "GA4_ID",
-                "type": "c",
-                "parameter": [
-                    {
-                        "type": "TEMPLATE",
-                        "key": "value",
-                        "value": "ga4_id_replace"
-                    }
-                ],
-                "fingerprint": "1681353198771",
-                "parentFolderId": "23",
-                "formatValue": {}
-            },
-            {
-                "accountId": "4701557434",
-                "containerId": "11458468",
-                "variableId": "40",
-                "name": "Server_Response",
-                "type": "v",
-                "parameter": [
-                    {
-                        "type": "INTEGER",
-                        "key": "dataLayerVersion",
-                        "value": "2"
-                    },
-                    {
-                        "type": "BOOLEAN",
-                        "key": "setDefaultValue",
-                        "value": "true"
-                    },
-                    {
-                        "type": "TEMPLATE",
-                        "key": "defaultValue",
-                        "value": "false"
-                    },
-                    {
-                        "type": "TEMPLATE",
-                        "key": "name",
-                        "value": "server_response"
-                    }
-                ],
-                "fingerprint": "1681356281533",
-                "parentFolderId": "23",
-                "formatValue": {}
-            },
-            {
-                "accountId": "4701557434",
-                "containerId": "11458468",
-                "variableId": "41",
-                "name": "Google_Optimize_ID",
-                "type": "c",
-                "parameter": [
-                    {
-                        "type": "TEMPLATE",
-                        "key": "value",
-                        "value": "google_optimize_id_replace"
-                    }
-                ],
-                "fingerprint": "1681360262465",
-                "parentFolderId": "23",
-                "formatValue": {}
-            },
-            {
-                "accountId": "4701557434",
-                "containerId": "11458468",
-                "variableId": "43",
-                "name": "Hotjar_Site_ID",
-                "type": "c",
-                "parameter": [
-                    {
-                        "type": "TEMPLATE",
-                        "key": "value",
-                        "value": "hotjar_site_id_replace"
-                    }
-                ],
-                "fingerprint": "1681360262464",
-                "parentFolderId": "23",
-                "formatValue": {}
-            },
-            {
-                "accountId": "4701557434",
-                "containerId": "11458468",
                 "variableId": "45",
                 "name": "1st_Party_Cookie",
                 "type": "k",
@@ -728,6 +559,130 @@
                         "value": "1"
                     }
                 }
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "47",
+                "name": "Gads_Label",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "gads_label_replace"
+                    }
+                ],
+                "fingerprint": "1681393479075",
+                "parentFolderId": "62",
+                "formatValue": {}
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "48",
+                "name": "Hotjar_Site_ID",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "hotjar_site_id_replace"
+                    }
+                ],
+                "fingerprint": "1681393479114",
+                "parentFolderId": "62",
+                "formatValue": {}
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "50",
+                "name": "System_Prompt",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "sys_prompt_replace"
+                    }
+                ],
+                "fingerprint": "1681393479115",
+                "parentFolderId": "62",
+                "formatValue": {}
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "51",
+                "name": "Form_DOM",
+                "type": "aev",
+                "parameter": [
+                    {
+                        "type": "BOOLEAN",
+                        "key": "setDefaultValue",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "varType",
+                        "value": "ELEMENT"
+                    }
+                ],
+                "fingerprint": "1681393076703",
+                "parentFolderId": "23",
+                "formatValue": {}
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "53",
+                "name": "Gads_ID",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "gads_id_replace"
+                    }
+                ],
+                "fingerprint": "1681393479075",
+                "parentFolderId": "62",
+                "formatValue": {}
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "57",
+                "name": "GA4_ID",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "ga4_id_replace"
+                    }
+                ],
+                "fingerprint": "1681393479074",
+                "parentFolderId": "62",
+                "formatValue": {}
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "variableId": "60",
+                "name": "Google_Optimize_ID",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "google_optimize_id_replace"
+                    }
+                ],
+                "fingerprint": "1681393479076",
+                "parentFolderId": "62",
+                "formatValue": {}
             }
         ],
         "folder": [
@@ -742,8 +697,8 @@
                 "accountId": "4701557434",
                 "containerId": "11458468",
                 "folderId": "26",
-                "name": "Tags",
-                "fingerprint": "1680707510437"
+                "name": "Leads Events",
+                "fingerprint": "1681393750025"
             },
             {
                 "accountId": "4701557434",
@@ -751,6 +706,20 @@
                 "folderId": "31",
                 "name": "Triggers",
                 "fingerprint": "1680707510439"
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "folderId": "62",
+                "name": "Const",
+                "fingerprint": "1681393477947"
+            },
+            {
+                "accountId": "4701557434",
+                "containerId": "11458468",
+                "folderId": "63",
+                "name": "PV/PI Events",
+                "fingerprint": "1681393625451"
             }
         ],
         "builtInVariable": [
@@ -783,15 +752,9 @@
                 "containerId": "11458468",
                 "type": "EVENT",
                 "name": "Event"
-            },
-            {
-                "accountId": "4701557434",
-                "containerId": "11458468",
-                "type": "FORM_TEXT",
-                "name": "Form Text"
             }
         ],
-        "fingerprint": "1681373021660",
+        "fingerprint": "1681396660310",
         "tagManagerUrl": "https://tagmanager.google.com/#/versions/accounts/4701557434/containers/11458468/versions/0?apiLink=version"
     }
 }

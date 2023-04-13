@@ -156,9 +156,6 @@ form {
       form input[type="text"]:focus, form input[type="number"]:focus, form textarea:focus {
         outline: none;
         border-color: #333; }
-        form input[type="text"]:invalid, form input[type="number"]:invalid,
-        form textarea:invalid {
-          border-color: red; }
   form input[type="submit"], form button[type="submit"] {
     padding: 12px 24px;
     background-color: #333;
