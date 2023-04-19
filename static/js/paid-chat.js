@@ -1,5 +1,5 @@
 import { ChatClient } from './chat_client.js';
-import { getCookie, addBtns, addSseContainer } from './extra_func.js';
+import { getCookie, addBtn, addSseContainer } from './extra_func.js';
 
 const resultsContainer = document.getElementById('response-container');
 const loader = document.getElementById('loader');
@@ -38,7 +38,7 @@ function onDone() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    addBtns('clear-transcript-history', ['btn', 'btn-primary'], '清空历史记录', 'response-container');
+    addBtn('clear-transcript-history', ['btn', 'btn-primary'], '清空历史记录', 'response-container');
 
     const chatClient = new ChatClient(
         'sse/paid_chat',

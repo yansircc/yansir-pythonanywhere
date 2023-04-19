@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, Response, stream_with_context
 from golem import Golem, openai_api_key
-from transcripts_db import TranscriptsDB
+# from transcripts_db import TranscriptsDB
 from navigator import navigator
 from cookies import create_cookie
 from queue import Queue
@@ -10,34 +10,42 @@ import re
 generate_post_blueprint = Blueprint('generate_post', __name__)
 response_queue = Queue()
 
+
 @generate_post_blueprint.route('/generate-post', methods=['GET'])
 @navigator
 @create_cookie
 def generate_post():
     form_data = [
-        {'tag': 'input', 'type': 'text', 'name': 'user_input', 'id': 'user_input', 'placeholder': '输入英文标题'},
+        {'tag': 'input', 'type': 'text', 'name': 'user_input',
+            'id': 'user_input', 'placeholder': '输入英文标题'},
         {'tag': 'input', 'type': 'submit', 'id': 'submit', 'value': '回车'}
     ]
     endpoint = request.path.lstrip('/')
     return render_template(endpoint+'.jinja2', js_file='js/'+endpoint+'.js', form_data=form_data)
 
-@generate_post_blueprint.route('/sse/generate_post', methods=['GET','POST'])
+
+@generate_post_blueprint.route('/sse/generate_post', methods=['GET', 'POST'])
 def generate_post_golem():
     if request.method == 'POST':
         session_id = request.cookies.get('user_id')
-        title = ' '.join(re.findall(r'[a-zA-Z\s]+', request.form['user_input']))
+        title = ' '.join(re.findall(
+            r'[a-zA-Z\s]+', request.form['user_input']))
         post_type = request.form['post_type']
-        
-        generate_post_db = TranscriptsDB()
-        with generate_post_db as db:
-            business_prompts = db.retrieve_data('conversation', session_id, 'business_prompts')
+        business_prompts = request.form['businessPrompt']
+
+        # generate_post_db = TranscriptsDB()
+        # with generate_post_db as db:
+        #     business_prompts = db.retrieve_data('conversation', session_id, 'business_prompts')
 
         if business_prompts:
-            sys_prompt = "The following information is about you identity and your business. You will read it in the first person: " + business_prompts
+            sys_prompt = "The following information is about you identity and your business. You will read it in the first person: " + \
+                business_prompts[:business_prompts.rfind(
+                    '\n')]  # remove the last line
 
             if post_type == 'response_post':
                 max_word_count = 1200
-                response_post_golem = Golem(openai_api_key, session_id, sys_prompt=sys_prompt)
+                response_post_golem = Golem(
+                    openai_api_key, session_id, sys_prompt=sys_prompt)
                 user_input = f'''
                 From you angle of view, Write a blog post(between {max_word_count-100} to {max_word_count+100} words) about {title}. 
                 Keep in mind that you need to:
@@ -63,7 +71,7 @@ def generate_post_golem():
                 pass
 
             response = response_post_golem.response(user_input)
-            
+
         else:
             post_ideas_golem = Golem(
                 openai_api_key, session_id, sys_prompt="Don't output anything but '数据缺失，请先完成预训练。'.")
@@ -74,6 +82,7 @@ def generate_post_golem():
     else:
         response = response_queue.get()
         return Response(stream_with_context(response), mimetype='text/event-stream')
+
 
 def register_routes(app):
     app.register_blueprint(generate_post_blueprint)

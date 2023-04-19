@@ -1,5 +1,5 @@
 import { ChatClient } from './chat_client.js';
-import { addBtns, addSseContainer } from './extra_func.js';
+import { addBtn, addSseContainer } from './extra_func.js';
 
 const resultsContainer = document.getElementById('response-container');
 const loader = document.getElementById('loader');
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const highlightSpan = document.querySelector('span.highlight');
         highlightSpan.innerHTML = localStorage.getItem('businessPrompt');
     }
-    addBtns('refill', ['btn', 'btn-primary'], '重新填表', 'response-container');
+    addBtn('refill', ['btn', 'btn-primary'], '重新填表', 'response-container');
 
     const chatClient = new ChatClient(
         'sse/business_golem',

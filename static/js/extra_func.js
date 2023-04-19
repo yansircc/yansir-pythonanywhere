@@ -9,7 +9,7 @@ export const getCookie = (name) => {
     return null;
 }
 
-export const addBtns = (id, classNames, textContent, parentId) => {
+export const addBtn = (id, classNames, textContent, parentId, onClick=null) => {
     let container = document.querySelector('#'+parentId);
     let btns = document.querySelector('.btns');
     if (!btns) {
@@ -25,6 +25,7 @@ export const addBtns = (id, classNames, textContent, parentId) => {
     btn.id = id;
     btn.classList.add(...classNames);
     btn.textContent = textContent;
+    btn.onclick = onClick;
     btns.appendChild(btn);
   }
   

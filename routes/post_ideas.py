@@ -1,9 +1,10 @@
 from flask import Blueprint, request, render_template, Response, stream_with_context
 from golem import Golem, openai_api_key
-from transcripts_db import TranscriptsDB
+# from transcripts_db import TranscriptsDB
 from navigator import navigator
 from cookies import create_cookie
 from queue import Queue
+
 
 post_ideas_blueprint = Blueprint('post_ideas', __name__)
 response_queue = Queue()
@@ -29,15 +30,16 @@ def post_ideas_golem():
     if request.method == 'POST':
         keyword = request.form['keyword']
         process = request.form['process']
+        business_prompts = request.form['businessPrompt']
         session_id = request.cookies.get('user_id')
         mixed_strings = process_data(keyword, process)
 
-        post_ideas_db = TranscriptsDB()
-        with post_ideas_db as db:
-            business_prompts = db.retrieve_data(
-                'conversation', session_id, 'business_prompts')
+        # post_ideas_db = TranscriptsDB()
+        # with post_ideas_db as db:
+        #     business_prompts = db.retrieve_data(
+        #         'conversation', session_id, 'business_prompts')
         if business_prompts:
-            sys_prompt = business_prompts
+            sys_prompt = business_prompts[:business_prompts.rfind('\n')] # remove the last line
             sys_prompt_prefix = "The following information is about you identity and your business. You will read it in the first person: "
             user_input_prefix = "From your angle of view, "
             user_input_suffix = " What are some B2B blog post ideas that you can come up with? Note that the post title should be a clickbait question. Output in this format: English blog title[Chinese translation], and don't explain anything."

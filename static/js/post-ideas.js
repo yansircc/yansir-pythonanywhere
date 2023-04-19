@@ -13,6 +13,11 @@ function onSubmit() {
     highlightSpan.textContent = '';
 }
 
+function sendBusinessPrompt(formData) {
+    const businessPrompt = localStorage.getItem('businessPrompt');
+    formData.append('businessPrompt', businessPrompt);
+}
+
 function onMessage(response) {
     const highlightSpan = document.querySelector('span.highlight');
     highlightSpan.textContent += response;
@@ -27,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'sse/post_ideas',
         {
             onSubmitCallback: onSubmit,
+            handleFormDataCallback: sendBusinessPrompt,
             onMessageCallback: onMessage,
             onDoneCallback: onDone
         }

@@ -58,13 +58,13 @@ def business_golem():
         business_golem = Golem(openai_api_key, session_id, sys_prompt=sys_prompt,
                             user_input_prefix=user_input_prefix, user_input_suffix=user_input_suffix)
 
-        def store_data_in_db(full_reply_content):
-            with business_db as db:
-                db.create_table('conversation', 'business_prompts')
-                db.store_data('conversation', session_id,
-                            'business_prompts', full_reply_content)
+        # def store_data_in_db(full_reply_content):
+        #     with business_db as db:
+        #         db.create_table('conversation', 'business_prompts')
+        #         db.store_data('conversation', session_id,
+        #                     'business_prompts', full_reply_content)
 
-        response = business_golem.response(form_data_str, store_data_in_db)
+        response = business_golem.response(form_data_str)
         response_queue.put(response)
         return '', 204
     else:

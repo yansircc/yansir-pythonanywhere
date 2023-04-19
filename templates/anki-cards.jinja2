@@ -1,0 +1,20 @@
+{% from 'macro.jinja2' import qa_macro, title_macro %}
+
+{% extends 'base.jinja2' %}
+{% block content %}
+
+{{ title_macro('Anki卡片生成器','v1.05,内测期间免费') }}
+{{ qa_macro(form_data, 2) }}
+<div id="popup">
+    <div id="popup-content">
+        <div id="popup-close">&#10006;</div>
+        <form id="form">
+            <label for="front">卡片正面：</label>
+            <textarea id="front" name="front" placeholder="输入卡片正面内容" rows="5"></textarea>
+            <label for="back">卡片背面：</label>
+            <textarea id="back" name="back" placeholder="输入卡片背面内容" rows="5"></textarea>
+            <input type="submit" id="submit" value="添加">
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -26,8 +26,9 @@ def handle_user_input():
         user_input = request.form['user_input']
         session_id = request.cookies.get('user_id')
         sys_prompt = "You're a man of few words."
-        paid_golem = Golem(openai_api_key, session_id,
-                        sys_prompt=sys_prompt, memory=True, table_name='conversation', column_name='transcript_history')
+        # paid_golem = Golem(openai_api_key, session_id,
+        #                 sys_prompt=sys_prompt, memory=True, table_name='conversation', column_name='transcript_history')
+        paid_golem = Golem(openai_api_key, session_id, sys_prompt=sys_prompt)
         response = paid_golem.response(user_input)
         response_queue.put(response)
         return '', 204

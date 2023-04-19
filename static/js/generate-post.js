@@ -20,6 +20,8 @@ function onSubmit() {
 }
 
 function addCustomFormData(formData) {
+    const businessPrompt = localStorage.getItem('businessPrompt');
+    formData.append('businessPrompt', businessPrompt);
     formData.append('post_type', 'response_post')
     return formData;
 }

@@ -196,7 +196,7 @@ form {
     #response-container p {
       font-size: clamp(14px, 2.5vw, 18px); }
       #response-container .highlight {
-        background-color: #FFD700; }
+        background-color: #ffd700; }
 
 @media (max-width: 767px) {
   #response-container {
@@ -222,3 +222,62 @@ form {
     transition: background-color 0.2s ease-in-out; }
     .btn:hover {
       background-color: #555; }
+
+#popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center; }
+  #popup.show {
+    display: flex; }
+    #popup #popup-content {
+      position: relative;
+      border-radius: 5px;
+      width: 500px;
+      max-width: 100%;
+      box-sizing: border-box; }
+      #popup #popup-content #popup-close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 10px;
+        color: #333;
+        cursor: pointer; }
+
+#cards-list {
+  margin-bottom: 0; }
+  #cards-list li {
+    padding: 10px 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between; }
+    #cards-list li .card-back::before {
+      content: "答：";
+      font-weight: bold;
+      display: inline-block;
+      margin-right: 5px; }
+      #cards-list li .operation-btns {
+        display: flex;
+        visibility: hidden;
+        flex-direction: row;
+        justify-content: end;
+        align-items: center;
+        column-gap: 10px;
+        min-width: 58px; }
+        #cards-list li .operation-btns .edit-card-btn {
+          color: #23a455;
+          font-size: 12px;
+          cursor: pointer; }
+          #cards-list li .operation-btns .delete-card-btn {
+            color: #ef5f43;
+            font-size: 12px;
+            cursor: pointer; }
+    #cards-list li:not(:first-child) {
+      border-top: 1px dashed #ccc; }
