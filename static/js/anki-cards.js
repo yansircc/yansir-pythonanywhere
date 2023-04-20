@@ -68,7 +68,7 @@ const showPopup = (index = null) => {
     closeBtn.addEventListener('click', onClose);
 };
 
-//添加所需按钮
+//添加功能按钮
 const addBtns = () => {
     addBtn('custom-anki-card', ['btn', 'btn-primary'], '自制', 'response-container');
     const customBtn = document.getElementById('custom-anki-card');
@@ -84,6 +84,24 @@ const addBtns = () => {
             addNotice('download-success-notice', '制卡成功，文件已下载到本地。');
         } else {
             addNotice('empty-notice', '当前没卡片，先制卡。');
+        }
+    });
+    addBtn('fetch-chat-history', ['btn', 'btn-primary'], '读取对话', 'response-container', () => {
+        const chatHistory = localStorage.getItem('chatHistory');
+        if (chatHistory) {
+            const userInputContainer = document.querySelector('#user_input');
+            userInputContainer.value = '';
+            const chatHistoryArray = JSON.parse(chatHistory);
+            for (let i = 0; i < chatHistoryArray.length; i++) {
+                const key = Object.keys(chatHistoryArray[i])[0];
+                const value = chatHistoryArray[i][key];
+                userInputContainer.value += `问${i}: ` + key + '\n' + `答${i}: ` + value + '\n\n';
+            }
+            resultsContainer.innerHTML = '';
+            addNotice('chat-history-notice', `成功读取到${chatHistoryArray.length}条问答，检查无误后可提交。`);
+        } else {
+            addNotice('no-transcript-notice', '没检测到对话记录，先在“对话”页面问几个问题。');
+            return;
         }
     });
     addBtn('clear-apkg', ['btn', 'btn-primary'], '清空', 'response-container', () => {
@@ -128,7 +146,7 @@ const deleteCard = (index) => {
     addNotice('cards-count-notice', `共制作<b> ${JSON.parse(localStorage.getItem('ankiCards')).length} </b>张卡片，点击可编辑。`, listCards);
 };
 
-//列出所有内存中的卡片
+//列出所有卡片
 const listCards = () => {
     const oldCards = localStorage.getItem('ankiCards');
     if (oldCards) {

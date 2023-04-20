@@ -29,14 +29,14 @@ export const addBtn = (id, classNames, textContent, parentId, onClick=null) => {
     btns.appendChild(btn);
   }
   
-  export const addSseContainer = (classNames, isHighlight=true) => {
-    const resultsContainer = document.getElementById('response-container');
+  export const addSseContainer = (classNames, isHighlight=true, parentContainerId='response-container') => {
+    const parentContainer = document.getElementById(parentContainerId);
     const golemDiv = document.createElement('div');
-    golemDiv.classList.add(...classNames);
-    resultsContainer.appendChild(golemDiv);
     const span = document.createElement('span');
-    if (isHighlight) {
-        span.classList.add('highlight');
-    }
+
+    golemDiv.classList.add(...classNames);
+    isHighlight && span.classList.add('highlight');
+
     golemDiv.appendChild(span);
+    parentContainer.appendChild(golemDiv);
   }

@@ -6,7 +6,8 @@ export class ChatClient {
             handleFormDataCallback = null,
             onMessageCallback = null,
             onErrorCallback = null,
-            onDoneCallback = null
+            onDoneCallback = null,
+            onExceedCallback = null
         }
     ) {
         this.form = document.getElementById('form');
@@ -19,6 +20,7 @@ export class ChatClient {
         this.onMessageCallback = onMessageCallback;
         this.onErrorCallback = onErrorCallback;
         this.onDoneCallback = onDoneCallback;
+        this.onExceedCallback = onExceedCallback;
 
         this.form.addEventListener("submit", this.onSubmit.bind(this));
     }
@@ -67,6 +69,10 @@ export class ChatClient {
             this.eventSource.close();
             // Call the onDone callback function
             this.onDoneCallback && this.onDoneCallback(event);
+        } else if (eventData.exceed) {
+            this.eventSource.close();
+            // Call the onExceed callback function
+            this.onExceedCallback && this.onExceedCallback(event);
         }
     }
 

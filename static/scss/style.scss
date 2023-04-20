@@ -8,7 +8,7 @@ $succ-color: #23a455;
 $err-color: #ef5f43;
 $highlight-color: #ffd700;
 $font-family: Arial, sans-serif;
-$font-size-default: 18px;
+$font-size-default: 16px;
 $transition-duration: 0.2s;
 $mobile-breakpoint: 767px;
 $shadow-color: rgba(0, 0, 0, 0.1);
@@ -273,16 +273,65 @@ form {
     display: none;
     box-sizing: border-box;
 
+    .user-input {
+        margin: 16px 0;
+    }
+
+    #temp-div,
+    .chat-round {
+        padding: 10px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: space-between;
+
+        .golem-response::before {
+            content: "答：";
+            font-weight: bold;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        &:not(:first-child) {
+            border-top: 1px dashed $line-color;
+        }
+    }
+
     .golem-response {
         white-space: break-spaces;
     }
 
     p {
-        font-size: clamp(14px, 2.5vw, 18px);
+        font-size: clamp(14px, 2.5vw, 16px);
     }
 
     .highlight {
         background-color: $highlight-color;
+    }
+
+    code {
+        font-family: Consolas, Monaco, 'Andale Mono', monospace;
+        font-size: 14px;
+        line-height: 1.5;
+        background-color: #f0f0f0;
+        padding: 2px 4px;
+        border-radius: 4px;
+    }
+
+    pre {
+        background-color: #f0f0f0;
+        border-radius: 4px;
+        overflow: auto;
+        margin-bottom: 16px;
+
+        &>code {
+            display: block;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 16px;
+            overflow: auto;
+        }
     }
 }
 
