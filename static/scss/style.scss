@@ -286,10 +286,14 @@ form {
         justify-content: space-between;
 
         .golem-response::before {
-            content: "答：";
-            font-weight: bold;
+            content: "答";
             display: inline-block;
+            font-size: 12px;
             margin-right: 5px;
+            background: $succ-color;
+            color: white;
+            padding: 5px 8px;
+            border-radius: 14px;
         }
 
         &:not(:first-child) {

@@ -13,8 +13,8 @@ response_queue = Queue()
 @create_cookie
 def paid_chat():
     form_data = [
-        {'tag': 'input', 'type': 'text', 'name': 'user_input',
-            'id': 'user_input', 'placeholder': '输入你的问题'},
+        {'tag': 'textarea', 'name': 'user_input',
+            'id': 'user_input', 'placeholder': '输入你的问题', 'rows': '5'},
         {'tag': 'input', 'type': 'submit', 'id': 'submit', 'value': '回车'}
     ]
     endpoint = request.path.lstrip('/')

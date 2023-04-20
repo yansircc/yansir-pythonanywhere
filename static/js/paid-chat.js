@@ -103,6 +103,7 @@ const onSubmit = () => {
     loader.style.display = 'block';
     resultsContainer.style.display = 'block';
     userInput.value = '';
+    userInput.focus();
 }
 
 const onHandleFormData = (formData) => {
@@ -157,5 +158,6 @@ document.addEventListener('DOMContentLoaded', () => {
         showChatHistory();
         addBtns();
         resultsContainer.style.display = checkTranscript() ? 'block' : 'none';
+        userInput.focus();
     };
 });

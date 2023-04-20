@@ -48,7 +48,7 @@ const showPopup = (index = null) => {
             popupForm.querySelector('#front').value = '';
             popupForm.querySelector('#back').value = '';
             closeBtn.click();
-            addNotice('cards-count-notice', `共制作<b> ${JSON.parse(localStorage.getItem('ankiCards')).length} </b>张卡片，点击可编辑。`, listCards);
+            addNotice('cards-count-notice', `共制作<b> ${JSON.parse(localStorage.getItem('ankiCards')).length} </b>张卡片。`, listCards);
         } else {
             addNotice('empty-notice', '正反面都不能为空。');
         }
@@ -143,7 +143,7 @@ const deleteCard = (index) => {
     const oldCardsJson = JSON.parse(oldCards);
     oldCardsJson.splice(index, 1);
     localStorage.setItem('ankiCards', JSON.stringify(oldCardsJson));
-    addNotice('cards-count-notice', `共制作<b> ${JSON.parse(localStorage.getItem('ankiCards')).length} </b>张卡片，点击可编辑。`, listCards);
+    addNotice('cards-count-notice', `共制作<b> ${JSON.parse(localStorage.getItem('ankiCards')).length} </b>张卡片。`, listCards);
 };
 
 //列出所有卡片
@@ -190,7 +190,7 @@ const onLoad = () => {
     if (localStorage.getItem('ankiCards')) {
         const oldCards = localStorage.getItem('ankiCards');
         if (isVaildJson(oldCards)) {
-            addNotice('cards-count-notice', `共制作<b> ${JSON.parse(localStorage.getItem('ankiCards')).length} </b>张卡片，点击可编辑。`, listCards);
+            addNotice('cards-count-notice', `共制作<b> ${JSON.parse(localStorage.getItem('ankiCards')).length} </b>张卡片。`, listCards);
         } else {
             addNotice('local-json-notice', '本地存储的卡片数据有误，已清空。', () => {
                 localStorage.removeItem('ankiCards');
@@ -232,7 +232,7 @@ const onDone = () => {
         } else {
             localStorage.setItem('ankiCards', newCards);
         }
-        addNotice('cards-count-notice', `共制作<b> ${JSON.parse(localStorage.getItem('ankiCards')).length} </b>张卡片，点击可编辑。`, listCards);
+        addNotice('cards-count-notice', `共制作<b> ${JSON.parse(localStorage.getItem('ankiCards')).length} </b>张卡片。`, listCards);
     } else {
         addNotice('response-error-notice', '服务器返回的数据有问题, 请重新制卡。');
         return;

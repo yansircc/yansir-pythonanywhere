@@ -201,10 +201,14 @@ form {
       justify-content: space-between; }
       #response-container #temp-div .golem-response::before,
       #response-container .chat-round .golem-response::before {
-        content: "答：";
-        font-weight: bold;
+        content: "答";
         display: inline-block;
-        margin-right: 5px; }
+        font-size: 12px;
+        margin-right: 5px;
+        background: #23a455;
+        color: white;
+        padding: 5px 8px;
+        border-radius: 14px; }
         #response-container #temp-div:not(:first-child),
         #response-container .chat-round:not(:first-child) {
           border-top: 1px dashed #ccc; }

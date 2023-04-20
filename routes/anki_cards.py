@@ -39,7 +39,7 @@ def generate_anki_cards():
         The question should be specific and unambiguous.
         The answer should be clear and concise.
         The answer should only contain one key fact/name/concept/term.
-        You always summarize/rewrite the answer if it is beyond 30 characters.
+        You always summarize/rewrite the answer if it is beyond 50 characters.
         You create the flashcards by following the steps below:
         Step 1: Rewrite the content while retaining its original meaning.
         Step 2: Divide the content into several sections, with each section focusing on one point.
