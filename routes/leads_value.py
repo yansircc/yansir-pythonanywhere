@@ -33,9 +33,9 @@ def leads_value():
     leads_content = data['leads_content']
     sys_prompt = data['sys_prompt']
     sys_prompt_prefix = "You're a rating machine. You will rate the inquiries on a scale of 0-100. "
-    sys_prompt_suffix = " You always output score first head and then explain the reasons(within 100 words)."
+    sys_prompt_suffix = " You always output score first head and then explain the reasons(within 20 words)."
     leads_check_golem = Golem(openai_api_key, first_party_cookie, sys_prompt=sys_prompt,
-                              sys_prompt_prefix=sys_prompt_prefix, sys_prompt_suffix=sys_prompt_suffix, max_tokens=30, temperature=0.2, is_stream=False)
+                              sys_prompt_prefix=sys_prompt_prefix, sys_prompt_suffix=sys_prompt_suffix, temperature=0.2, is_stream=False)
 
     golem_response = leads_check_golem.response(leads_content)
     for res in golem_response:
