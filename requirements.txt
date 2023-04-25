@@ -7,3 +7,6 @@ Flask-Assets
 libsass
 pip-autoremove
 tiktoken
+markdown
+mistletoe
+genanki

@@ -52,18 +52,20 @@ const createTempDiv = () => {
     addSseContainer(['golem-response'], false, 'temp-div');
 };
 
+//清空对话记录
+const clearHistory = () => {
+    localStorage.removeItem('chatHistory');
+    const allChatRoundDiv = document.querySelectorAll('[id*="chat-round-"]');
+    for (let i = 0; i < allChatRoundDiv.length; i++) {
+        allChatRoundDiv[i].remove();
+    }
+    resultsContainer.style.display = 'none';
+    alert('历史记录已清空');
+}
+
 //添加功能按钮
 const addBtns = () => {
-    addBtn('clear-transcript-history', ['btn', 'btn-primary'], '清空对话', 'response-container', () => {
-        localStorage.removeItem('chatHistory');
-        const allChatRoundDiv = document.querySelectorAll('[id*="chat-round-"]');
-        for (let i = 0; i < allChatRoundDiv.length; i++) {
-            allChatRoundDiv[i].remove();
-        }
-        resultsContainer.style.display = 'none';
-        alert('历史记录已清空');
-    });
-    //addBtn('convert-to-anki', ['btn', 'btn-primary'], '转为Anki', 'response-container', () => {});
+    addBtn('clear-transcript-history', ['btn', 'btn-primary'], '清空对话', 'response-container', clearHistory);
 };
 
 //展示历史对话
@@ -159,5 +161,18 @@ document.addEventListener('DOMContentLoaded', () => {
         addBtns();
         resultsContainer.style.display = checkTranscript() ? 'block' : 'none';
         userInput.focus();
+
+        // 监听command/Ctrl + 回车，发送消息
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.metaKey || e.key === 'Enter' && e.ctrlKey) {
+                chatClient.submit();
+            }
+        });
+        // 监听command/Ctrl + Backspace，清空对话记录
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && e.metaKey || e.key === 'Backspace' && e.ctrlKey) {
+                clearHistory();
+            }
+        });
     };
 });

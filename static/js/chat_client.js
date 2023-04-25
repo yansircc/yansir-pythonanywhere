@@ -25,6 +25,10 @@ export class ChatClient {
         this.form.addEventListener("submit", this.onSubmit.bind(this));
     }
 
+    submit() {
+        this.form.dispatchEvent(new Event("submit"));
+    }
+
     onSubmit(event) {
         event.preventDefault();
 

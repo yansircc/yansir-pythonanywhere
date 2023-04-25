@@ -3,11 +3,11 @@ from golem import Golem, openai_api_key
 from navigator import navigator
 from cookies import create_cookie
 from queue import Queue
-from mdExtensions import HighlightExtension
+from mdExtensions import HighlightExtension, HideExtension
 import genanki
-import random
 import tempfile
 import markdown
+# import re
 
 anki_cards_blueprint = Blueprint('anki_cards', __name__)
 response_queue = Queue()
@@ -19,7 +19,7 @@ response_queue = Queue()
 def anki_cards():
     form_data = [
         {'label': '待整理文本：', 'tag': 'textarea', 'id': 'user_input', 'name': 'user_input',
-            'placeholder': '输入一段想转为Anki卡片的文本', 'rows': '5'},
+            'placeholder': '输入一段想转为Anki卡片的文本', 'rows': '5', 'required': 'true'},
         {'tag': 'input', 'type': 'submit', 'id': 'submit', 'value': '生成卡片'}
     ]
     endpoint = request.path.lstrip('/')
@@ -77,8 +77,10 @@ def generate_anki_cards():
 @anki_cards_blueprint.route('/generate-apkg', methods=['POST'])
 def generate_apkg():
     data = request.get_json()
-    model_id = random.randrange(1 << 30, 1 << 31)
-    deck_id = random.randrange(1 << 30, 1 << 31)
+
+    model_id = 1836072805
+    deck_id = 1836072806
+
     my_model = genanki.Model(
         model_id,
         'Simple Model',
@@ -91,24 +93,43 @@ def generate_apkg():
                 'name': 'Card 1',
                 'qfmt': '{{Question}}',
                 'afmt': '{{Answer}}',
+
             },
-        ])
+        ],
+        css='''
+        .anki-hide{
+            filter: blur(5px);
+        }
+        .anki-highlight{
+            color: #ebc345;
+            font-weight: bold;
+        '''
+        )
     my_deck = genanki.Deck(deck_id, 'My Deck')
-    highlight_md = markdown.Markdown(extensions=[HighlightExtension()])
+
+    md = markdown.Markdown(extensions=[HighlightExtension(), HideExtension()])
+
     for card in data:
+        # LATEX_PATTERN = r'\$\$(.*?)\$\$'
+        # latex_script = '\n<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>\n'
+
         for question, answer in card.items():
-            question=highlight_md.convert(question)
-            answer=highlight_md.convert(answer)
-            print(question, answer)
+            question=md.convert(question)
+            answer=md.convert(answer)
+            # if re.search(LATEX_PATTERN, question) or re.search(LATEX_PATTERN, answer):
+            #     question += latex_script
             my_deck.add_note(
                 genanki.Note(
                     model=my_model,
-                    fields=[question, answer]
+                    fields=[question, answer],
+                    guid=genanki.guid_for(question+answer)
                 )
             )
+
     temp_file = tempfile.NamedTemporaryFile(delete=False)
     genanki.Package(my_deck).write_to_file(temp_file.name)
     temp_file.close()
+
     return send_file(temp_file.name, as_attachment=True, download_name='anki_cards.apkg', mimetype='application/octet-stream')
 
 

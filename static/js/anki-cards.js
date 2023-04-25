@@ -4,6 +4,7 @@ import { addSseContainer, addBtn } from './extra_func.js';
 const resultsContainer = document.getElementById('response-container');
 const loader = document.getElementById('loader');
 const form = document.getElementById('form');
+const popup = document.getElementById('popup');
 
 //检查内容是否为合法Json
 const isVaildJson = (str) => {
@@ -32,7 +33,6 @@ const addNotice = (id, noticeText, callback = null) => {
 
 //显示弹窗
 const showPopup = (index = null) => {
-    const popup = document.getElementById("popup");
     const popupForm = popup.querySelector('form');
     const closeBtn = popup.querySelector('#popup-close');
     const oldCards = localStorage.getItem('ankiCards');
@@ -80,7 +80,6 @@ const addBtns = () => {
         if (oldCards) {
             fetchApkg(JSON.parse(oldCards));
             localStorage.removeItem('ankiCards');
-            resultsContainer.innerHTML = '';
             addNotice('download-success-notice', '制卡成功，文件已下载到本地。');
         } else {
             addNotice('empty-notice', '当前没卡片，先制卡。');
@@ -128,7 +127,8 @@ const fetchApkg = async (data) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'anki_cards.apkg';
+        //将时间戳加入下载的文件名中，避免重复
+        a.download = `anki_cards_${new Date().getTime()}.apkg`;
         document.body.appendChild(a);
         a.click();
         a.remove();
@@ -148,15 +148,22 @@ const deleteCard = (index) => {
 
 //列出所有卡片
 const listCards = () => {
-    const oldCards = localStorage.getItem('ankiCards');
-    if (oldCards) {
-        const oldCardsJson = JSON.parse(oldCards);
-        const ol = document.createElement('ol');
-        ol.id = 'cards-list';
-        oldCardsJson.forEach((card, index) => {
-            const li = document.createElement('li');
-            li.setAttribute('data-index', index);
-            li.innerHTML = `
+    // Load mathJax.js
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML';
+    document.head.appendChild(script);
+
+    //exe code after mathjax loaded
+    script.onload = () => {
+        const oldCards = localStorage.getItem('ankiCards');
+        if (oldCards) {
+            const oldCardsJson = JSON.parse(oldCards);
+            const ol = document.createElement('ol');
+            ol.id = 'cards-list';
+            oldCardsJson.forEach((card, index) => {
+                const li = document.createElement('li');
+                li.setAttribute('data-index', index);
+                li.innerHTML = `
                 <div class="card-contents">
                     <div class="card-front">${Object.keys(card)[0]}</div>
                     <div class="card-back">${Object.values(card)[0]}</div>
@@ -165,23 +172,24 @@ const listCards = () => {
                     <span class="edit-card-btn">编辑</span>
                     <span class="delete-card-btn">删除</span>
                 </div>`;
-            const operationBtns = li.querySelector('.operation-btns');
-            const editBtn = li.querySelector('.edit-card-btn');
-            const deleteBtn = li.querySelector('.delete-card-btn');
-            editBtn.onclick = () => { showPopup(index) };
-            deleteBtn.onclick = () => { deleteCard(index) };
-            li.onmouseover = () => {
-                operationBtns.style.visibility = 'visible';
-            };
-            li.onmouseout = () => {
-                operationBtns.style.visibility = 'hidden';
-            };
-            ol.appendChild(li);
-        });
-        resultsContainer.appendChild(ol);
-    } else {
-        addNotice('no-cards-notice', '暂无卡片，请先制作卡片。');
-    }
+                const operationBtns = li.querySelector('.operation-btns');
+                const editBtn = li.querySelector('.edit-card-btn');
+                const deleteBtn = li.querySelector('.delete-card-btn');
+                editBtn.onclick = () => { showPopup(index) };
+                deleteBtn.onclick = () => { deleteCard(index) };
+                li.onmouseover = () => {
+                    operationBtns.style.visibility = 'visible';
+                };
+                li.onmouseout = () => {
+                    operationBtns.style.visibility = 'hidden';
+                };
+                ol.appendChild(li);
+            });
+            resultsContainer.appendChild(ol);
+        } else {
+            addNotice('no-cards-notice', '暂无卡片，请先制作卡片。');
+        }
+    };
 };
 
 //加载页面时执行
@@ -241,8 +249,85 @@ const onDone = () => {
     document.getElementById('user_input').value = '';
 };
 
+//添加key监听
+const addKeyListeners = () => {
+    document.addEventListener('keydown', (e) => {
+        //console.log(e.key);
+
+        const userInput = document.activeElement;
+
+        //监听左右组合键，如果无弹窗，就显示弹窗，如果有弹窗，就提交弹窗
+        if (e.key === 'Enter' && e.metaKey || e.key === 'Enter' && e.ctrlKey) {
+            const popupBtn = resultsContainer.querySelector('#custom-anki-card');
+            const front = popup.querySelector('#front');
+            popup.classList.contains('show') && popup.querySelector('#popup-submit').click();
+            popupBtn.click();
+            front.focus();
+        }
+        //监听Esc，关闭当前弹窗
+        if (e.key === 'Escape' && popup.classList.contains('show')) {
+            const closeBtn = popup.querySelector('#popup-close');
+            popup.classList.contains('show') && closeBtn.click();
+        }
+
+        //监听Mac+4，在选中的字符两侧加上$，用于mathjax，如果没有选中字符，就在光标处插入$
+        if (e.key === '4' && e.metaKey) {
+            e.preventDefault();
+            const start = userInput.selectionStart;
+            const end = userInput.selectionEnd;
+            const text = userInput.value;
+            const before = text.substring(0, start);
+            const after = text.substring(end);
+            if (start === end) {
+                userInput.value = before + '$' + after;
+                userInput.selectionStart = userInput.selectionEnd = start + 1;
+            } else {
+                userInput.value = before + '$' + text.substring(start, end) + '$' + after;
+                userInput.selectionStart = start + 1;
+                userInput.selectionEnd = end + 1;
+            }
+        }
+
+        //监听Mac+b, 在选中的字符两侧加上**，用于加粗，如果没有选中字符，就在光标处插入**
+        if (e.key === 'b' && e.metaKey) {
+            const start = userInput.selectionStart;
+            const end = userInput.selectionEnd;
+            const text = userInput.value;
+            const before = text.substring(0, start);
+            const after = text.substring(end);
+            if (start === end) {
+                userInput.value = before + '**' + after;
+                userInput.selectionStart = userInput.selectionEnd = start + 2;
+            } else {
+                userInput.value = before + '**' + text.substring(start, end) + '**' + after;
+                userInput.selectionStart = start + 2;
+                userInput.selectionEnd = end + 2;
+            }
+        }
+
+        //监听Mac+/, 在选中的字符两侧加上?，用于代码块，如果没有选中字符，就在光标处插入?
+        if (e.key === '/' && e.metaKey) {
+            const start = userInput.selectionStart;
+            const end = userInput.selectionEnd;
+            const text = userInput.value;
+            const before = text.substring(0, start);
+            const after = text.substring(end);
+            if (start === end) {
+                userInput.value = before + '??' + after;
+                userInput.selectionStart = userInput.selectionEnd = start + 2;
+            } else {
+                userInput.value = before + '??' + text.substring(start, end) + '??' + after;
+                userInput.selectionStart = start + 2;
+                userInput.selectionEnd = end + 2;
+            }
+        }
+
+    });
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     onLoad();
+    addKeyListeners();
     const chatClient = new ChatClient(
         'sse/anki_cards',
         {
