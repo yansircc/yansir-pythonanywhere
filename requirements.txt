@@ -6,11 +6,7 @@ mysql-connector-python
 Flask-Assets
 libsass
 pip-autoremove
-setuptools_rust
-libxml2
-libxslt
-rust
-tiktoken
+tiktoken==0.3.3
 markdown
 mistletoe
 genanki
