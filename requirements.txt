@@ -6,6 +6,10 @@ mysql-connector-python
 Flask-Assets
 libsass
 pip-autoremove
+setuptools_rust
+libxml2
+libxslt
+rust
 tiktoken
 markdown
 mistletoe
