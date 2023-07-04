@@ -33,7 +33,8 @@ route_names = [
     'generate_post',
     'gtm_json',
     'anki_cards',
-    'clear_db'
+    'clear_db',
+    'serp_titles'
 ]
 register_routes_by_name(app, route_names)
 

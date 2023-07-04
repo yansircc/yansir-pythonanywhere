@@ -6,13 +6,13 @@ from transcripts_db import TranscriptsDB
 from count_tokens import Counter
 
 openai_api_key = os.getenv("OPENAI_API_KEY")
-
+openai_4_api_key = os.getenv("OPENAI_4_API_KEY")
 
 class Golem:
 
-    def __init__(self, api_key, session_id, sys_prompt="", sys_prompt_prefix="", sys_prompt_suffix="", user_input_prefix="", user_input_suffix="", max_tokens=None, temperature=0.7, memory=False, is_stream=True, table_name="", column_name=""):
-        #self.__model = "gpt-3.5-turbo"
-        self.__model = "gpt-3.5-turbo"
+    def __init__(self, api_key, session_id, sys_prompt="", sys_prompt_prefix="", sys_prompt_suffix="", user_input_prefix="", user_input_suffix="", max_tokens=None, temperature=0.7, memory=False, is_stream=True, is_gpt4=False, table_name="", column_name=""):
+        self.__is_gpt4 = is_gpt4
+        self.__model = "gpt-4" if self.__is_gpt4 else "gpt-3.5-turbo"
         self.__openai_api_key = api_key
         self.__session_id = session_id
         self.__user_input_prefix = user_input_prefix

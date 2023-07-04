@@ -12,6 +12,7 @@ def get_navigator_items():
         {'route': 'generate_post.generate_post', 'text': '文章'},
         {'route': 'gtm_json.gtm_json', 'text': 'GTM'},
         {'route': 'anki_cards.anki_cards', 'text': 'Anki'},
+        {'route': 'serp_titles.serp_titles', 'text': 'SERP'},
     ]
 
 

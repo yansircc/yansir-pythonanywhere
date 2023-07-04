@@ -7,3 +7,4 @@ templates/personas.html
 templates/gtm-demo.jinja2
 static/js/gtm-demo.js
 myenv/
+test.py
