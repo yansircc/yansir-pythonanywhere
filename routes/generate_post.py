@@ -38,7 +38,7 @@ def generate_post_golem():
         #     business_prompts = db.retrieve_data('conversation', session_id, 'business_prompts')
 
         if business_prompts:
-            sys_prompt = "The following information is about you identity and your business. You will read it in the first person: " + \
+            sys_prompt = "The following information is about your identity and your business. You will read it in the first person: " + \
                 business_prompts[:business_prompts.rfind(
                     '\n')]  # remove the last line
 
@@ -47,14 +47,16 @@ def generate_post_golem():
                 response_post_golem = Golem(
                     openai_api_key, session_id, sys_prompt=sys_prompt)
                 user_input = f'''
-                From you angle of view, Write a blog post(between {max_word_count-100} to {max_word_count+100} words) about {title}. 
+                From your angle of view, Write a blog post(between {max_word_count-100} to {max_word_count+100} words) about {title}. 
                 Keep in mind that you need to:
-                1. Inset a resources link for those keywords which need data support;
+                1. Inset fake resources link for those keywords which need data support;
                 2. Short sentence, split the paragraph more often;
-                Here is a example of what you should do:
+                3. Add demo images for every 2 paragraphs in this fromat: ![image description](http://source.unsplash.com/800x450/?related-keywords);
+                Here is an example of what you should do:
+                [START]
                 # A title end with question mark?
-                Frist paragraph, multiple rhetorical questions or a fabricated story.(80 words)
-                **Second paragraph, provide a brief and helpful answer to the title.(80 words)**
+                Frist paragraph, use PAS formula to start the post.(80 words)
+                **Second paragraph, provide a brief and helpful answer to the title.(80 words)**(Markup this whole paragraph within two asterisks)
                 Maintaining readers' interest in continuing to read.(30 words)
                 ## Topic related question end with question mark?
                 Bold all keywords which need data support.
@@ -64,6 +66,7 @@ def generate_post_golem():
                 ## Conclusion
                 Within 50 words.
                 That's it, output in English and markdown format.
+                [END]
                 '''
             elif post_type == 'listicle':
                 pass

@@ -79,6 +79,7 @@ const addBtns = () => {
         const oldCards = localStorage.getItem('ankiCards');
         if (oldCards) {
             fetchApkg(JSON.parse(oldCards));
+            localStorage.setItem(`ankiCards_${new Date().getTime()}`, oldCards);
             localStorage.removeItem('ankiCards');
             addNotice('download-success-notice', '制卡成功，文件已下载到本地。');
         } else {
@@ -148,22 +149,15 @@ const deleteCard = (index) => {
 
 //列出所有卡片
 const listCards = () => {
-    // Load mathJax.js
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML';
-    document.head.appendChild(script);
-
-    //exe code after mathjax loaded
-    script.onload = () => {
-        const oldCards = localStorage.getItem('ankiCards');
-        if (oldCards) {
-            const oldCardsJson = JSON.parse(oldCards);
-            const ol = document.createElement('ol');
-            ol.id = 'cards-list';
-            oldCardsJson.forEach((card, index) => {
-                const li = document.createElement('li');
-                li.setAttribute('data-index', index);
-                li.innerHTML = `
+    const oldCards = localStorage.getItem('ankiCards');
+    if (oldCards) {
+        const oldCardsJson = JSON.parse(oldCards);
+        const ol = document.createElement('ol');
+        ol.id = 'cards-list';
+        oldCardsJson.forEach((card, index) => {
+            const li = document.createElement('li');
+            li.setAttribute('data-index', index);
+            li.innerHTML = `
                 <div class="card-contents">
                     <div class="card-front">${Object.keys(card)[0]}</div>
                     <div class="card-back">${Object.values(card)[0]}</div>
@@ -172,24 +166,23 @@ const listCards = () => {
                     <span class="edit-card-btn">编辑</span>
                     <span class="delete-card-btn">删除</span>
                 </div>`;
-                const operationBtns = li.querySelector('.operation-btns');
-                const editBtn = li.querySelector('.edit-card-btn');
-                const deleteBtn = li.querySelector('.delete-card-btn');
-                editBtn.onclick = () => { showPopup(index) };
-                deleteBtn.onclick = () => { deleteCard(index) };
-                li.onmouseover = () => {
-                    operationBtns.style.visibility = 'visible';
-                };
-                li.onmouseout = () => {
-                    operationBtns.style.visibility = 'hidden';
-                };
-                ol.appendChild(li);
-            });
-            resultsContainer.appendChild(ol);
-        } else {
-            addNotice('no-cards-notice', '暂无卡片，请先制作卡片。');
-        }
-    };
+            const operationBtns = li.querySelector('.operation-btns');
+            const editBtn = li.querySelector('.edit-card-btn');
+            const deleteBtn = li.querySelector('.delete-card-btn');
+            editBtn.onclick = () => { showPopup(index) };
+            deleteBtn.onclick = () => { deleteCard(index) };
+            li.onmouseover = () => {
+                operationBtns.style.visibility = 'visible';
+            };
+            li.onmouseout = () => {
+                operationBtns.style.visibility = 'hidden';
+            };
+            ol.appendChild(li);
+        });
+        resultsContainer.appendChild(ol);
+    } else {
+        addNotice('no-cards-notice', '暂无卡片，请先制作卡片。');
+    }
 };
 
 //加载页面时执行
@@ -268,6 +261,18 @@ const addKeyListeners = () => {
         if (e.key === 'Escape' && popup.classList.contains('show')) {
             const closeBtn = popup.querySelector('#popup-close');
             popup.classList.contains('show') && closeBtn.click();
+        }
+
+        //监听mac+上键，如果有弹窗，就把光标移动到弹窗的front
+        if (e.key === 'ArrowUp' && e.metaKey && popup.classList.contains('show')) {
+            const front = popup.querySelector('#front');
+            front.focus();
+        }
+
+        //监听mac+下键，如果有弹窗，就把光标移动到弹窗的back
+        if (e.key === 'ArrowDown' && e.metaKey && popup.classList.contains('show')) {
+            const back = popup.querySelector('#back');
+            back.focus();
         }
 
         //监听Mac+4，在选中的字符两侧加上$，用于mathjax，如果没有选中字符，就在光标处插入$

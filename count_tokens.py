@@ -23,12 +23,12 @@ class Counter:
             print("Warning: gpt-3.5-turbo may change over time. Returning num tokens assuming gpt-3.5-turbo-0301.")
             return self.num_tokens_from_messages(messages, model="gpt-3.5-turbo-0301")
         elif self.__model == "gpt-4":
-            print("Warning: gpt-4 may change over time. Returning num tokens assuming gpt-4-0314.")
-            return self.num_tokens_from_messages(messages, model="gpt-4-0314")
+            print("Warning: gpt-4 may change over time. Returning num tokens assuming gpt-3.5-turbo.")
+            return self.num_tokens_from_messages(messages, model="gpt-3.5-turbo")
         elif self.__model == "gpt-3.5-turbo-0301":
             tokens_per_message = 4  # every message follows <|start|>{role/name}\n{content}<|end|>\n
             tokens_per_name = -1  # if there's a name, the role is omitted
-        elif self.__model == "gpt-4-0314":
+        elif self.__model == "gpt-3.5-turbo":
             tokens_per_message = 3
             tokens_per_name = 1
         else:

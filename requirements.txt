@@ -10,3 +10,4 @@ tiktoken
 markdown
 mistletoe
 genanki
+gunicorn
