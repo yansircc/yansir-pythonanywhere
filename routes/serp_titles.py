@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, Response, stream_with_context
-from golem import Golem, openai_api_key ,openai_4_api_key
+from golem import Golem, openai_api_key ,openai_4_api_key, api_base
 from navigator import navigator
 from cookies import create_cookie
 from queue import Queue
@@ -27,28 +27,17 @@ def serp_titles():
 def serp_titles_golem():
     if request.method == 'POST':
         queries = request.form['query'].splitlines()
-        print("成功读取关键词：", queries)
-
         session_id = request.cookies.get('user_id')
-        print("成功读取session_id")
 
         serp_titles_golem = None
         for i, query in enumerate(queries):
             serp_titles = '\n'.join(serp_scraper(query))
-            sys_prompt = serp_titles + f"Now, analyze the following titles: {serp_titles}. Note that leave '\n---\n' at the end of your results."
-            sys_prompt_prefix = '''
-            As a top-notch SEO copywriter, you can analyze titles on Google's first page and find out the search intent behind the query, and write high-click-through-rate titles to rank #1. You will show your work in given format. For example:
-            Query: SEO tips
-            Search Intent: The user is looking for advice, strategies, or best practices to improve SEO(Translate this line into Chinese)
-            Recommand Post type: Listicle
-            Recommand title: 10 Best SEO Tools for 2021
-            '''
-            if not serp_titles_golem:
-                serp_titles_golem = Golem(openai_api_key, session_id, sys_prompt=sys_prompt, sys_prompt_prefix=sys_prompt_prefix)
-            else:
-                serp_titles_golem.update_sys_prompt(sys_prompt)
-            is_final = i == len(queries) - 1
-            response = serp_titles_golem.response(query, is_final=is_final, is_multi=True)
+            sys_prompt = "As a top-notch SEO copywriter, your job is to help me write better blog posts. I will query in google, and show you a list of titles form the first page. you will analyze those titles and give me some recommandations in given format."
+            user_input = f"I queried {query} and find that these titles are ranking: {serp_titles}. My question is: What's the search intent of this query? (like informational, transactional, etc.) What's the best post type for this query?(like listicle, roundup, etc.) What's the best title for this query if you want to rank #1 in google? Write down your answer in this format(note that keep my newline character):Orginal query: [original query]\nSearch Intent: [Search intent]\nRecommand Post type: [Post type]\nRecommand title: [Your winning title here]\nFor example:\nOrginal query: how to make money\nSearch Intent: Informational\nRecommand Post type: Listicle\nRecommand title: 10 Ways to Make Money Online" 
+            user_input_suffix = "Keep in mind leave 2 empty lines at the very end and strictly output the content according to the specified format."
+            serp_titles_golem = Golem(openai_4_api_key, session_id, sys_prompt=sys_prompt, user_input_suffix=user_input_suffix, api_base=api_base)
+            no_stop_sign = not(i == len(queries) - 1)
+            response = serp_titles_golem.response(user_input, no_stop=no_stop_sign)
             response_queue.put(response)
         return '', 204
     else:
@@ -57,7 +46,6 @@ def serp_titles_golem():
                 response = response_queue.get()
                 yield from response
         return Response(stream_with_context(generate()), mimetype='text/event-stream')
-
 
 def register_routes(app):
     app.register_blueprint(serp_titles_blueprint)
