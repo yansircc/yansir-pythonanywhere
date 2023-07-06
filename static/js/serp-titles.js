@@ -31,6 +31,8 @@ class ChatClient {
         event.preventDefault();
         const textarea = document.getElementById('query');
         this.queries = textarea.value.split('\n');
+        // delete all empty lines
+        this.queries = this.queries.filter(query => query.trim() !== '');
         this.submitNextquery();
     }
 

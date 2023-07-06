@@ -57,6 +57,10 @@ class Golem:
         openai.api_key = self.__openai_api_key
         if self.__api_base:
             openai.api_base = self.__api_base
+        
+        # print("openai.api_key: ", self.__openai_api_key)
+        # print("openai.api_base: ", self.__api_base)
+
         response = openai.ChatCompletion.create(
             model=self.__model,
             messages=self.__transcript_history,
