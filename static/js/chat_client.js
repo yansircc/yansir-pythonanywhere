@@ -69,9 +69,6 @@ export class ChatClient {
         if (eventData.response) {
             // Call the onMessage callback function
             this.onMessageCallback && this.onMessageCallback(eventData.response);
-        } else if (eventData.keyword_done) {
-            // Process a single keyword's completion
-            this.onKeywordDoneCallback && this.onKeywordDoneCallback(event);
         } else if (eventData.done) {
             this.eventSource.close();
             // Call the onDone callback function

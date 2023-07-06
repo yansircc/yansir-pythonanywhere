@@ -37,7 +37,7 @@ class Golem:
         else:
             self.__transcript_history = self.__init_sys_prompt
 
-    def response(self, user_input, callback=None, no_stop=False):
+    def response(self, user_input, callback=None):
         
         token_counter = Counter()
         if isinstance(user_input, list):
@@ -73,12 +73,7 @@ class Golem:
                 self.__collected_messages.append(chunk_message)
 
                 if not chunk_message:
-                    if not chunk_message:
-                        print(no_stop)
-                        if no_stop:
-                            yield f"data: {json.dumps({'keyword_done': True})}\n\n"
-                        else:
-                            yield f"data: {json.dumps({'done': True})}\n\n"
+                    yield f"data: {json.dumps({'done': True})}\n\n"
                     self.__full_reply_content = ''.join(
                         [m.get('content', '') for m in self.__collected_messages])
                     self.__transcript_history += [{'role': 'assistant',
