@@ -36,7 +36,7 @@ class Golem:
         else:
             self.__transcript_history = self.__init_sys_prompt
 
-    def response(self, user_input, callback=None):
+    def response(self, user_input, callback=None, is_final=False, is_multi=False):
         
         token_counter = Counter()
         if isinstance(user_input, list):
@@ -70,7 +70,15 @@ class Golem:
                 self.__collected_messages.append(chunk_message)
 
                 if not chunk_message:
-                    yield f"data: {json.dumps({'done': True})}\n\n"
+                    if not chunk_message:
+                        if is_multi:  # check if this is a multi-keyword context
+                            if is_final:
+                                yield f"data: {json.dumps({'done': True})}\n\n"
+                                print("multi-keyword context done")
+                            else:
+                                yield f"data: {json.dumps({'keyword_done': True})}\n\n"
+                        else:
+                            yield f"data: {json.dumps({'done': True})}\n\n"
                     self.__full_reply_content = ''.join(
                         [m.get('content', '') for m in self.__collected_messages])
                     self.__transcript_history += [{'role': 'assistant',
@@ -96,3 +104,6 @@ class Golem:
             if callback:
                 callback(golem_response)
             yield golem_response
+
+    def update_sys_prompt(self, sys_prompt):
+            self.__init_sys_prompt = [{'role': 'system', 'content': sys_prompt}]

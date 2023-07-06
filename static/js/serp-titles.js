@@ -8,9 +8,9 @@ function onSubmit() {
     loader.style.display = 'block';
     resultsContainer.style.display = 'block';
     //为sse消息创建容器
-    addSseContainer(['golem-response']);
-    const highlightSpan = document.querySelector('span.highlight');
-    highlightSpan.textContent = '';
+    addSseContainer(['golem-response'], false, 'response-container');
+    const resultSpan = document.querySelector('.golem-response span');
+    resultSpan.textContent = '';
 }
 
 function sendBusinessPrompt(formData) {
@@ -19,8 +19,8 @@ function sendBusinessPrompt(formData) {
 }
 
 function onMessage(response) {
-    const highlightSpan = document.querySelector('span.highlight');
-    highlightSpan.textContent += response;
+    const resultSpan = document.querySelector('.golem-response span');
+    resultSpan.textContent += response;
 }
 
 function onDone() {
