@@ -46,9 +46,9 @@ def register_routes(app):
 
 
 def serp_scraper(keywords):
-    #convert all spaces to + in keywords
+    api_key = "c0ddd631-6758-4993-9fdd-354e4bc195e4"
     keywords = keywords.replace(' ', '+')
-    search_url = "https://api.spaceserp.com/google/search?apiKey=c0ddd631-6758-4993-9fdd-354e4bc195e4&q=" + keywords + "&location=New+York+Mills%2CMinnesota%2CUnited+States&domain=google.com&gl=us&hl=en&resultFormat=json&device=mobile&mobileOs=ios&pageSize=10&pageNumber=1&resultBlocks="
+    search_url = f"https://api.spaceserp.com/google/search?apiKey={api_key}&q={keywords}&location=New+York+Mills%2CMinnesota%2CUnited+States&domain=google.com&gl=us&hl=en&resultFormat=json&device=mobile&mobileOs=ios&pageSize=10&pageNumber=1"
     response = requests.get(search_url)
     response_json = response.json()
     titles = []
