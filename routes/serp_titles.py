@@ -4,6 +4,8 @@ from navigator import navigator
 from cookies import create_cookie
 from queue import Queue
 import requests
+from client import RestClient
+import os
 
 
 serp_titles_blueprint = Blueprint('serp_titles', __name__)
@@ -33,7 +35,7 @@ def serp_titles_golem():
         
         serp_titles = '\n'.join(serp_scraper(query))
         sys_prompt = "As an SEO copywriting expert, guide me to craft better content. I'll provide Google query results as titles. Analyze these and suggest improvements in the given format."
-        user_input = f"Given my Google query {query} and its first page titles {serp_titles}, identify the search intent (informational, transactional, etc.), suggest the most suitable content format (blog post, webpage, video, QA page, etc.), recommend the most suitable content type (listicle, roundup, etc.), and provide a top-ranking title. Answer in the following format: Search Intent: [Search intent]\n Content Format: [Content format]\n Content type: [Content type]\n Recommended title: [Your title here]\n For instance(the initial query: how to make money): Search Intent: Informational\n Content Format: Blog post\n Content type: Listicle\n Recommended title: 10 Ways to Make Money Online"
+        user_input = f"Given my Google query {query} and its first page titles {serp_titles}, identify the search intent (informational, transactional, etc.), suggest the most suitable content format (blog post, webpage, video, QA page, etc.), recommend the most suitable content type (listicle, roundup, etc.), and provide a top-ranking title. Answer in the following format: Search Intent: [Search intent]\n Content Format: [Content format]\n Content type: [Content type]\n Recommended title: [Your title here]. For instance(the initial query: how to make money): Search Intent: Informational\n Content Format: Blog post\n Content type: Listicle\n Recommended title: 10 Ways to Make Money Online"
         user_input_suffix = "Ensure your response strictly follows the above format."
         serp_titles_golem = Golem(openai_4_api_key, session_id, sys_prompt=sys_prompt, user_input_suffix=user_input_suffix, api_base=api_base)
         
@@ -52,20 +54,26 @@ def register_routes(app):
 
 
 def serp_scraper(query):
-    api_key = "c0ddd631-6758-4993-9fdd-354e4bc195e4"
-    query = query.replace(' ', '+')
-    domain = "google.com"
-    country = "us"
-    language = "en"
-    result_format = "json"
-    device = "mobile"
-    page_size = 16
-    search_url = f"https://api.spaceserp.com/google/search?apiKey={api_key}&q={query}&location=New+York+Mills%2CMinnesota%2CUnited+States&domain={domain}&gl={country}&hl={language}&resultFormat={result_format}&device={device}&pageSize={page_size}&pageNumber=1"
-    
-    print(f"正在查询{query}的数据")
-    response = requests.get(search_url)
-    response_json = response.json()
-    titles = []
-    for result in response_json['organic_results']:
-        titles.append(result['title'])
-    return titles
+    client = RestClient(os.getenv("DFS_ADMIN_EMAIL"), os.getenv("DFS_API_KEY"))
+    post_data = dict()
+    # You can set only one task at a time
+    post_data[len(post_data)] = dict(
+        language_code="en",
+        location_name="New York Mills,Minnesota,United States",
+        keyword=query,
+        device="mobile",
+        os="ios",
+        depth=10,
+        max_crawl_pages=1,
+    )
+    response = client.post("/v3/serp/google/organic/live/regular", post_data)
+    # you can find the full list of the response codes here https://docs.dataforseo.com/v3/appendix/errors
+    if response["status_code"] == 20000:
+        items = response["tasks"][0]["result"][0]["items"]
+        titles = []
+        for item in items:
+            if item["type"] == "organic":
+                titles.append(item["title"])
+        return titles
+    else:
+        print("error. Code: %d Message: %s" % (response["status_code"], response["status_message"]))

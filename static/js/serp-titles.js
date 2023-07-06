@@ -25,6 +25,7 @@ class ChatClient {
 
         this.form.addEventListener("submit", this.onSubmit.bind(this));
         this.current_query = "";
+        this.allQueriesSubmitted = false;
     }
 
     onSubmit(event) {
@@ -34,10 +35,12 @@ class ChatClient {
         // delete all empty lines
         this.queries = this.queries.filter(query => query.trim() !== '');
         this.submitNextquery();
+        this.allQueriesSubmitted = this.queries.length === 0;
     }
 
     submitNextquery() {
         if (!this.queries.length) {
+            this.allQueriesSubmitted = true;
             return;
         }
 
@@ -72,6 +75,7 @@ class ChatClient {
             .catch((error) => {
                 console.error("Error:", error);
             });
+        
     }
 
     onMessage(event) {
@@ -90,6 +94,15 @@ class ChatClient {
             this.eventSource.close();
             this.onExceedCallback && this.onExceedCallback(event);
         }
+
+        this.checkAllDone();
+    }
+
+    onDone(event) {
+        this.eventSource.close();
+        this.onDoneCallback && this.onDoneCallback(event);
+        this.submitNextquery();
+        this.checkAllDone();
     }
 
     onError(error) {
@@ -98,6 +111,14 @@ class ChatClient {
         this.eventSource.close();
         // Call the onError callback function
         this.onErrorCallback && this.onErrorCallback(error);
+    }
+
+    checkAllDone() {
+        if (this.allQueriesSubmitted && this.eventSource.readyState === EventSource.CLOSED) {
+            const resultSpan = document.querySelector('.golem-response span');
+            resultSpan.innerHTML = resultSpan.innerHTML.replace(/Recommended title: .*/g, '<span class="highlight">$&</span>');
+            resultSpan.innerHTML = marked.parse(resultSpan.textContent);
+        }
     }
 }
 
@@ -114,11 +135,6 @@ function onSubmit() {
     resultSpan.textContent += "**Query:** " + this.current_query + "\n";
 }
 
-function sendBusinessPrompt(formData) {
-    const businessPrompt = localStorage.getItem('businessPrompt');
-    formData.append('businessPrompt', businessPrompt);
-}
-
 function onMessage(response) {
     const resultSpan = document.querySelector('.golem-response span');
     resultSpan.textContent += response;
@@ -128,8 +144,6 @@ function onDone() {
     loader.style.display = 'none';
     const resultSpan = document.querySelector('.golem-response span');
     resultSpan.textContent += "\n\n";
-    //resultSpan.innerHTML = marked.parse(resultSpan.textContent);
-    //resultSpan.style.whiteSpace = 'normal';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -142,7 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'sse/serp_titles',
         {
             onSubmitCallback: onSubmit,
-            handleFormDataCallback: sendBusinessPrompt,
             onMessageCallback: onMessage,
             onDoneCallback: onDone
         }
