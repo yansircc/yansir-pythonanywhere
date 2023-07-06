@@ -53,8 +53,7 @@ class Golem:
                 yield f"data: {json.dumps({'exceed': True})}\n\n"
             self.__transcript_history += [{'role': 'user',
                                            'content': self.__user_input_prefix + user_input + self.__user_input_suffix}]
-        print("API base", self.__api_base)
-        print("API key", self.__openai_api_key)
+
         openai.api_key = self.__openai_api_key
         if self.__api_base:
             openai.api_base = self.__api_base
