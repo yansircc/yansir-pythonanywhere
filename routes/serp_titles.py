@@ -33,9 +33,9 @@ def serp_titles_golem():
 
         serp_titles_golem = None
         
-        serp_titles = '\n'.join(serp_scraper(query))
+        serp_results = '\n'.join(serp_scraper(query))
         sys_prompt = "As an SEO copywriting expert, guide me to craft better content. I'll provide Google query results as titles. Analyze these and suggest improvements in the given format."
-        user_input = f"Given my Google query {query} and its first page titles {serp_titles}, identify the search intent (informational, transactional, etc.), suggest the most suitable content format (blog post, webpage, video, QA page, etc.), recommend the most suitable content type (listicle, roundup, etc.), and provide a top-ranking title. Answer in the following format: Search Intent: [Search intent]\n Content Format: [Content format]\n Content type: [Content type]\n Recommended title: [Your title here]. For instance(the initial query: how to make money): Search Intent: Informational\n Content Format: Blog post\n Content type: Listicle\n Recommended title: 10 Ways to Make Money Online"
+        user_input = f"Given my Google query {query} and its first page results {serp_results}, identify the search intent (informational, transactional, etc.), suggest the most suitable content format (blog post, webpage, video, QA page, etc.), recommend the most suitable content type (listicle, roundup, etc.), provide a top-ranking title and corresponding descriptions. Answer in the following format: Search Intent: [Search intent]\n Content Format: [Content format]\n Content type: [Content type]\n Recommended title: [Your title here]\n Description: [Your desc here]. For instance(the initial query: how to make money): Search Intent: Informational\n Content Format: Blog post\n Content type: Listicle\n Recommended title: 10 Ways to Make Money Online\n Description: Here are 10 ways to make money online."
         user_input_suffix = "Ensure your response strictly follows the above format."
         serp_titles_golem = Golem(openai_4_api_key, session_id, sys_prompt=sys_prompt, user_input_suffix=user_input_suffix, api_base=api_base)
         
@@ -73,7 +73,7 @@ def serp_scraper(query):
         titles = []
         for item in items:
             if item["type"] == "organic":
-                titles.append(item["title"])
+                titles.append(f'[rank: {item["rank_group"]}, title: {item["title"]}, desc: {item["description"]}]')
         return titles
     else:
         print("error. Code: %d Message: %s" % (response["status_code"], response["status_message"]))
