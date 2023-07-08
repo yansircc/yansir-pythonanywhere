@@ -82,7 +82,6 @@ class ChatClient {
 }
 
 
-
 const resultsContainer = document.getElementById('response-container');
 const loader = document.getElementById('loader');
 

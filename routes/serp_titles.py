@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, Response, stream_with_context, jsonify
-from golem import Golem, openai_api_key ,openai_4_api_key, api_base
+from golem import Golem , azure_gpt4_api_key
 from navigator import navigator
 from cookies import create_cookie
 from queue import Queue
@@ -59,7 +59,7 @@ def serp_titles_golem_no_sse():
     sys_prompt = "As an SEO expert, guide me to craft better content. I'll provide Google query results. Analyze them and suggest improvements in the given format."
     user_input = f'Given my Google query {query} and its first {query_amount} results {serp_results} write down your insights in the following format: Search intent: [identify the search intent in SERP and provide the corresponding reliability score without any explaination. (informational, transactional, etc.)]\n Content format: [suggest the most suitable content format (blog post, video, QA page, etc.), just one]\n Content type: [corresponding content type (listicle, roundup, etc.), just one]\n Recommended title: [provide a top-ranking page title]\n Description: [corresponding description]. For instance(the initial query: long sleeve sun shirt): Search intent: Transactional with 90% reliability\n Content format: Product page\n Content type: Roundup\n Recommended title: Top 10 Long Sleeve Sun Shirts for Ultimate Protection\n Description: Explore our top picks for long sleeve sun shirts, offering the best in UV protection and comfort for all your outdoor adventures.'
     user_input_suffix = "Ensure your response strictly follows the above format."
-    serp_titles_golem = Golem(openai_4_api_key, session_id, sys_prompt=sys_prompt, user_input_suffix=user_input_suffix, api_base=api_base, is_stream=False, temperature=0.1)
+    serp_titles_golem = Golem(azure_gpt4_api_key, session_id, sys_prompt=sys_prompt, user_input_suffix=user_input_suffix, is_stream=False, temperature=0.1, is_azure_gpt4=True)
 
     response = serp_titles_golem.response(user_input)
     result = next(response)

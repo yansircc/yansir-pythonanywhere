@@ -3,15 +3,15 @@ import os
 import json
 from transcripts_db import TranscriptsDB
 from count_tokens import Counter
+import requests
 
 openai_api_key = os.getenv("OPENAI_API_KEY")
-openai_4_api_key = os.getenv("GPT4_API_KEY")
-api_base = os.getenv("API_BASE")
+azure_gpt4_api_key = os.getenv("AZURE_GPT4_API_KEY")
 
 class Golem:
 
-    def __init__(self, api_key, session_id, sys_prompt="", sys_prompt_prefix="", sys_prompt_suffix="", user_input_prefix="", user_input_suffix="", max_tokens=None, temperature=0.7, memory=False, is_stream=True, table_name="", column_name="", api_base=None):
-        self.__model = "gpt-4" if api_base else "gpt-3.5-turbo"
+    def __init__(self, api_key, session_id, sys_prompt="", sys_prompt_prefix="", sys_prompt_suffix="", user_input_prefix="", user_input_suffix="", max_tokens=None, temperature=0.7, memory=False, is_stream=True, table_name="", column_name="", is_azure_gpt4=False):
+        self.__model = "gpt-4" if is_azure_gpt4 else "gpt-3.5-turbo"
         self.__openai_api_key = api_key
         self.__session_id = session_id
         self.__user_input_prefix = user_input_prefix
@@ -19,7 +19,7 @@ class Golem:
         self.__max_tokens = max_tokens
         self.__temperature = temperature
         self.__memory = memory
-        self.__api_base = api_base
+        self.__is_azure_gpt4 = is_azure_gpt4
         self.__init_sys_prompt = [
             {'role': 'system', 'content': sys_prompt_prefix + sys_prompt + sys_prompt_suffix}]
         self.__is_stream = is_stream
@@ -53,61 +53,78 @@ class Golem:
             self.__transcript_history += [{'role': 'user',
                                            'content': self.__user_input_prefix + user_input + self.__user_input_suffix}]
 
-        openai.api_key = self.__openai_api_key
-        if self.__api_base:
-            openai.api_base = self.__api_base
+        if self.__is_azure_gpt4:
+            headers = {
+                'Content-Type': 'application/json',
+                'api-key': self.__openai_api_key,
+            }
 
-        for i in range(10):  # Try up to 10 times
-            try:
-                response = openai.ChatCompletion.create(
-                    model=self.__model,
-                    messages=self.__transcript_history,
-                    max_tokens=self.__max_tokens,
-                    temperature=self.__temperature,
-                    stream=self.__is_stream,
-                )
-                break
-            except openai.error.APIError as e:
-                if "Invalid API key" in str(e):
-                    print(f"Invalid API key error occurred, retrying... ({i+1}/10)")
-                else:
-                    raise e
+            params = {
+                'api-version': '2023-03-15-preview',
+            }
 
+            json_data = {
+                'messages': self.__transcript_history,
+                'max_tokens': self.__max_tokens,
+                'temperature': self.__temperature,
+                'frequency_penalty': 0,
+                'presence_penalty': 0,
+                'stop': None,
+            }
 
-        if self.__is_stream:
-            self.__collected_messages = []
-            self.__full_reply_content = ""
-            for chunk in response:
-                chunk_message = chunk["choices"][0]["delta"]
-                self.__collected_messages.append(chunk_message)
-
-                if not chunk_message:
-                    yield f"data: {json.dumps({'done': True})}\n\n"
-                    self.__full_reply_content = ''.join(
-                        [m.get('content', '') for m in self.__collected_messages])
-                    self.__transcript_history += [{'role': 'assistant',
-                                                   'content': self.__full_reply_content}]
-                    if self.__memory:
-                        with self.__transcripts_db as db:
-                            db.store_data(self.__table_name, self.__session_id,
-                                          self.__column_name, self.__transcript_history)
-                    if callback:
-                        callback(self.__full_reply_content)
-                    break
-                elif chunk_message.get('content'):
-                    yield f"data: {json.dumps({'response': chunk_message['content']})}\n\n"
-
+            url = 'https://azure.forkway.cn/openai/deployments/gpt-4/chat/completions'
+            
+            response = requests.post(
+                url,
+                params=params,
+                headers=headers,
+                json=json_data,
+            )
+            result = response.json()['choices'][0]['message']['content']
+            yield result
         else:
-            golem_response = response['choices'][0]['message']['content']
-            self.__transcript_history += [{'role': 'assistant',
-                                           'content': golem_response}]
-            if self.__memory:
-                with self.__transcripts_db as db:
-                    db.store_data(self.__table_name, self.__session_id,
-                                  self.__column_name, self.__transcript_history)
-            if callback:
-                callback(golem_response)
-            yield golem_response
+            openai.api_key = self.__openai_api_key
 
-    def update_sys_prompt(self, sys_prompt):
-            self.__init_sys_prompt = [{'role': 'system', 'content': sys_prompt}]
+            response = openai.ChatCompletion.create(
+                model=self.__model,
+                messages=self.__transcript_history,
+                max_tokens=self.__max_tokens,
+                temperature=self.__temperature,
+                stream=self.__is_stream,
+            )
+
+            if self.__is_stream:
+                self.__collected_messages = []
+                self.__full_reply_content = ""
+                for chunk in response:
+                    chunk_message = chunk["choices"][0]["delta"]
+                    self.__collected_messages.append(chunk_message)
+
+                    if not chunk_message:
+                        yield f"data: {json.dumps({'done': True})}\n\n"
+                        self.__full_reply_content = ''.join(
+                            [m.get('content', '') for m in self.__collected_messages])
+                        self.__transcript_history += [{'role': 'assistant',
+                                                    'content': self.__full_reply_content}]
+                        if self.__memory:
+                            with self.__transcripts_db as db:
+                                db.store_data(self.__table_name, self.__session_id,
+                                            self.__column_name, self.__transcript_history)
+                        if callback:
+                            callback(self.__full_reply_content)
+                        break
+                    elif chunk_message.get('content'):
+                        yield f"data: {json.dumps({'response': chunk_message['content']})}\n\n"
+
+            else:
+                golem_response = response
+                print('golem:', golem_response)
+                self.__transcript_history += [{'role': 'assistant',
+                                            'content': golem_response}]
+                if self.__memory:
+                    with self.__transcripts_db as db:
+                        db.store_data(self.__table_name, self.__session_id,
+                                    self.__column_name, self.__transcript_history)
+                if callback:
+                    callback(golem_response)
+                yield golem_response
