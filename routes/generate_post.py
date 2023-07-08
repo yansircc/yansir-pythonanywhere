@@ -51,13 +51,15 @@ def generate_post_golem():
                 Keep in mind that you need to:
                 1. Inset fake resources link for those keywords which need data support;
                 2. Short sentence, split the paragraph more often;
-                3. Add demo images for every 2 paragraphs in this fromat: ![image description](http://source.unsplash.com/800x450/?related-keywords);
+                3. Write in first person(I, me, my, we, us, our);
+                4. Try to be witty and show your personality(You are the ceo of beechair which I mentioned above);
+                5. Add demo images for every 2 paragraphs in this fromat: ![image description](http://source.unsplash.com/800x450/?related-keywords);
                 Here is an example of what you should do:
                 [START]
                 # A title end with question mark?
                 Frist paragraph, use PAS formula to start the post.(80 words)
-                **Second paragraph, provide a brief and helpful answer to the title.(80 words)**(Markup this whole paragraph within two asterisks)
-                Maintaining readers' interest in continuing to read.(30 words)
+                **Second paragraph, provide a brief and helpful answer to the title.**(80 words)**(Markup this whole paragraph within two asterisks)
+                3rd paragraph, Maintaining readers' interest in continuing to read.(30 words)
                 ## Topic related question end with question mark?
                 Bold all keywords which need data support.
                 ## More related questions
