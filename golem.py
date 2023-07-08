@@ -1,4 +1,3 @@
-from flask import Response
 import openai
 import os
 import json
@@ -57,17 +56,23 @@ class Golem:
         openai.api_key = self.__openai_api_key
         if self.__api_base:
             openai.api_base = self.__api_base
-        
-        # print("openai.api_key: ", self.__openai_api_key)
-        # print("openai.api_base: ", self.__api_base)
 
-        response = openai.ChatCompletion.create(
-            model=self.__model,
-            messages=self.__transcript_history,
-            max_tokens=self.__max_tokens,
-            temperature=self.__temperature,
-            stream=self.__is_stream,
-        )
+        for i in range(10):  # Try up to 10 times
+            try:
+                response = openai.ChatCompletion.create(
+                    model=self.__model,
+                    messages=self.__transcript_history,
+                    max_tokens=self.__max_tokens,
+                    temperature=self.__temperature,
+                    stream=self.__is_stream,
+                )
+                break
+            except openai.error.APIError as e:
+                if "Invalid API key" in str(e):
+                    print(f"Invalid API key error occurred, retrying... ({i+1}/10)")
+                else:
+                    raise e
+
 
         if self.__is_stream:
             self.__collected_messages = []

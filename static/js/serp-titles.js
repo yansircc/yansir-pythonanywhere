@@ -1,4 +1,5 @@
 import { addSseContainer } from './extra_func.js';
+
 class ChatClient {
     constructor(
         routeName='',
@@ -6,22 +7,15 @@ class ChatClient {
             onSubmitCallback = null,
             handleFormDataCallback = null,
             onMessageCallback = null,
-            onErrorCallback = null,
-            onDoneCallback = null,
-            onExceedCallback = null
+            onDoneCallback = null
         }
     ) {
         this.form = document.getElementById('form');
         this.routeName = routeName;
-        this.eventSource = null;
-
-        // Add callback functions
         this.onSubmitCallback = onSubmitCallback;
         this.handleFormDataCallback = handleFormDataCallback;
         this.onMessageCallback = onMessageCallback;
-        this.onErrorCallback = onErrorCallback;
         this.onDoneCallback = onDoneCallback;
-        this.onExceedCallback = onExceedCallback;
 
         this.form.addEventListener("submit", this.onSubmit.bind(this));
         this.current_query = "";
@@ -60,17 +54,13 @@ class ChatClient {
             headers: headers,
             body: new URLSearchParams(formData),
         })
-            .then((response) => {
-                if (response.ok) {
-                    return response;
-                } else {
-                    throw new Error("Error sending the POST request");
-                }
-            })
-            .then((response) => {
-                this.eventSource = new EventSource("/" + this.routeName);
-                this.eventSource.onmessage = this.onMessage.bind(this);
-                this.eventSource.onerror = this.onError.bind(this);
+            .then(response => response.json())  // Parse response as JSON
+            .then(data => {
+                // Handle the data received from the server
+                this.onMessageCallback && this.onMessageCallback(data);
+                this.onDoneCallback && this.onDoneCallback();
+                this.submitNextquery();
+                this.checkAllDone();
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -78,46 +68,11 @@ class ChatClient {
         
     }
 
-    onMessage(event) {
-        const eventData = JSON.parse(event.data);
-
-        if (eventData.response) {
-            this.onMessageCallback && this.onMessageCallback(eventData.response);
-        } else if (eventData.query_done) {
-            this.onqueryDoneCallback && this.onqueryDoneCallback(event);
-        } else if (eventData.done) {
-            this.eventSource.close();
-            this.onDoneCallback && this.onDoneCallback(event);
-            // Submit the next query after receiving a response
-            this.submitNextquery();
-        } else if (eventData.exceed) {
-            this.eventSource.close();
-            this.onExceedCallback && this.onExceedCallback(event);
-        }
-
-        this.checkAllDone();
-    }
-
-    onDone(event) {
-        this.eventSource.close();
-        this.onDoneCallback && this.onDoneCallback(event);
-        this.submitNextquery();
-        this.checkAllDone();
-    }
-
-    onError(error) {
-        console.error("Error receiving SSE:", error);
-        console.error("Status:", error.target.status);
-        this.eventSource.close();
-        // Call the onError callback function
-        this.onErrorCallback && this.onErrorCallback(error);
-    }
-
     checkAllDone() {
-        if (this.allQueriesSubmitted && this.eventSource.readyState === EventSource.CLOSED) {
+        if (this.allQueriesSubmitted) {
             const resultSpan = document.querySelector('.golem-response span');
-            resultSpan.innerHTML = resultSpan.innerHTML.replace(/Recommended title: .*/g, '<span class="highlight">$&</span>');
             resultSpan.innerHTML = marked.parse(resultSpan.textContent);
+            loader.style.display = 'none';
         }
     }
 }
@@ -129,7 +84,7 @@ const loader = document.getElementById('loader');
 function onSubmit() {
     loader.style.display = 'block';
     resultsContainer.style.display = 'block';
-    //为sse消息创建容器
+    // Create output container for messages
     addSseContainer(['golem-response'], false, 'response-container');
     const resultSpan = document.querySelector('.golem-response span');
     resultSpan.textContent += "**Query:** " + this.current_query + "\n";
@@ -144,6 +99,7 @@ function onDone() {
     loader.style.display = 'none';
     const resultSpan = document.querySelector('.golem-response span');
     resultSpan.textContent += "\n\n";
+    resultSpan.innerHTML = resultSpan.innerHTML.replace(/(Recommended title:)(.*)/g, '$1<span class="highlight">$2</span>');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -153,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.head.appendChild(script);
 
     const chatClient = new ChatClient(
-        'sse/serp_titles',
+        'no_sse/serp_titles',
         {
             onSubmitCallback: onSubmit,
             onMessageCallback: onMessage,
