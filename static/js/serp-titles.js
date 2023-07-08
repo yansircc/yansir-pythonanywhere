@@ -74,9 +74,7 @@ class ChatClient {
             const content = resultSpan.textContent;
             resultSpan.innerHTML = marked.parse(resultSpan.textContent);
             loader.style.display = 'none';
-            console.log(content);
             const data = parseData(content);
-            console.log(data);
             const csvData = objectToCsv(data);
             downloadCsv(csvData);
         }

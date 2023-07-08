@@ -48,13 +48,13 @@ export const parseData = (dataStr) => {
         let [intent, conf] = rest[0].split(' with ');
         conf = conf.replace(' reliability', '');
         return {
-            'Initial Query': query,
-            'Search Intent': intent,
-            'Reliability': conf,
-            'Content Format': rest[1].replace('Content Format: ', ''),
-            'Content Type': rest[2].replace('Content type: ', ''),
-            'Recommended Title': rest[3].replace('Recommended title: ', ''),
-            'Description': rest[4].replace('Description: ', '')
+            '关键词': query,
+            '搜索意图': intent.replace('Search intent: ', ''),
+            '可靠性': conf,
+            '内容形式': rest[1].replace('Content format: ', ''),
+            '输出类型': rest[2].replace('Content type: ', ''),
+            '推荐标题': rest[3].replace('Recommended title: ', ''),
+            '描述': rest[4].replace('Description: ', '')
         };
     });
 }
