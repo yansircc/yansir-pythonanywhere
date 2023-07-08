@@ -1,4 +1,4 @@
-import { addSseContainer } from './extra_func.js';
+import { addSseContainer, parseData, objectToCsv, downloadCsv } from './extra_func.js';
 
 class ChatClient {
     constructor(
@@ -71,11 +71,18 @@ class ChatClient {
     checkAllDone() {
         if (this.allQueriesSubmitted) {
             const resultSpan = document.querySelector('.golem-response span');
+            const content = resultSpan.textContent;
             resultSpan.innerHTML = marked.parse(resultSpan.textContent);
             loader.style.display = 'none';
+            console.log(content);
+            const data = parseData(content);
+            console.log(data);
+            const csvData = objectToCsv(data);
+            downloadCsv(csvData);
         }
     }
 }
+
 
 
 const resultsContainer = document.getElementById('response-container');
@@ -99,7 +106,6 @@ function onDone() {
     loader.style.display = 'none';
     const resultSpan = document.querySelector('.golem-response span');
     resultSpan.textContent += "\n\n";
-    resultSpan.innerHTML = resultSpan.innerHTML.replace(/(Recommended title:)(.*)/g, '$1<span class="highlight">$2</span>');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
