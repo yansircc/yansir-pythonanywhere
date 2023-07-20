@@ -36,6 +36,7 @@ route_names = [
     'clear_db',
     'serp_titles',
     'mj_md',
+    'cors_proxy',
 ]
 register_routes_by_name(app, route_names)
 

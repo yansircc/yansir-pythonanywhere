@@ -14,9 +14,14 @@ from werkzeug.utils import secure_filename
 import os
 import re
 import threading
+from midjourney_api import TNL
+import time
 
 mj_md_blueprint = Blueprint('mj_md', __name__)
 response_queue = Queue()
+# NextLeg API
+token = os.getenv("NEXT_LEG_TOKEN")
+tnl = TNL(token)
 
 @mj_md_blueprint.route('/mj-md')
 @navigator
@@ -43,14 +48,15 @@ def parse_file(file_path):
 
     return mj_commands, h2_contents
 
-# 传入MJ命令，输出一张MJ的4 in 1图片的链接
-def request_mj_post_api(prompt):
-    url = "http://127.0.0.1:5000/api/send_and_receive"
-    data = {"prompt": prompt}
-    response = requests.post(url, json=data)
-    response_json = response.json()
-    fio_img_link = response_json.get("latest_img_url")
-    return fio_img_link
+# 传入MJ命令，输出一张MJ的4 in 1图片的字典，其中有图片的ID
+def next_leg_post_api(prompt):
+    response = tnl.imagine(prompt)
+    return response
+
+# 传入图片ID，获取图片进度
+def next_leg_get_api(message_id):
+    response = tnl.get_message_and_progress(message_id)
+    return response
 
 # [已测试]传入二级内容，使用ChatGPT获取一组图片名、alt和总结
 def request_openai_api(h2_content):
@@ -136,7 +142,6 @@ def replace_mj_to_md(raw_content, replacement_list):
 @mj_md_blueprint.route('/fio_imgs', methods=['POST'])
 def get_fio_imgs():
     file = request.files['file']
-    raw_content = file.stream.read().decode("utf-8")
 
     filename = secure_filename(file.filename)
     file_path = os.path.join(os.path.dirname(__file__), 'tmp')
@@ -148,30 +153,51 @@ def get_fio_imgs():
     #file = json.loads(raw_content)
     mj_prompts, h2_content = parse_file(file_path)
     
-    fio_img_urls = []
+    print(type(mj_prompts), type(h2_content))
+    print(len(mj_prompts), len(h2_content))
+
+    fio_img_ids = []
     fio_img_names = []
     fio_img_alt = []
     fio_img_summaries = []
 
     for prompt in mj_prompts:
         print(prompt)
-        fio_img_url = request_mj_post_api(prompt)
-        fio_img_urls.append(fio_img_url)
+        fio_img = next_leg_post_api(prompt)
+        if fio_img['success']:
+            fio_img_ids.append(fio_img['messageId'])
+            print(fio_img['messageId'])
+            time.sleep(1)
 
     for content in h2_content:
-        print(content)
         response = request_openai_api(content)
         fio_img_names.append(response[0])
         fio_img_alt.append(response[1])
         fio_img_summaries.append(response[2])
 
+    with open(file_path, 'r') as file:
+        raw_content = file.read()
+
     combined_dict = {
         'raw_content': raw_content,
-        'imgs': [fio_img_urls, fio_img_names, fio_img_alt, fio_img_summaries]
+        'imgs': [fio_img_ids, fio_img_names, fio_img_alt, fio_img_summaries]
     }
 
     json_str = json.dumps(combined_dict)
     return json_str
+
+# NextLeg达到100%后，返回图片信息并加入队列
+@mj_md_blueprint.route('/webhook', methods=['POST'])
+def webhook():
+    post_data = request.data
+    img_data = json.loads(post_data)
+    img_id = img_data['originatingMessageId']
+    img_urls = img_data['imageUrls']
+    optimize_img(img_data['imageUrl'], img_id, 800, 'jpeg', 90)
+    for index, img in enumerate(img_urls):
+        optimize_img(img, img_id + '_' + str(index+1) , 800, 'jpeg', 90)
+    return 'success'
+
 
 # 用户返回所选图片，返回替换为md格式的原文
 @mj_md_blueprint.route('/mj_to_md', methods=['POST'])
@@ -183,8 +209,8 @@ def get_upscale_imgs_number():
     mj_get_url = "http://localhost:5000/upscale"
     creds = {
         'endpoint': 'https://nosunthx.com/xmlrpc.php',
-        'username': 'yansircc@icloud.com',
-        'password': '+D9g?N+h5/m'
+        'username': os.getenv('NO_SUN_THX_ADMIN'),
+        'password': os.getenv('NO_SUN_THX_PASSWORD')
     }
     
     img_md_strings = []
@@ -204,15 +230,6 @@ def get_upscale_imgs_number():
 
     replaced_md_string = replace_mj_to_md(raw_content, img_md_strings)
     return replaced_md_string
-
-@mj_md_blueprint.route('/webhook', methods=['POST'])
-def webhook():
-    # 在这里处理接收到的POST请求数据
-    post_data = request.data
-    print(post_data.decode('utf-8'))
-    
-    # 返回响应
-    return 'Received the webhook'
 
 
 def register_routes(app):

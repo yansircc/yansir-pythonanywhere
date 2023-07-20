@@ -11,3 +11,4 @@ markdown
 mistletoe
 genanki
 gunicorn
+midjourney-api
