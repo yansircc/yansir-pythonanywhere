@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, Response, stream_with_context
-from golem import Golem, openai_api_key
+from golem import Golem, openai_api_key, gpt4_api_key
 from navigator import navigator
 from cookies import create_cookie
 from queue import Queue
@@ -28,7 +28,7 @@ def handle_user_input():
         chat_history = request.form['chat_history'] if 'chat_history' in request.form else None
         session_id = request.cookies.get('user_id')
         sys_prompt = "You're a man of few words."
-        paid_golem = Golem(openai_api_key, session_id, sys_prompt=sys_prompt)
+        paid_golem = Golem(openai_api_key, session_id, sys_prompt=sys_prompt, is_gpt4=False)
         if chat_history:
             chat_rounds = json.loads(chat_history)
             transcript_history = []

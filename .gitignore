@@ -8,3 +8,4 @@ templates/gtm-demo.jinja2
 static/js/gtm-demo.js
 myenv/
 test/
+test.py

@@ -7,11 +7,12 @@ import requests
 
 openai_api_key = os.getenv("OPENAI_API_KEY")
 azure_gpt4_api_key = os.getenv("AZURE_GPT4_API_KEY")
+gpt4_api_key = os.getenv("GPT4_API_KEY")
 
 class Golem:
 
-    def __init__(self, api_key, session_id, sys_prompt="", sys_prompt_prefix="", sys_prompt_suffix="", user_input_prefix="", user_input_suffix="", max_tokens=None, temperature=0.7, memory=False, is_stream=True, table_name="", column_name="", is_azure_gpt4=False):
-        self.__model = "gpt-4" if is_azure_gpt4 else "gpt-3.5-turbo"
+    def __init__(self, api_key, session_id, sys_prompt="", sys_prompt_prefix="", sys_prompt_suffix="", user_input_prefix="", user_input_suffix="", max_tokens=None, temperature=0.7, memory=False, is_stream=True, table_name="", column_name="", is_gpt4=None, is_azure_gpt4=False):
+        self.__model = "gpt-4" if (is_azure_gpt4 or is_gpt4)  else "gpt-3.5-turbo"
         self.__openai_api_key = api_key
         self.__session_id = session_id
         self.__user_input_prefix = user_input_prefix
@@ -84,7 +85,8 @@ class Golem:
             yield result
         else:
             openai.api_key = self.__openai_api_key
-
+            print('model:', self.__model)
+            
             response = openai.ChatCompletion.create(
                 model=self.__model,
                 messages=self.__transcript_history,
@@ -117,7 +119,7 @@ class Golem:
                         yield f"data: {json.dumps({'response': chunk_message['content']})}\n\n"
 
             else:
-                golem_response = response
+                golem_response = response['choices'][0]['message']['content']
                 print('golem:', golem_response)
                 self.__transcript_history += [{'role': 'assistant',
                                             'content': golem_response}]
