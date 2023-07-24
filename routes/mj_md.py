@@ -18,6 +18,7 @@ import time
 import markdown
 import markdown.extensions.tables
 import concurrent.futures
+from uuid import uuid4
 
 mj_md_blueprint = Blueprint('mj_md', __name__)
 response_queue = Queue()
@@ -110,8 +111,8 @@ def get_nextleg_img(img_url:str) -> bytes:
     response = requests.request("POST", url, headers=headers, data=payload)
     return response
 
-# [已测试]优化图片
-def optimize_img(url:str, file_name:str, width:int, format:str, quality:int) -> str:
+# 下载、优化图片并上传到WP
+def optimize_and_upload_img(url:str, file_name:str, width:int, format:str, quality:int, creds:dict, max_retries:int=3) -> tuple:
     # Download the image
     response = get_nextleg_img(url)
 
@@ -132,19 +133,16 @@ def optimize_img(url:str, file_name:str, width:int, format:str, quality:int) -> 
     if not os.path.exists(file_path):
         os.makedirs(file_path)
     
-    file_name = file_name.replace(" ", "_").split('.')[0] + '-' + str(int(time.time())) + '.' + format.lower()
+    file_name = file_name.replace(" ", "_").split('.')[0] + '_' + str(uuid4()) + '.' + format.lower()
 
     img_path = os.path.join(file_path, file_name)
 
     img.save(img_path, format, quality=quality)
     print('Saved image to', img_path)
-    return img_path
 
-# [已测试]把图片上传到WP
-def upload_img_to_wp(img_path:str, creds:dict, max_retries:int=3) -> str:
+    # Connect to WordPress with the credentials
     for i in range(max_retries):
         try:
-            # Connect to WordPress with the credentials
             wp = Client(creds['endpoint'], creds['username'], creds['password'])
 
             # Prepare metadata for the img
@@ -158,10 +156,7 @@ def upload_img_to_wp(img_path:str, creds:dict, max_retries:int=3) -> str:
                 data['bits'] = xmlrpc_client.Binary(img.read())
             response = wp.call(media.UploadFile(data))
 
-            # Clean up the temporary file
-            os.remove(img_path)
-
-            return response['url']
+            return response['url'], file_name, file_name # assuming alt text is the same as file_name
         except requests.exceptions.ConnectionError:
             if i < max_retries - 1:
                 time.sleep(3)
@@ -251,29 +246,20 @@ def get_upscale_imgs_number():
     file_path = data["file_path"]
     imgs = data["imgs"]
     
-    img_md_strings = []
-    # for img in imgs:
-    #     title = img["upscale_img_name"]
-    #     alt = img["upscale_img_alt"]
-    #     url = img["upscale_img_url"]
-    #     optimized_img = optimize_img(url, title, 800, 'jpeg', 90)
-    #     wp_img_url = upload_img_to_wp(optimized_img, creds)
-    #     img_md_string = convert_img_md_link(wp_img_url, title, alt)
-    #     img_md_strings.append(img_md_string)
+    img_md_strings = ['Processing...' for _ in imgs]
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        future_to_img = {executor.submit(optimize_img, img["upscale_img_url"], img["upscale_img_name"], 800, 'jpeg', 90): img for img in imgs}
-        for future in concurrent.futures.as_completed(future_to_img):
-            img = future_to_img[future]
+        futures = {executor.submit(optimize_and_upload_img, img["upscale_img_url"], img["upscale_img_name"], 800, 'jpeg', 90, creds): i for i, img in enumerate(imgs)}
+        
+        for future in concurrent.futures.as_completed(futures):
+            i = futures[future]  # get the original index
             try:
-                optimized_img = future.result()
-                wp_img_url = upload_img_to_wp(optimized_img, creds)
-                img_md_string = convert_img_md_link(wp_img_url, img["upscale_img_name"], img["upscale_img_alt"])
-                img_md_strings.append(img_md_string)
+                wp_img_url, img_name, img_alt = future.result()
+                img_md_string = convert_img_md_link(wp_img_url, img_name, img_alt)
+                img_md_strings[i] = img_md_string
             except Exception as exc:
-                print('%r generated an exception: %s' % (img, exc))
-                img_md_strings.append('Error processing image: %s' % exc)
-
+                print('A task generated an exception: %s' % exc)
+                img_md_strings[i] = 'Error processing image: %s' % exc
 
     with open(file_path, 'r') as file:
         raw_content = file.read()
@@ -320,7 +306,11 @@ def upload_to_wp():
             post.post_status = 'draft'
             post.id = wp.call(posts.NewPost(post))
             
-            os.remove(file_path)
+            # clean up all files in the tmp folder
+            file_path = os.path.join(os.path.dirname(__file__), 'tmp')
+            for file in os.listdir(file_path):
+                os.remove(os.path.join(file_path, file))
+
             return 'success', 200
         except requests.exceptions.ConnectionError:
             if i < max_retries - 1:
