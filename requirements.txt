@@ -12,3 +12,5 @@ mistletoe
 genanki
 gunicorn
 midjourney-api
+python-wordpress-xmlrpc
+werkzeug
