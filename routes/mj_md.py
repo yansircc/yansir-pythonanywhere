@@ -112,7 +112,7 @@ def get_nextleg_img(img_url:str) -> bytes:
     return response
 
 # 下载、优化图片并上传到WP
-def optimize_and_upload_img(url:str, file_name:str, width:int, format:str, quality:int, creds:dict, max_retries:int=3) -> tuple:
+def optimize_and_upload_img(url:str, file_name:str, alt:str, width:int, format:str, quality:int, creds:dict, max_retries:int=3) -> tuple:
     # Download the image
     response = get_nextleg_img(url)
 
@@ -156,7 +156,7 @@ def optimize_and_upload_img(url:str, file_name:str, width:int, format:str, quali
                 data['bits'] = xmlrpc_client.Binary(img.read())
             response = wp.call(media.UploadFile(data))
 
-            return response['url'], file_name, file_name # assuming alt text is the same as file_name
+            return response['url'], file_name, alt
         except requests.exceptions.ConnectionError:
             if i < max_retries - 1:
                 time.sleep(3)
@@ -166,7 +166,9 @@ def optimize_and_upload_img(url:str, file_name:str, width:int, format:str, quali
 
 # 把图片链接转换成markdown格式
 def convert_img_md_link(url:str, title:str, alt:str) -> str:
-    return f'![{alt}]({url} "{title}")'
+    shortened_name = '_'.join(title.split('_')[:-1])
+    space_separated_name = shortened_name.replace('_', ' ')
+    return f'![{alt}]({url} "{space_separated_name}")'
 
 # [已测试]把文本中的MJ内容替换为md链接
 def replace_mj_to_md(raw_content:str, replacement_list:list) -> str:
@@ -249,7 +251,7 @@ def get_upscale_imgs_number():
     img_md_strings = ['Processing...' for _ in imgs]
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        futures = {executor.submit(optimize_and_upload_img, img["upscale_img_url"], img["upscale_img_name"], 800, 'jpeg', 90, creds): i for i, img in enumerate(imgs)}
+        futures = {executor.submit(optimize_and_upload_img, img["upscale_img_url"], img["upscale_img_name"], img["upscale_img_alt"], 800, 'jpeg', 90, creds): i for i, img in enumerate(imgs)}
         
         for future in concurrent.futures.as_completed(futures):
             i = futures[future]  # get the original index
