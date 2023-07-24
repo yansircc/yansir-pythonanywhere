@@ -13,11 +13,11 @@ from io import BytesIO
 from werkzeug.utils import secure_filename
 import os
 import re
-import threading
 from midjourney_api import TNL
 import time
 import markdown
 import markdown.extensions.tables
+import concurrent.futures
 
 mj_md_blueprint = Blueprint('mj_md', __name__)
 response_queue = Queue()
@@ -132,7 +132,9 @@ def optimize_img(url:str, file_name:str, width:int, format:str, quality:int) -> 
     if not os.path.exists(file_path):
         os.makedirs(file_path)
     
-    img_path = os.path.join(file_path, file_name.split('.')[0] + '.' + format.lower())
+    file_name = file_name.replace(" ", "_").split('.')[0] + '-' + time.time().__str__() + '.' + format.lower()
+
+    img_path = os.path.join(file_path, file_name)
 
     img.save(img_path, format, quality=quality)
     print('Saved image to', img_path)
@@ -207,10 +209,13 @@ def get_fio_imgs():
         if fio_img['success']:
             fio_img_ids.append(fio_img['messageId'])
             print(fio_img['messageId'])
-            time.sleep(1)
+            time.sleep(0.5)
 
-    for content in h2_content:
-        response = request_openai_api(content)
+    # Using ThreadPoolExecutor to run the function concurrently
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        responses = list(executor.map(request_openai_api, h2_content))
+
+    for response in responses:
         print(response)
         fio_img_names.append(response[0])
         fio_img_alt.append(response[1])
@@ -247,14 +252,28 @@ def get_upscale_imgs_number():
     imgs = data["imgs"]
     
     img_md_strings = []
-    for img in imgs:
-        title = img["upscale_img_name"]
-        alt = img["upscale_img_alt"]
-        url = img["upscale_img_url"]
-        optimized_img = optimize_img(url, title, 800, 'jpeg', 90)
-        wp_img_url = upload_img_to_wp(optimized_img, creds)
-        img_md_string = convert_img_md_link(wp_img_url, title, alt)
-        img_md_strings.append(img_md_string)
+    # for img in imgs:
+    #     title = img["upscale_img_name"]
+    #     alt = img["upscale_img_alt"]
+    #     url = img["upscale_img_url"]
+    #     optimized_img = optimize_img(url, title, 800, 'jpeg', 90)
+    #     wp_img_url = upload_img_to_wp(optimized_img, creds)
+    #     img_md_string = convert_img_md_link(wp_img_url, title, alt)
+    #     img_md_strings.append(img_md_string)
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future_to_img = {executor.submit(optimize_img, img["upscale_img_url"], img["upscale_img_name"], 800, 'jpeg', 90): img for img in imgs}
+        for future in concurrent.futures.as_completed(future_to_img):
+            img = future_to_img[future]
+            try:
+                optimized_img = future.result()
+                wp_img_url = upload_img_to_wp(optimized_img, creds)
+                img_md_string = convert_img_md_link(wp_img_url, img["upscale_img_name"], img["upscale_img_alt"])
+                img_md_strings.append(img_md_string)
+            except Exception as exc:
+                print('%r generated an exception: %s' % (img, exc))
+                img_md_strings.append('Error processing image: %s' % exc)
+
 
     with open(file_path, 'r') as file:
         raw_content = file.read()

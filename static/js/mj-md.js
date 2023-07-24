@@ -88,8 +88,8 @@ form.addEventListener('submit', function(e) {
             // Append section to resultsContainer
             resultsContainer.appendChild(sectionDiv);
 
-            // if the imageContainer.firstchild.src exist and end with png, then append the image
-            if(imageContainer.firstChild && imageContainer.firstChild.src.endsWith('png')) {
+            // if the imageContainer.firstchild.src exists and is not a progress image, then don't send the request
+            if ( !imageContainer.firstChild || !imageContainer.firstChild.src.endsWith('png')) {
                 let intervalId = setInterval(() => {
                     axios.get(`https://api.thenextleg.io/v2/message/${messageId}?expireMins=12`, {
                         headers: { 
