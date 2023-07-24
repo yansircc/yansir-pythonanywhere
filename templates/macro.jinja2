@@ -8,7 +8,7 @@
 {% macro qa_macro(form_data, formPo=0) %}
 <div id="container">
     <div class="form-container"{% if formPo %} style="order:{{ formPo }}"{% endif %}>
-        <form id="form"{% if db_strings %} style="display:none;"{% endif %}>
+        <form id="form">
             {% for field in form_data %}
                 {% set tag = field.pop('tag') %}
                 {% set label = field.pop('label', None) %}

@@ -2,7 +2,8 @@
 
 {% extends 'base.jinja2' %}
 {% block content %}
-<script src="//unpkg.com/xdomain@0.8.2/dist/xdomain.min.js" slave="http://127.0.0.1:5000/cors-proxy"></script>
+<script src="//unpkg.com/xdomain@0.8.2/dist/xdomain.min.js" slave="/cors-proxy"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 {{ title_macro('MJ转MD格式','v1.05,内测期间免费') }}
 {{ qa_macro(form_data) }}
 

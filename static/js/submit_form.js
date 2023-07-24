@@ -15,7 +15,7 @@
             const sys_prompt = "You're a rating machine. You will rate the inquiries on a scale of 0-100. If the inquiry has no relationship with B2B procurement, you will give it a rating of 0. If it is relevant, then you will rate it based on the quality of the inquiry. You always output score first head and then explain the reasons.";
 
             $.ajax({
-                url: "http://127.0.0.1:5000/leads-value",
+                url: "/leads-value",
                 method: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({

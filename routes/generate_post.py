@@ -52,7 +52,7 @@ def generate_post_golem():
                 1. Inset fake resources link for those keywords which need data support;
                 2. Short sentence, split the paragraph more often;
                 3. Write in first person(I, me, my, we, us, our);
-                4. Try to be witty and show your personality(You are the ceo of beechair which I mentioned above);
+                4. Try to be witty and show your personality(You are the ceo of beechair which mentioned above);
                 5. Add demo images for every 2 paragraphs in this fromat: ![image description](http://source.unsplash.com/800x450/?related-keywords);
                 Here is an example of what you should do:
                 [START]
