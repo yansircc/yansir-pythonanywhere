@@ -125,7 +125,7 @@ def optimize_img(url:str, file_name:str, width:int, format:str, quality:int) -> 
     # Resize the image
     wpercent = (width / float(img.size[0]))
     hsize = int((float(img.size[1]) * float(wpercent)))
-    img = img.resize((width, hsize), Image.ANTIALIAS)
+    img = img.resize((width, hsize), Image.Resampling.LANCZOS)
 
     # Save the image
     file_path = os.path.join(os.path.dirname(__file__), 'tmp')
