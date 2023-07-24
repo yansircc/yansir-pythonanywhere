@@ -62,7 +62,7 @@ def next_leg_post_api(prompt:str, max_retries:int=3) -> dict:
         try:
             response = tnl.imagine(prompt)
             return response
-        except requests.exceptions.ConnectionError:
+        except requests.exceptions.ConnectionError or requests.exceptions.JSONDecodeError:
             if i < max_retries - 1:  # i is zero indexed
                 time.sleep(5)  # wait for 5 seconds before trying again
                 continue
@@ -132,7 +132,7 @@ def optimize_img(url:str, file_name:str, width:int, format:str, quality:int) -> 
     if not os.path.exists(file_path):
         os.makedirs(file_path)
     
-    file_name = file_name.replace(" ", "_").split('.')[0] + '-' + time.time().__str__() + '.' + format.lower()
+    file_name = file_name.replace(" ", "_").split('.')[0] + '-' + str(int(time.time())) + '.' + format.lower()
 
     img_path = os.path.join(file_path, file_name)
 
@@ -209,7 +209,7 @@ def get_fio_imgs():
         if fio_img['success']:
             fio_img_ids.append(fio_img['messageId'])
             print(fio_img['messageId'])
-            time.sleep(0.5)
+            time.sleep(1)
 
     # Using ThreadPoolExecutor to run the function concurrently
     with concurrent.futures.ThreadPoolExecutor() as executor:
